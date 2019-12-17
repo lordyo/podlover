@@ -29,7 +29,8 @@
 podlove_get_and_clean <- function(db_name = rstudioapi::askForSecret(name = "dbname"),
                                   db_host = rstudioapi::askForSecret(name = "host"),
                                   db_user = rstudioapi::askForSecret(name = "user"),
-                                  db_password = rstudioapi::askForSecret(name = "password")) {
+                                  db_password = rstudioapi::askForSecret(name = "password"),
+																	launch_date) {
   
   # define which tables to fetch
   
@@ -61,7 +62,10 @@ podlove_get_and_clean <- function(db_name = rstudioapi::askForSecret(name = "dbn
   fetch_tbl <- function(con, tbl_name) {
     rs <- RMySQL::dbSendQuery(con, paste0("select * from ", tbl_name))
     df <- RMySQL::fetch(rs, n=-1)
-    df
+    
+	  RMySQL::dbClearResult(rs)
+    
+	  df
     }
 
  tables <- tbl_names %>% 
@@ -76,7 +80,8 @@ podlove_get_and_clean <- function(db_name = rstudioapi::askForSecret(name = "dbn
 	                                  tables[[df_names[2]]],
 	                                  tables[[df_names[3]]],
 	                                  tables[[df_names[4]]],
-	                                  tables[[df_names[5]]])
+	                                  tables[[df_names[5]]],
+																		launch_date)
 	
 	
 	dlic_clean

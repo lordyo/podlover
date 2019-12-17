@@ -10,7 +10,12 @@
 # OUTPUT
 ### df_clean: clean data frame
     
-podlove_clean_stats <- function(df_stats, df_mediafile, df_user, df_episodes, df_posts) {
+podlove_clean_stats <- function(df_stats,
+                                df_mediafile,
+                                df_user,
+                                df_episodes,
+                                df_posts,
+                                launch_date) {
     
     # clean reference data
     df_user <-
@@ -33,9 +38,9 @@ podlove_clean_stats <- function(df_stats, df_mediafile, df_user, df_episodes, df
             lubridate::hour(post_datetime))),
         post_date = lubridate::date(post_datetime)
       )
-    
+
     # clean download data, join with ref data
-    
+
     df_clean <- df_stats %>%
       dplyr::select(id:media_file_id, dldatetime = accessed_at, source, context) %>%
       dplyr::mutate(
@@ -47,13 +52,13 @@ podlove_clean_stats <- function(df_stats, df_mediafile, df_user, df_episodes, df
           paste(lubridate::year(dldatetime),
                  lubridate::month(dldatetime),
                  lubridate::day(dldatetime),
-                 lubridate::hour,
+                 lubridate::hour(dldatetime),
                  sep = "-"))) %>%
       dplyr::filter(dldate >= lubridate::ymd(launch_date)) %>%
       dplyr::left_join(df_mediafile, by = c("media_file_id" = "id")) %>%
       dplyr::left_join(df_user, by = c("user_agent_id" = "id")) %>%
       dplyr::mutate(
-        hours_since_release = round(interval(post_datetime, dldatetime) / lubridate::hours(1), 0),
+        hours_since_release = round(lubridate::interval(post_datetime, dldatetime) / lubridate::hours(1), 0),
         days_since_release = round(hours_since_release / 24, 0),
         ep_number = as.integer(ep_number)) %>%
       dplyr::select(
@@ -76,7 +81,7 @@ podlove_clean_stats <- function(df_stats, df_mediafile, df_user, df_episodes, df
       dplyr::group_by_all() %>%
       dplyr::summarize(dl_attempts = n()) %>%
       dplyr::ungroup()
-    
+
     df_clean
     
   }
