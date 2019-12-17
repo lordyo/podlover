@@ -31,18 +31,22 @@ podlove_get_and_clean <- function(db_name = rstudioapi::askForSecret(name = "dbn
                                   db_user = rstudioapi::askForSecret(name = "user"),
                                   db_password = rstudioapi::askForSecret(name = "password")) {
   
-	wp_names <-	c("wp_podlove_downloadintentclean", 
-								"wp_podlove_mediafile", 
-								"wp_podlove_useragent", 
-								"wp_podlove_episode", 
-								"wp_posts")
-	
-	db_names <- c("db_stats",
-								"db_ref_media", 
-								"db_ref_user", 
-								"db_ref_episodes", 
+  # define which tables to fetch
+  
+  tbl_names <-	c("wp_podlove_downloadintentclean",
+      						"wp_podlove_mediafile",
+      						"wp_podlove_useragent",
+      						"wp_podlove_episode",
+    							"wp_posts")
+
+  # set names of resulting data frames
+  
+	df_names <- c("db_stats",
+								"db_ref_media",
+								"db_ref_user",
+								"db_ref_episodes",
 								"db_ref_posts")
-	 
+
 	# open connection
 	
   podlove_db <- RMySQL::dbConnect(RMySQL::MySQL(),
@@ -52,25 +56,28 @@ podlove_get_and_clean <- function(db_name = rstudioapi::askForSecret(name = "dbn
                           host = db_host)
   
  
-  # add map function for wp_names, db_names
-  
-   
-  RMySQL::dbClearResult(rs)
+  # helper function for fetching tables once connection is established
+    
+  fetch_tbl <- function(con, tbl_name) {
+    rs <- RMySQL::dbSendQuery(con, paste0("select * from ", tbl_name))
+    df <- RMySQL::fetch(rs, n=-1)
+    df
+    }
+
+ tables <- tbl_names %>% 
+   purrr::map(fetch_tbl, con = podlove_db) %>% 
+   purrr::set_names(df_names)
+ 
   RMySQL::dbDisconnect(podlove_db)
 	
-	
-	
-	# get all data from stats table (dlic)
-	dlic_raw <- podlove_get_table_data(db_stats)
-	
-	# get all reference values
-	ref_mediafile <- podlove_get_table_data(db_ref_media)
-	ref_user <- podlove_get_table_data(db_ref_user)
-	ref_episodes <- podlove_get_table_data(db_ref_episodes)
-	ref_posts <- podlove_get_table_data(db_ref_posts)
-	
 	#clean data
-	dlic_clean <- podlove_clean_stats(dlic_raw, ref_mediafile, ref_user, ref_episodes, ref_posts)
+	# dlic_clean <- podlove_clean_stats(dlic_raw, ref_mediafile, ref_user, ref_episodes, ref_posts)
+	dlic_clean <- podlove_clean_stats(tables[[df_names[1]]],
+	                                  tables[[df_names[2]]],
+	                                  tables[[df_names[3]]],
+	                                  tables[[df_names[4]]],
+	                                  tables[[df_names[5]]])
+	
 	
 	dlic_clean
 }
