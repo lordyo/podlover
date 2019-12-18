@@ -2,18 +2,18 @@
 % Please edit documentation in R/podlove_get_and_clean.R
 \name{podlove_get_and_clean}
 \alias{podlove_get_and_clean}
-\title{Fetch a table from a MySQL database}
+\title{Fetch and prepare all download data}
 \usage{
 podlove_get_and_clean(
   db_name = rstudioapi::askForSecret(name = "dbname"),
   db_host = rstudioapi::askForSecret(name = "host"),
   db_user = rstudioapi::askForSecret(name = "user"),
   db_password = rstudioapi::askForSecret(name = "password"),
-  launch_date
+  launch_date = NULL
 )
 }
 \arguments{
-\item{tablename}{name of the MySQL table}
+\item{launch_date}{date of the first official podcast episode release}
 
 \item{dbname}{name of the database}
 
@@ -24,15 +24,25 @@ podlove_get_and_clean(
 \item{password}{password of the database}
 }
 \value{
-A dataframe containing the table data.
+a dataframe containing all episode download attempts
 }
 \description{
-\code{podlove_get_table_data} opens up a connection to a MySQL database and
-fetches a whole table as a df. It Uses \code{rstudioapi::askForSecret()}, 
-which allows securely storing access info in the local keyring.
+\code{podlove_get_and_clean} opens up a connection to a Podlove-enable 
+Wordpress MySQL database, gets all necessary tables, connects and cleans
+the data and returns it as a data frame. The function uses
+\code{rstudioapi::askForSecret()}, which allows securely storing access 
+info in the local keyring.
 }
 \examples{
 \dontrun{
-dlic_raw <- podlove_get_table_data(db_stats)
+# will ask for db name, host, username, password
+dlic_raw <- podlove_get_and_clean(launchdate = "2019-05-01")
+}
+\dontrun{
+dlic_raw <- podlove_get_and_clean(dbname = "my_sql_database",
+                                  host = "my.database.host",
+                                  user = "username,"
+                                  password = "my.secret.password",
+                                  launchdate = "2019-05-01")
 }
 }

@@ -58,6 +58,7 @@ podlove_get_and_clean <- function(db_name = rstudioapi::askForSecret(name = "dbn
                           dbname = db_name,
                           host = db_host)
   
+  message("connection established")
  
   # helper function for fetching tables once connection is established
     
@@ -68,6 +69,8 @@ podlove_get_and_clean <- function(db_name = rstudioapi::askForSecret(name = "dbn
   	df <- RMySQL::fetch(rs, n = -1)
     
 	  RMySQL::dbClearResult(rs)
+	  
+	  message(paste0("fetched table ", tbl_name))
     
 	  df
     }
@@ -77,6 +80,8 @@ podlove_get_and_clean <- function(db_name = rstudioapi::askForSecret(name = "dbn
    purrr::set_names(df_names)
  
   RMySQL::dbDisconnect(podlove_db)
+  
+  message("connection closed")
 	
 	#clean data
 	# dlic_clean <- podlove_clean_stats(dlic_raw, ref_mediafile, ref_user, ref_episodes, ref_posts)
