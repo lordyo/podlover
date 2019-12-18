@@ -1,5 +1,32 @@
-podlove_prepare_stats_for_graph <- function(df_stats, gvar, hourly = FALSE, relative = TRUE) {
-  
+#' Prepare Podlove data for graphical rendering
+#'
+#' Takes clean Podlove data and prepares it to be rendered with \code{ggplot2}. 
+#' The function accepts one or more grouping variables (e.g. episode title) and
+#' accepts parameters for the time axis of downloads.
+#'
+#' @param df_stats A data frame of clean Podlove data, as rendered by 
+#'     \code{podlove_get_and_clean()} or \code{podlove_clean_stats}.
+#' @param gvar Optional grouping variable(s), unquoted. If multiple variables 
+#'     are given, they need to be in the form \code{c(var1, var2)}. 
+#' @param hourly Boolean switching parameter for rendering of hourly vs.
+#'     daily data. Defaults to \code{FALSE} (daily data), \code{TRUE} creates
+#'     hourly data.  
+#' @param relative Boolean switching parameter to define if the data is 
+#'     rendered relative to the respective episode release date (\code{TRUE}) or
+#'     in absolute dates (\code{TRUE}). Defaults to \code{TRUE}. 
+#'     
+#' @examples 
+#' code...
+#' \dontrun{
+#' code...
+#' }
+#' 
+#'
+
+
+
+
+
   # PURPOSE
   ### Prepares the data for graphical output
   
@@ -12,6 +39,8 @@ podlove_prepare_stats_for_graph <- function(df_stats, gvar, hourly = FALSE, rela
   # OUTPUT
   ### prep_stats: a tidy dataframe for graphical analysis
   # prints out a graph as well
+podlove_prepare_stats_for_graph <- function(df_stats, gvar, hourly = FALSE, relative = TRUE) {
+  
   
   library(dplyr)
   library(tidyr)
