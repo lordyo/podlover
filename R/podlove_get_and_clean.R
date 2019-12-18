@@ -1,36 +1,38 @@
-
-#' Fetch a table from a MySQL database
+#' Fetch and prepare all download data
 #' 
-#' \code{podlove_get_table_data} opens up a connection to a MySQL database and
-#' fetches a whole table as a df. It Uses \code{rstudioapi::askForSecret()}, 
-#' which allows securely storing access info in the local keyring.
+#' \code{podlove_get_and_clean} opens up a connection to a Podlove-enable 
+#' Wordpress MySQL database, gets all necessary tables, connects and cleans
+#' the data and returns it as a data frame. The function uses
+#' \code{rstudioapi::askForSecret()}, which allows securely storing access 
+#' info in the local keyring.
 #'    
-#' @param tablename name of the MySQL table
 #' @param dbname name of the database
 #' @param host hostname of the database
 #' @param user username of the database 
 #' @param password password of the database
+#' @param launch_date date of the first official podcast episode release
 #' 
-#' @return A dataframe containing the table data.
+#' @return a dataframe containing all episode download attempts
 #' 
 #' @examples
 #' \dontrun{
-#' dlic_raw <- podlove_get_table_data(db_stats)
+#' # will ask for db name, host, username, password
+#' dlic_raw <- podlove_get_and_clean(launchdate = "2019-05-01")
+#' }
+#' \dontrun{
+#' dlic_raw <- podlove_get_and_clean(dbname = "my_sql_database",
+#'                                   host = "my.database.host",
+#'                                   user = "username,"
+#'                                   password = "my.secret.password",
+#'                                   launchdate = "2019-05-01")
 #' }
 
-
-# purpose
-### wrapper function to get all table data and clean it
-### calls on podlove_get_table_data() and podlove_clean_stats
-
-# output
-### dlic_clean: a clean dataframe containing all podcast data
 
 podlove_get_and_clean <- function(db_name = rstudioapi::askForSecret(name = "dbname"),
                                   db_host = rstudioapi::askForSecret(name = "host"),
                                   db_user = rstudioapi::askForSecret(name = "user"),
                                   db_password = rstudioapi::askForSecret(name = "password"),
-																	launch_date) {
+																	launch_date = NULL)  {
   
   # define which tables to fetch
   
@@ -63,7 +65,7 @@ podlove_get_and_clean <- function(db_name = rstudioapi::askForSecret(name = "dbn
     suppressWarnings(  # no warnings when importing undefined data types
 	    rs <- RMySQL::dbSendQuery(con, paste0("select * from ", tbl_name)))
   	
-  	df <- RMySQL::fetch(rs, n=-1)
+  	df <- RMySQL::fetch(rs, n = -1)
     
 	  RMySQL::dbClearResult(rs)
     
@@ -84,7 +86,6 @@ podlove_get_and_clean <- function(db_name = rstudioapi::askForSecret(name = "dbn
 	                                  tables[[df_names[4]]],
 	                                  tables[[df_names[5]]],
 																		launch_date)
-	
 	
 	dlic_clean
 }
