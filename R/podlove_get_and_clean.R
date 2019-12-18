@@ -60,8 +60,10 @@ podlove_get_and_clean <- function(db_name = rstudioapi::askForSecret(name = "dbn
   # helper function for fetching tables once connection is established
     
   fetch_tbl <- function(con, tbl_name) {
-    rs <- RMySQL::dbSendQuery(con, paste0("select * from ", tbl_name))
-    df <- RMySQL::fetch(rs, n=-1)
+    suppressWarnings(  # no warnings when importing undefined data types
+	    rs <- RMySQL::dbSendQuery(con, paste0("select * from ", tbl_name)))
+  	
+  	df <- RMySQL::fetch(rs, n=-1)
     
 	  RMySQL::dbClearResult(rs)
     
