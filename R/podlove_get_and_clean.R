@@ -26,6 +26,7 @@
 #'                                   password = "my.secret.password",
 #'                                   launchdate = "2019-05-01")
 #' }
+#' @importFrom magrittr %>% 
 
 
 podlove_get_and_clean <- function(db_name = rstudioapi::askForSecret(name = "dbname"),

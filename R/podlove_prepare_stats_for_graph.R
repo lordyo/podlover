@@ -20,15 +20,14 @@
 #' \dontrun{
 #' code...
 #' }
+#' 
+#' @importFrom magrittr %>% 
+#' @importFrom dpylr group_by summarize ungroup mutate
 
 podlove_prepare_stats_for_graph <- function(df_stats, gvar, hourly = FALSE, relative = TRUE) {
   
-  
-  library(dplyr)
-  library(tidyr)
-  
   # prepare for tidy evaluation
-  gvar <- enquo(gvar)
+  gvar <- dplyr::enquo(gvar)
   
   prep_stats <- df_stats
 
@@ -55,7 +54,7 @@ podlove_prepare_stats_for_graph <- function(df_stats, gvar, hourly = FALSE, rela
   prep_stats <- prep_stats %>%
     summarize(listeners = n()) %>%
     ungroup() %>% 
-    rename(time = 1) # call first column "time"
+    dplyr::rename(time = 1) # call first column "time"
   
   # check again if gvar is empty
   

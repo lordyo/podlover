@@ -26,7 +26,10 @@
 #'                                      df_posts = table_posts,
 #'                                      launch_date = "2017-12-04")
 #'                                      }
-    
+#' @importFrom magrittr %>% 
+#' @importFrom dpylr group_by summarize ungroup select mutate left_join filter
+#' @importFrom lubridate ymd_hms ydm_h year month day date interval
+
 podlove_clean_stats <- function(df_stats,
                                 df_mediafile,
                                 df_user,
@@ -35,54 +38,54 @@ podlove_clean_stats <- function(df_stats,
                                 launch_date) {
     
   if (is.null(launch_date)) {
-    launch_date <- min(lubridate::ymd_hms(post_date))
+    launch_date <- min(ymd_hms(post_date))
   }
   
   # clean reference data
   df_user <-
-    dplyr::select(df_user, id, client_name, client_type, os_name)
+    select(df_user, id, client_name, client_type, os_name)
   df_episodes <-
-    dplyr::select(df_episodes, id, post_id, ep_number = number, title, duration)
-  df_posts <- dplyr::select(df_posts, ID, post_date)
+    select(df_episodes, id, post_id, ep_number = number, title, duration)
+  df_posts <- select(df_posts, ID, post_date)
   df_mediafile <- df_mediafile %>%
-    dplyr::select(id, episode_id) %>%
-    dplyr::left_join(df_episodes, by = c("episode_id" = "id")) %>%
-    dplyr::select(-episode_id) %>%
-    dplyr::left_join(df_posts, by = c("post_id" = "ID")) %>%
-    dplyr::mutate(
-      post_datetime = lubridate::ymd_hms(post_date),
+    select(id, episode_id) %>%
+    left_join(df_episodes, by = c("episode_id" = "id")) %>%
+    select(-episode_id) %>%
+    left_join(df_posts, by = c("post_id" = "ID")) %>%
+    mutate(
+      post_datetime = ymd_hms(post_date),
       post_datehour = lubridate::ymd_h(
         paste0(
-          lubridate::year(post_datetime), "-",
-          lubridate::month(post_datetime), "-",
-          lubridate::day(post_datetime), " ",
+          year(post_datetime), "-",
+          month(post_datetime), "-",
+          day(post_datetime), " ",
           lubridate::hour(post_datetime))),
-      post_date = lubridate::date(post_datetime)
+      post_date = date(post_datetime)
     )
 
   # clean download data, join with ref data
 
   df_clean <- df_stats %>%
-    dplyr::select(id:media_file_id, dldatetime = accessed_at, source, context) %>%
-    dplyr::mutate(
-      dldatetime = lubridate::ymd_hms(dldatetime),
-      dldate = lubridate::date(dldatetime),
+    select(id:media_file_id, dldatetime = accessed_at, source, context) %>%
+    mutate(
+      dldatetime = ymd_hms(dldatetime),
+      dldate = date(dldatetime),
       weekday = lubridate::wday(dldatetime, label = TRUE),
       hour = lubridate::hour(dldatetime),
       dldatehour = lubridate::ymd_h(
-        paste(lubridate::year(dldatetime),
-               lubridate::month(dldatetime),
-               lubridate::day(dldatetime),
+        paste(year(dldatetime),
+               month(dldatetime),
+               day(dldatetime),
                lubridate::hour(dldatetime),
                sep = "-"))) %>%
-    dplyr::filter(dldate >= lubridate::ymd(launch_date)) %>%
-    dplyr::left_join(df_mediafile, by = c("media_file_id" = "id")) %>%
-    dplyr::left_join(df_user, by = c("user_agent_id" = "id")) %>%
-    dplyr::mutate(
-      hours_since_release = round(lubridate::interval(post_datetime, dldatetime) / lubridate::hours(1), 0),
+    filter(dldate >= lubridate::ymd(launch_date)) %>%
+    left_join(df_mediafile, by = c("media_file_id" = "id")) %>%
+    left_join(df_user, by = c("user_agent_id" = "id")) %>%
+    mutate(
+      hours_since_release = round(interval(post_datetime, dldatetime) / lubridate::hours(1), 0),
       days_since_release = round(hours_since_release / 24, 0),
       ep_number = as.integer(ep_number)) %>%
-    dplyr::select(
+    select(
       ep_number,
       title,
       duration,
@@ -100,8 +103,8 @@ podlove_clean_stats <- function(df_stats,
       client_type,
       os_name) %>%
     dplyr::group_by_all() %>%
-    dplyr::summarize(dl_attempts = n()) %>%
-    dplyr::ungroup()
+    summarize(dl_attempts = n()) %>%
+    ungroup()
 
     df_clean
     
