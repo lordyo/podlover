@@ -23,5 +23,6 @@ Imports:
     RMySQL,
     tidyr,
     rstudioapi,
-    purrr
+    purrr,
+    magrittr
 RoxygenNote: 7.0.2
