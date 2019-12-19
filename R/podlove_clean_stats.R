@@ -27,7 +27,7 @@
 #'                                      launch_date = "2017-12-04")
 #'                                      }
 #' @importFrom magrittr %>% 
-#' @importFrom dpylr group_by summarize ungroup select mutate left_join filter
+#' @importFrom dplyr group_by summarize ungroup select mutate left_join filter
 #' @importFrom lubridate ymd_hms ydm_h year month day date interval
 
 podlove_clean_stats <- function(df_stats,
@@ -37,9 +37,9 @@ podlove_clean_stats <- function(df_stats,
                                 df_posts,
                                 launch_date) {
     
-  if (is.null(launch_date)) {
-    launch_date <- min(ymd_hms(post_date))
-  }
+  # if (is.null(launch_date)) {
+  #   launch_date <- min(ymd_hms(df_posts$post_date))
+  # }
   
   # clean reference data
   df_user <-
@@ -77,8 +77,12 @@ podlove_clean_stats <- function(df_stats,
                month(dldatetime),
                day(dldatetime),
                lubridate::hour(dldatetime),
-               sep = "-"))) %>%
-    filter(dldate >= lubridate::ymd(launch_date)) %>%
+               sep = "-"))) 
+  
+  # filter for launchdate if parameter is not empty
+  if (!is.null(launch_date)) filter(df_clean, dldate >= lubridate::ymd(launch_date))
+  
+  df_clean <- df_clean %>% 
     left_join(df_mediafile, by = c("media_file_id" = "id")) %>%
     left_join(df_user, by = c("user_agent_id" = "id")) %>%
     mutate(

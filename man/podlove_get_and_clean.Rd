@@ -13,15 +13,15 @@ podlove_get_and_clean(
 )
 }
 \arguments{
+\item{db_name}{name of the database}
+
+\item{db_host}{hostname of the database}
+
+\item{db_user}{username of the database}
+
+\item{db_password}{password of the database}
+
 \item{launch_date}{date of the first official podcast episode release}
-
-\item{dbname}{name of the database}
-
-\item{host}{hostname of the database}
-
-\item{user}{username of the database}
-
-\item{password}{password of the database}
 }
 \value{
 a dataframe containing all episode download attempts
@@ -45,4 +45,5 @@ dlic_raw <- podlove_get_and_clean(dbname = "my_sql_database",
                                   password = "my.secret.password",
                                   launchdate = "2019-05-01")
 }
+
 }

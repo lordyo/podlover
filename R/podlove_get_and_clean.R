@@ -6,10 +6,10 @@
 #' \code{rstudioapi::askForSecret()}, which allows securely storing access 
 #' info in the local keyring.
 #'    
-#' @param dbname name of the database
-#' @param host hostname of the database
-#' @param user username of the database 
-#' @param password password of the database
+#' @param db_name name of the database
+#' @param db_host hostname of the database
+#' @param db_user username of the database 
+#' @param db_password password of the database
 #' @param launch_date date of the first official podcast episode release
 #' 
 #' @return a dataframe containing all episode download attempts
@@ -26,6 +26,7 @@
 #'                                   password = "my.secret.password",
 #'                                   launchdate = "2019-05-01")
 #' }
+#' 
 #' @importFrom magrittr %>% 
 
 

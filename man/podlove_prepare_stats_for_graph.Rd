@@ -32,9 +32,8 @@ The function accepts one or more grouping variables (e.g. episode title) and
 accepts parameters for the time axis of downloads.
 }
 \examples{
-code...
 \dontrun{
-code...
+print(1)
 }
 
 }

@@ -16,13 +16,12 @@
 #'     in absolute dates (\code{TRUE}). Defaults to \code{TRUE}. 
 #'     
 #' @examples 
-#' code...
 #' \dontrun{
-#' code...
+#' print(1)
 #' }
 #' 
 #' @importFrom magrittr %>% 
-#' @importFrom dpylr group_by summarize ungroup mutate
+#' @importFrom dplyr group_by summarize ungroup mutate
 
 podlove_prepare_stats_for_graph <- function(df_stats, gvar, hourly = FALSE, relative = TRUE) {
   
