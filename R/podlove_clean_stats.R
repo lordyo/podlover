@@ -37,15 +37,11 @@ podlove_clean_stats <- function(df_stats,
                                 df_posts,
                                 launch_date) {
   
-  # if (is.null(launch_date)) {
-  #   launch_date <- min(ymd_hms(df_posts$post_date))
-  # }
-  
   # clean reference data
   df_user <-
     select(df_user, id, client_name, client_type, os_name)
   df_episodes <-
-    select(df_episodes, id, post_id, ep_number = number, title, duration)
+    select(df_episodes, id, post_id, ep_number = number, title, duration) 
   df_posts <- select(df_posts, ID, post_date)
   df_mediafile <- df_mediafile %>%
     select(id, episode_id) %>%
@@ -88,7 +84,7 @@ podlove_clean_stats <- function(df_stats,
     mutate(
       hours_since_release = round(interval(post_datetime, dldatetime) / lubridate::hours(1), 0),
       days_since_release = round(hours_since_release / 24, 0),
-      ep_number = as.integer(ep_number)) %>%
+      ep_number = as.character(ep_number)) %>%
     select(
       ep_number,
       title,
