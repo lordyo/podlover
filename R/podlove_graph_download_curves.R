@@ -9,7 +9,7 @@
 #' @param  df_tidy_data A tidy data frame with download data, as constructed
 #'     by \code{podlove_prepare_stats_for_graph()}
 #' @param gvar Optional grouping parameter (e.g. episode title), handed over
-#'     to \code{ggplot2::aes(color)}. Must be quoted (e.g. \code{"title"})
+#'     to \code{ggplot2::aes(color)}.
 #' @param cumulative Boolean switch to show either cumulative data (TRUE, default),
 #'     or non-comulative data (FALSE)
 #' @param labelmethod Defines where should the labels be attached 
@@ -24,21 +24,26 @@
 #' }
 #' @importFrom ggplot2 ggplot aes
 
-podlove_plot_download_curves <- function(df_tidy_data,
+podlove_graph_download_curves <- function(df_tidy_data,
                                          gvar = NULL,
                                          cumulative = TRUE,
                                          labelmethod = "last.points",
                                          printout = TRUE) {
   
+  gvar_q = deparse(substitute(gvar))
+  
+  
   # construct graph
-  g_dl_curves <- podlove_baseplot(df_tidy_data, gvar = gvar, cumulative = cumulative)
+  g_dl_curves <- podlove_baseplot(df_tidy_data, gvar = gvar_q, cumulative = cumulative)
   
   g_dl_curves <-  g_dl_curves +
     ggplot2::geom_line(alpha = 0.5) +
-    ggplot2::guides(color = FALSE)
-  
-  # g_dl_curves + directlabels::geom_dl(aes(label = enquo(gvar)),
-  #                         method = list(labelmethod, cex = 0.8))
+    ggplot2::guides(color = FALSE) 
+   
+  if (gvar_q != "NULL") {
+    g_dl_curves <-  g_dl_curves +
+      directlabels::geom_dl(aes(label = {{gvar}}), method = list(labelmethod, cex = 0.8))
+  }
 
   if (printout) print(g_dl_curves)
   

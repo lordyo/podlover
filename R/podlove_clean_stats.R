@@ -36,7 +36,7 @@ podlove_clean_stats <- function(df_stats,
                                 df_episodes,
                                 df_posts,
                                 launch_date) {
-    
+  
   # if (is.null(launch_date)) {
   #   launch_date <- min(ymd_hms(df_posts$post_date))
   # }
@@ -77,7 +77,7 @@ podlove_clean_stats <- function(df_stats,
                month(dldatetime),
                day(dldatetime),
                lubridate::hour(dldatetime),
-               sep = "-"))) 
+               sep = "-")))
   
   # filter for launchdate if parameter is not empty
   if (!is.null(launch_date)) filter(df_clean, dldate >= lubridate::ymd(launch_date))
@@ -108,7 +108,8 @@ podlove_clean_stats <- function(df_stats,
       os_name) %>%
     dplyr::group_by_all() %>%
     summarize(dl_attempts = n()) %>%
-    ungroup()
+    ungroup() %>% 
+    filter(!is.na(title), !is.na(post_date))
 
     df_clean
     

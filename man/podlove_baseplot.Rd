@@ -2,7 +2,7 @@
 % Please edit documentation in R/podlove_baseplot.R
 \name{podlove_baseplot}
 \alias{podlove_baseplot}
-\title{Construct a basic Podlove plot}
+\title{Construct a basic Podlove plot 2}
 \usage{
 podlove_baseplot(df_tidy_data, gvar = NULL, cumulative = TRUE, ...)
 }
@@ -11,7 +11,7 @@ podlove_baseplot(df_tidy_data, gvar = NULL, cumulative = TRUE, ...)
 by \code{podlove_prepare_stats_for_graph()}}
 
 \item{gvar}{Optional grouping parameter (e.g. episode title), handed over
-to \code{ggplot2::aes(color)}. Must be quoted (e.g. \code{"title"})}
+to \code{ggplot2::aes(color)}.}
 
 \item{cumulative}{Boolean switch to show either cumulative data (TRUE, default),
 or non-comulative data (FALSE)}
