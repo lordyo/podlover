@@ -1,22 +1,39 @@
-podlove_total_average_downloads <- function(df_tidy_data, gvar = "title", lower_limit = 0, upper_limit = Inf,
-                              limit_unit = "days") {
-  
-  # Flexible function to get average and total donwloads per episode. Can be constrained to 
-  # maximum and minimum time span since episode launch, e.g. to get best launches or best evergreens
-  
-  # INPUT
-  #   df_tidy_data: A tidy data frame created by podlove_clean_stats()
-  #   gvar: a grouping variable that should be related to individual episodes (title, episode number)
-  #         allows for multiple variables in the form of concatenated strings
-  #   lower_limit: lower cutoff for time since launch (used to eliminate launch peaks)
-  #   upper_limit: upper cutoff for time since launch (used to eliminiate long term download data)
-  #   limit_unit: time unit for limits - "days" or "hours"
-  
-  
-  # OUTPUT
+#' Calculate total downloads and average downloads over time
+#'
+#' Calculates the total of downloads and the average of downloads over a time 
+#'     unit for a podcast or its episodes. The measurement period can be defined
+#'     with an upper and lower limit. Use this function for fine-tuned performance
+#'     measurement.
+#'     
+#' @param  df_tidy_data A tidy data frame with download data, as constructed
+#'     by \code{podlove_clean_stats()} or \code{podlove_get_and_clean}.
+#' @param gvar an optional grouping variable, which should be reflect the episode
+#'     structure (e.g. ep_number, title). Other variables will lead to nonsensical
+#'     results, because the calculation is based on time unit since episode release.
+#' @param lower_limit lower cutoff for time since episode launch (used to eliminate
+#'     launch peaks). Defaults to 0, i.e. no filtering.
+#' @param upper_limit upper cutoff for time since episode launch (used to eliminate
+#'     long term download data and just focus on launch performance)
+#' @param limit_unit time unit for limits. Can be "days" (default) or "hours".
+#'     Used to fine-tune launch performance cutoffs. 
+#' 
+#' @return a dataframe containing performance data per episode (total downloads,
+#'     during time period, average downloads during time period). 
+#' 
+#' @examples 
+#' \dontrun{
+#' print(1)
+#' }
+#' 
+#' @importFrom magrittr %>%
+#' 
+#' @seealso \code{podlove_performance_stats} for a more general performance function
 
-  
-  ########################################################################
+podlove_total_average_downloads <- function(df_tidy_data, 
+                                            gvar = "title", 
+                                            lower_limit = 0, 
+                                            upper_limit = Inf,
+                                            limit_unit = "days") {
   
   # switch units if necessary
   
@@ -29,27 +46,27 @@ podlove_total_average_downloads <- function(df_tidy_data, gvar = "title", lower_
   tad <- df_tidy_data %>%
     
     # NSE grouping for gvar
-    group_by_at(gvar) %>%
+    dplyr::group_by_at(gvar) %>%
     # additional grouping for time since launch
-    group_by(hours_since_release, add = TRUE) %>%
-    summarize(listeners_total = n()) %>% 
-    ungroup()  %>% 
+    dplyr::group_by(hours_since_release, add = TRUE) %>%
+    dplyr::summarize(listeners_total = n()) %>% 
+    dplyr::ungroup()  %>% 
     # set limits
-    filter(hours_since_release <= upper_limit,
+    dplyr::filter(hours_since_release <= upper_limit,
             hours_since_release >= lower_limit) %>% 
     # calculate sum and averages
-    group_by_at(gvar) %>% 
-    summarize(listeners_total = sum(listeners_total),
+    dplyr::group_by_at(gvar) %>% 
+    dplyr::summarize(listeners_total = sum(listeners_total),
               maxtime = max(hours_since_release)) %>% 
-    mutate(listeners_per_day = listeners_total / maxtime) %>% 
-    select({{gvar}}, listeners_total, listeners_per_day)
+    dplyr::mutate(listeners_per_day = listeners_total / maxtime) %>% 
+    dplyr::select({{gvar}}, listeners_total, listeners_per_day)
   
   
   # set average unit
   if (limit_unit == "days") {
-    tad <- mutate(tad, listeners_per_day = listeners_per_day * 24)
+    tad <- dplyr::mutate(tad, listeners_per_day = listeners_per_day * 24)
   } else {
-    tad <- rename(tad, listeners_per_hour = listeners_per_day)
+    tad <- dplyr::rename(tad, listeners_per_hour = listeners_per_day)
   }
 
   tad
