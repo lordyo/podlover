@@ -1,16 +1,26 @@
-podlove_graph_performance <- function(df_perfstats) {
+#' Create performance grid for podcast episodes
+#'
+#' Based on data created by \code{podlove_performance_stats}, plot all episodes
+#'     on an X/Y grid, X showing long-term average downloads, Y showing average
+#'     downloads during launch. This allows for categorization of epsisodes into
+#'     performance clusters. Note that you won't see episodes which are younger
+#'     than your \code{post_launch} limit.
+#'
+#' @param  df_perfstats a tidy data frame created by \code{performance_stats()}
+#' @param printout Switcher to automatically print out the plot (default TRUE)
+#'     
+#' @return A ggplot object
+#' 
+#' @examples 
+#' \dontrun{
+#' }
+#' @importFrom ggplot2 ggplot aes
+
+
+
+podlove_graph_performance <- function(df_perfstats, printout = TRUE) {
   
-  # PURPOSE
-  ### Graphs launch performance and long term performance in an XY chart
-  
-  # INPUT
-  ### df_perfstats: a performance stats df created by performance_stats()
-  
-  # OUTPUT
-  ### g: a ggplot graph (print is integrated)
-  
-  
-  df_perfstats <- filter(df_perfstats, !is.na(listeners_per_day_after_launch),
+  df_perfstats <- dplyr::filter(df_perfstats, !is.na(listeners_per_day_after_launch),
                          !is.na(listeners_per_day_at_launch))
   
   median_x <- median(df_perfstats$listeners_per_day_after_launch)
@@ -20,14 +30,16 @@ podlove_graph_performance <- function(df_perfstats) {
               aes(x = listeners_per_day_after_launch,
                   y = listeners_per_day_at_launch ,label = title)) +
     geom_point() +
-    scale_x_continuous(name = "Listeners per Day after Launch", limits = c(0,max(df_perfstats$listeners_per_day_after_launch))) +
-    scale_y_continuous(name = "Listeners per Day during Launch", limits = c(0,max(df_perfstats$listeners_per_day_at_launch))) +
+    scale_x_continuous(name = "Listeners per Day after Launch",
+                       limits = c(0,max(df_perfstats$listeners_per_day_after_launch))) +
+    scale_y_continuous(name = "Listeners per Day during Launch",
+                       limits = c(0,max(df_perfstats$listeners_per_day_at_launch))) +
     geom_hline(yintercept = median_y, alpha = 0.3) +
     geom_vline(xintercept = median_x, alpha = 0.3) +
-    geom_label_repel()
+    ggrepel::geom_label_repel()
     
   
-  print(g)
+  if (printout) print(g)
   
   g
   
