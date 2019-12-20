@@ -15,13 +15,15 @@
 #' \dontrun{
 #' }
 #' @importFrom ggplot2 ggplot aes
+#' 
+#' @export
 
 
 
 podlove_graph_performance <- function(df_perfstats, printout = TRUE) {
   
   df_perfstats <- dplyr::filter(df_perfstats, !is.na(listeners_per_day_after_launch),
-                         !is.na(listeners_per_day_at_launch))
+                                !is.na(listeners_per_day_at_launch))
   
   median_x <- median(df_perfstats$listeners_per_day_after_launch)
   median_y <- median(df_perfstats$listeners_per_day_at_launch)

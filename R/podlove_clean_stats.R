@@ -29,6 +29,9 @@
 #' @importFrom magrittr %>% 
 #' @importFrom dplyr group_by summarize ungroup select mutate left_join filter
 #' @importFrom lubridate ymd_hms ydm_h year month day date interval
+#' 
+#' @export
+
 
 podlove_clean_stats <- function(df_stats,
                                 df_mediafile,

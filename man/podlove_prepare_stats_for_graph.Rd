@@ -15,8 +15,7 @@ podlove_prepare_stats_for_graph(
 \item{df_stats}{A data frame of clean Podlove data, as rendered by 
 \code{podlove_get_and_clean()} or \code{podlove_clean_stats}.}
 
-\item{gvar}{Optional grouping variable(s), unquoted. If multiple variables 
-are given, they need to be in the form \code{c(var1, var2)}.}
+\item{gvar}{Optional grouping variable(s), unquoted.}
 
 \item{hourly}{Boolean switching parameter for rendering of hourly vs.
 daily data. Defaults to \code{FALSE} (daily data), \code{TRUE} creates
@@ -32,8 +31,16 @@ The function accepts one or more grouping variables (e.g. episode title) and
 accepts parameters for the time axis of downloads.
 }
 \examples{
-\dontrun{
-print(1)
-}
+# relative, daily plot by episode title
+podlove_graph_download_curves(example_data, gvar = title) 
+
+# relative, hourly plot by episode number
+podlove_graph_download_curves(example_data, gvar = ep_number, hourly = TRUE) 
+
+# absolute, daily plot by episode title
+podlove_graph_download_curves(example_data, gvar = title, relative = FALSE) 
+
+# abolute, hourly plot by podcast client name
+podlove_graph_download_curves(example_data, gvar = client_name, relative = FALSE) 
 
 }

@@ -23,12 +23,14 @@
 #' \dontrun{
 #' }
 #' @importFrom ggplot2 ggplot aes
+#' 
+#' @export
 
 podlove_graph_download_curves <- function(df_tidy_data,
-                                         gvar = NULL,
-                                         cumulative = TRUE,
-                                         labelmethod = "last.points",
-                                         printout = TRUE) {
+                                          gvar = NULL,
+                                          cumulative = TRUE,
+                                          labelmethod = "last.points",
+                                          printout = TRUE) {
   
   gvar_q = deparse(substitute(gvar))
   

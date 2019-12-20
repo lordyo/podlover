@@ -31,6 +31,8 @@
 #' 
 #' @importFrom magrittr %>%
 #' 
+#' @export
+#' 
 #' @seealso \code{podlove_total_average_downloads} for a more the helper function
 #'    behind this function, which allows more fine tuned data.
 

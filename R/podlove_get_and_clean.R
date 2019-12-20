@@ -20,14 +20,17 @@
 #' dlic_raw <- podlove_get_and_clean(launchdate = "2019-05-01")
 #' }
 #' \dontrun{
-#' dlic_raw <- podlove_get_and_clean(dbname = "my_sql_database",
-#'                                   host = "my.database.host",
-#'                                   user = "username,"
-#'                                   password = "my.secret.password",
-#'                                   launchdate = "2019-05-01")
+#' # don't use clear access data in functions, never save passwords to .R files! 
+#' download_data <- podlove_get_and_clean(dbname = "my_sql_database",
+#'                                        host = "my.database.host",
+#'                                        user = "username,"
+#'                                        password = "my.secret.password",
+#'                                        launchdate = "2019-05-01")
 #' }
 #' 
 #' @importFrom magrittr %>% 
+#' 
+#' @export
 
 
 podlove_get_and_clean <- function(db_name = rstudioapi::askForSecret(name = "dbname"),

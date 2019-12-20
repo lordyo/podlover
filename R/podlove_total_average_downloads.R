@@ -27,6 +27,8 @@
 #' 
 #' @importFrom magrittr %>%
 #' 
+#' @export
+#' 
 #' @seealso \code{podlove_performance_stats} for a more general performance function
 
 podlove_total_average_downloads <- function(df_tidy_data, 

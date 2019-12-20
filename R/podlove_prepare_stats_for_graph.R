@@ -6,8 +6,7 @@
 #'
 #' @param df_stats A data frame of clean Podlove data, as rendered by 
 #'     \code{podlove_get_and_clean()} or \code{podlove_clean_stats}.
-#' @param gvar Optional grouping variable(s), unquoted. If multiple variables 
-#'     are given, they need to be in the form \code{c(var1, var2)}. 
+#' @param gvar Optional grouping variable(s), unquoted.
 #' @param hourly Boolean switching parameter for rendering of hourly vs.
 #'     daily data. Defaults to \code{FALSE} (daily data), \code{TRUE} creates
 #'     hourly data.  
@@ -16,16 +15,29 @@
 #'     in absolute dates (\code{TRUE}). Defaults to \code{TRUE}. 
 #'     
 #' @examples 
-#' \dontrun{
-#' print(1)
-#' }
+#' # relative, daily plot by episode title
+#' podlove_graph_download_curves(example_data, gvar = title) 
+#' 
+#' # relative, hourly plot by episode number
+#' podlove_graph_download_curves(example_data, gvar = ep_number, hourly = TRUE) 
+#' 
+#' # absolute, daily plot by episode title
+#' podlove_graph_download_curves(example_data, gvar = title, relative = FALSE) 
+#' 
+#' # abolute, hourly plot by podcast client name
+#' podlove_graph_download_curves(example_data, gvar = client_name, relative = FALSE) 
 #' 
 #' @importFrom magrittr %>% 
 #' @importFrom dplyr group_by summarize ungroup mutate
+#' 
+#' @export 
+
 
 podlove_prepare_stats_for_graph <- function(df_stats, gvar, hourly = FALSE, relative = TRUE) {
   
-  # prepare for tidy evaluation
+  # p\dontrun{
+#' print(1)
+#' irepare for tidy evaluation
   gvar <- dplyr::enquo(gvar)
   
   prep_stats <- df_stats
