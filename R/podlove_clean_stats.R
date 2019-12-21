@@ -85,8 +85,8 @@ podlove_clean_stats <- function(df_stats,
     left_join(df_mediafile, by = c("media_file_id" = "id")) %>%
     left_join(df_user, by = c("user_agent_id" = "id")) %>%
     mutate(
-      hours_since_release = round(interval(post_datetime, dldatetime) / lubridate::hours(1), 0),
-      days_since_release = round(hours_since_release / 24, 0),
+      hours_since_release = floor(interval(post_datetime, dldatetime) / lubridate::hours(1)),
+      days_since_release = floor(hours_since_release / 24),
       ep_number = as.character(ep_number)) %>%
     select(
       ep_number,
