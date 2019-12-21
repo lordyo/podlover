@@ -32,15 +32,15 @@ accepts parameters for the time axis of downloads.
 }
 \examples{
 # relative, daily plot by episode title
-podlove_graph_download_curves(example_data, gvar = title) 
+podlove_prepare_stats_for_graph(podcast_example_data, gvar = title) 
 
 # relative, hourly plot by episode number
-podlove_graph_download_curves(example_data, gvar = ep_number, hourly = TRUE) 
+podlove_prepare_stats_for_graph(podcast_example_data, gvar = ep_number, hourly = TRUE) 
 
 # absolute, daily plot by episode title
-podlove_graph_download_curves(example_data, gvar = title, relative = FALSE) 
+podlove_prepare_stats_for_graph(podcast_example_data, gvar = title, relative = FALSE) 
 
 # abolute, hourly plot by podcast client name
-podlove_graph_download_curves(example_data, gvar = client_name, relative = FALSE) 
+podlove_prepare_stats_for_graph(podcast_example_data, gvar = client_name, relative = FALSE) 
 
 }

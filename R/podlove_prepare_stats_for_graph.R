@@ -16,16 +16,16 @@
 #'     
 #' @examples 
 #' # relative, daily plot by episode title
-#' podlove_graph_download_curves(example_data, gvar = title) 
+#' podlove_prepare_stats_for_graph(podcast_example_data, gvar = title) 
 #' 
 #' # relative, hourly plot by episode number
-#' podlove_graph_download_curves(example_data, gvar = ep_number, hourly = TRUE) 
+#' podlove_prepare_stats_for_graph(podcast_example_data, gvar = ep_number, hourly = TRUE) 
 #' 
 #' # absolute, daily plot by episode title
-#' podlove_graph_download_curves(example_data, gvar = title, relative = FALSE) 
+#' podlove_prepare_stats_for_graph(podcast_example_data, gvar = title, relative = FALSE) 
 #' 
 #' # abolute, hourly plot by podcast client name
-#' podlove_graph_download_curves(example_data, gvar = client_name, relative = FALSE) 
+#' podlove_prepare_stats_for_graph(podcast_example_data, gvar = client_name, relative = FALSE) 
 #' 
 #' @importFrom magrittr %>% 
 #' @importFrom dplyr group_by summarize ungroup mutate
@@ -35,9 +35,7 @@
 
 podlove_prepare_stats_for_graph <- function(df_stats, gvar, hourly = FALSE, relative = TRUE) {
   
-  # p\dontrun{
-#' print(1)
-#' irepare for tidy evaluation
+  # prepare for tidy evaluation
   gvar <- dplyr::enquo(gvar)
   
   prep_stats <- df_stats
