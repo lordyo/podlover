@@ -42,9 +42,14 @@ Podcast performance between episodes is difficult to measure and compare,
     and its helper function \code{podlove_total_average_downloads} allow this.
 }
 \examples{
-\dontrun{
-print(1)
-}
+# performance stats with a launch period of 2 days and a post-launch period
+# of 5 days
+podlove_performance_stats(podcast_example_data, launch = 2, post_launch = 5)
+
+# performance stats with a launch period of 12 hours and a post-launch period
+# of 120 hours (= 5 days)
+podlove_performance_stats(podcast_example_data,
+                          launch = 2, post_launch = 5*24, limit_unit = "hours")
 
 }
 \seealso{

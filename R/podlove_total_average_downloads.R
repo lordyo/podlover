@@ -21,9 +21,16 @@
 #'     during time period, average downloads during time period). 
 #' 
 #' @examples 
-#' \dontrun{
-#' print(1)
-#' }
+#' # total and average downloads by episode, no timeframe filter (complete period)
+#' podlove_total_average_downloads(podcast_example_data, gvar = "title")
+#' 
+#' # total and average downloads by episode number after 7 days of release 
+#' podlove_total_average_downloads(podcast_example_data, gvar = "ep_number",
+#'                                lower_limit = 7)
+#'
+#'# total and average downloads by episode number during first 12 hours of release 
+#'podlove_total_average_downloads(podcast_example_data, gvar = "ep_number",
+#'                                upper_limit = 12, limit_unit = "hours")
 #' 
 #' @importFrom magrittr %>%
 #' 

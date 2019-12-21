@@ -17,11 +17,15 @@ A ggplot object
 \description{
 Based on data created by \code{podlove_performance_stats}, plot all episodes
     on an X/Y grid, X showing long-term average downloads, Y showing average
-    downloads during launch. This allows for categorization of epsisodes into
-    performance clusters. Note that you won't see episodes which are younger
-    than your \code{post_launch} limit.
+    downloads during launch. Horizontal and vertcal lines show median values. 
+    This allows for categorization of epsisodes into performance clusters.
+    Note that you won't see episodes which are younger than your \code{post_launch}
+    limit.
 }
 \examples{
-\dontrun{
-}
+# plot episode performance stats with a launch period of 2 days and a
+# post-launch period of 5 days
+perf <- podlove_performance_stats(podcast_example_data, launch = 2, post_launch = 5)
+podlove_graph_performance(perf)
+
 }
