@@ -20,8 +20,23 @@
 #' @return A ggplot object
 #' 
 #' @examples 
-#' \dontrun{
-#' }
+#' # relative, daily plot by episode title, cumulative
+#' gdata <- podlove_prepare_stats_for_graph(podcast_example_data, gvar = title) 
+#' podlove_graph_download_curves(gdata, gvar = title, cumulative = TRUE)
+
+#' # relative, hourly plot by episode number, cumulative
+#' gdata <- podlove_prepare_stats_for_graph(podcast_example_data, gvar = ep_number, hourly = TRUE) 
+#' podlove_graph_download_curves(gdata, gvar = ep_number, cumulative = TRUE)
+
+#' # absolute, daily plot by episode title, noncumulative, with labels at the beginning
+#' gdata <- podlove_prepare_stats_for_graph(podcast_example_data, gvar = title, relative = FALSE) 
+#' podlove_graph_download_curves(gdata, gvar = title, cumulative = FALSE, labelmethod = "first.points")
+
+#' # abolute, hourly plot by podcast client name, cumulative
+#' gdata <- podlove_prepare_stats_for_graph(podcast_example_data, gvar = client_name, relative = FALSE) 
+#' podlove_graph_download_curves(gdata, gvar = client_name, cumulative = TRUE)
+
+#'
 #' @importFrom ggplot2 ggplot aes
 #' 
 #' @export
