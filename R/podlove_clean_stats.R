@@ -87,13 +87,19 @@ podlove_clean_stats <- function(df_stats,
     mutate(
       hours_since_release = floor(interval(post_datetime, dldatetime) / lubridate::hours(1)),
       days_since_release = floor(hours_since_release / 24),
-      ep_number = as.character(ep_number)) %>%
+      ep_number = as.character(ep_number),
+      ep_num_title = paste0(ep_number, ": ", title),
+      ep_age_hours = floor(interval(post_datehour, max(dldatehour)) / lubridate::hours(1)),
+      ep_age_days = floor(ep_age_hours / 24)) %>%
     select(
       ep_number,
       title,
+      ep_num_title,
       duration,
       post_date,
       post_datehour,
+      ep_age_hours,
+      ep_age_days,
       hours_since_release,
       days_since_release,
       source,
