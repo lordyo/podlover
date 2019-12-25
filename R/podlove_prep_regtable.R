@@ -25,6 +25,7 @@
 
 podlove_prep_regtable <- function(df_tidy_data,
                                   point_in_time) {
+ 
   
   if (point_in_time > max(df_tidy_data$hours_since_release)) {
     warning(paste0("point_in_time (", point_in_time, " hours) is greater than podcast age: No data generated"))
