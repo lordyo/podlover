@@ -61,9 +61,9 @@ podlove_clean_stats <- function(df_stats,
           lubridate::hour(post_datetime))),
       post_date = date(post_datetime)
     )
-
+  
   # clean download data, join with ref data
-
+  
   df_clean <- df_stats %>%
     select(id:media_file_id, dldatetime = accessed_at, source, context) %>%
     mutate(
@@ -73,10 +73,10 @@ podlove_clean_stats <- function(df_stats,
       hour = lubridate::hour(dldatetime),
       dldatehour = lubridate::ymd_h(
         paste(year(dldatetime),
-               month(dldatetime),
-               day(dldatetime),
-               lubridate::hour(dldatetime),
-               sep = "-")))
+              month(dldatetime),
+              day(dldatetime),
+              lubridate::hour(dldatetime),
+              sep = "-")))
   
   # filter for launchdate if parameter is not empty
   if (!is.null(launch_date)) filter(df_clean, dldate >= lubridate::ymd(launch_date))
