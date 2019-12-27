@@ -23,10 +23,12 @@ Based on data created by \code{podlove_performance_stats}, plot all episodes
     limit.
 }
 \examples{
+\dontrun{
 # plot episode performance stats with a launch period of 2 days and a
 # post-launch period of 5 days
 
 perf <- podlove_performance_stats(podcast_example_data, launch = 2, post_launch = 5)
 podlove_graph_performance(perf)
+}
 
 }

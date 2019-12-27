@@ -24,10 +24,12 @@ Episodes with an episode age younger than \code{point_in_time} will be excluded.
 Helper function to \code{podlove_prep_regtables()}.
 }
 \examples{
+\dontrun{
 # downloads after 12 hours
 podlove_prep_regtable(podcast_example_data, 12)
 
 # downloads after 10 days
 podlove_prep_regtable(podcast_example_data, 10*24)
+}
 
 }

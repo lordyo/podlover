@@ -31,6 +31,7 @@ The function accepts one or more grouping variables (e.g. episode title) and
 accepts parameters for the time axis of downloads.
 }
 \examples{
+\dontrun{
 # relative, daily plot by episode title
 podlove_prepare_stats_for_graph(podcast_example_data, gvar = title) 
 
@@ -42,5 +43,6 @@ podlove_prepare_stats_for_graph(podcast_example_data, gvar = title, relative = F
 
 # abolute, hourly plot by podcast client name
 podlove_prepare_stats_for_graph(podcast_example_data, gvar = client_name, relative = FALSE) 
+}
 
 }

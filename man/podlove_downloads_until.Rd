@@ -27,6 +27,7 @@ Episodes with an episode age younger than \code{point_in_time} will be excluded.
 Can be used to generate data for regression models.
 }
 \examples{
+\dontrun{ 
 # downloads after 3 days
 podlove_downloads_until(podcast_example_data, points_in_time = 3)
 
@@ -36,5 +37,6 @@ podlove_downloads_until(podcast_example_data, points_in_time = 12,
 
 # downloads after 1, 3, and 10 days
 podlove_downloads_until(podcast_example_data, points_in_time = c(1, 3, 10))
+}
 
 }

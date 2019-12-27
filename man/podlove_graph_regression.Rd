@@ -17,8 +17,7 @@ podlove_graph_regression(
 }
 \arguments{
 \item{df_regression_data}{a tidy data table created by \code{podlove_downloads_until()}.
-Note that this function should not be fed data including more than one \code{point_in_time}
-unless vectorized.}
+Note that this function can't be fed data including more than one \code{point_in_time}}
 
 \item{predictor}{a single predictor variable for downloads, typically a time 
 or order based variable such as \code{post_date}, \code{post_datehour} (default), 
@@ -50,6 +49,7 @@ This function takes data from a \code{podlove_downloads_until()} and creates
     a regression plot with several graphical options.
 }
 \examples{
+\dontrun{
 # prepare linear regression data for downloads on day 3 by episode release date
 dl <- podlove_downloads_until(podcast_example_data, points_in_time = 3)
 
@@ -68,6 +68,6 @@ podlove_graph_regression(dl, predictor = post_datehour, plot_type = "point",
 podlove_graph_regression(dl, predictor = post_datehour, plot_type = "point",
                          stylize = FALSE) +
     ggthemes::theme_economist()
-
+}
 
 }
