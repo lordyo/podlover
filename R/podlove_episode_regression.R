@@ -20,9 +20,11 @@
 #' @return a linear reression model created by \code{lm()}.
 #' 
 #' @examples 
+#' \dontrun{
 #' # linear regression for downloads on day 3 by episode release date
 #' dl <- podlove_downloads_until(podcast_example_data, points_in_time = 3)
 #' podlove_episode_regression(dl, terms = "post_datehour")
+#' }
 #' 
 #' @export
 

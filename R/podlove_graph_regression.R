@@ -4,8 +4,7 @@
 #'     a regression plot with several graphical options.
 #'
 #' @param df_regression_data a tidy data table created by \code{podlove_downloads_until()}.
-#'     Note that this function should not be fed data including more than one \code{point_in_time}
-#'     unless vectorized. 
+#'     Note that this function can't be fed data including more than one \code{point_in_time}
 #' @param predictor a single predictor variable for downloads, typically a time 
 #'     or order based variable such as \code{post_date}, \code{post_datehour} (default), 
 #'     \code{episode_age_hours}/\code{episode_age_days} (note: age decreases
@@ -25,6 +24,7 @@
 #' @return a ggplot2 object 
 #' 
 #' @examples 
+#' \dontrun{
 #' # prepare linear regression data for downloads on day 3 by episode release date
 #' dl <- podlove_downloads_until(podcast_example_data, points_in_time = 3)
 #' 
@@ -43,11 +43,9 @@
 #' podlove_graph_regression(dl, predictor = post_datehour, plot_type = "point",
 #'                          stylize = FALSE) +
 #'     ggthemes::theme_economist()
-#' 
+#' }
 #' 
 #' @importFrom magrittr %>%
-#' @importFrom dplyr group_by summarize ungroup select mutate left_join filter
-#' @importFrom lubridate ymd_hms ydm_h year month day date interval
 #' 
 #' @export
 
@@ -60,6 +58,15 @@ podlove_graph_regression <- function(df_regression_data,
                                      stylize = TRUE,
                                      printout = TRUE) {
   
+  # error handling for data sets with more than one point_in_time
+  
+  check_pits <- regression_data %>% 
+    group_by(measure_hour) %>% 
+    group_size() %>% 
+    length()
+  
+  if (check_pits != 1) stop("Data set must consist of one point_in_time.")
+  
   # predictor to string
   pred_string <- deparse(substitute(predictor))
   
@@ -69,7 +76,7 @@ podlove_graph_regression <- function(df_regression_data,
                                       printout = FALSE)
   
   # get confidence interval data from regression model
-  conf_df <- as.data.frame(predict(model, interval = 'confidence'))
+  conf_df <- as.data.frame(stats::predict(model, interval = 'confidence'))
   
   # attach regression data to original data
   df_data_with_model <- dplyr::bind_cols(df_regression_data, conf_df)
@@ -81,6 +88,9 @@ podlove_graph_regression <- function(df_regression_data,
                                           label = ep_num_title))
   
   # switcher for plot_type
+  
+  plot_types = c("line", "point", "area")
+  
   if (plot_type == "line") {
     g_model <- g_model + ggplot2::geom_line(color = "#555555") +
        ggplot2::geom_point(color = "#000066")
@@ -90,7 +100,8 @@ podlove_graph_regression <- function(df_regression_data,
 
   } else if (plot_type == "area") {
     g_model <- g_model + ggplot2::geom_area(fill = "#6699CC")
-  }
+  
+  } else  stop(paste0("plot_type is unkonwn. Use 'line', 'point' or 'area'."))
   
   # switcher for regression line
   if (regline) {
