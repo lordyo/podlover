@@ -5,7 +5,7 @@
 #'
 #' @format A data frame with 552 rows and 17 variables:
 #' \describe{
-#'   \item{ep_number}{episode number, as string}
+#'   \item{ep_number}{episode number, as strings}
 #'   \item{title}{episode title}
 #'   \item{duration}{duration of the episode in minutes:seconds.deciseconds}
 #'   \item{post_date}{episode publish date in YYYY-MM-DD}
