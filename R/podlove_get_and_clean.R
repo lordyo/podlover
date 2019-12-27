@@ -11,6 +11,11 @@
 #' @param db_user username of the database 
 #' @param db_password password of the database
 #' @param launch_date date of the first official podcast episode release
+#' @param tbl_downloads name of the MySQL table for clean downloads
+#' @param tbl_mediafile name of the MySQL table for mediafiles
+#' @param tbl_useragent name of the MySQL table for useragents
+#' @param tbl_episode name of the MySQL table for episodes
+#' @param tbl_posts name of the MySQL table for posts
 #' 
 #' @return a dataframe containing all episode download attempts
 #' 
@@ -37,15 +42,20 @@ podlove_get_and_clean <- function(db_name = rstudioapi::askForSecret(name = "dbn
                                   db_host = rstudioapi::askForSecret(name = "host"),
                                   db_user = rstudioapi::askForSecret(name = "user"),
                                   db_password = rstudioapi::askForSecret(name = "password"),
-																	launch_date = NULL)  {
+																	launch_date = NULL,
+																	tbl_downloads = "wp_podlove_downloadintentclean",
+																	tbl_mediafile = "wp_podlove_mediafile",
+																	tbl_useragent = "wp_podlove_useragent",
+																	tbl_episode = "wp_podlove_episode",
+																	tbl_posts = "wp_posts")  {
   
   # define which tables to fetch
   
-  tbl_names <-	c("wp_podlove_downloadintentclean",
-      						"wp_podlove_mediafile",
-      						"wp_podlove_useragent",
-      						"wp_podlove_episode",
-    							"wp_posts")
+  tbl_names <-	c(tbl_downloads, 
+                 tbl_mediafile, 
+                 tbl_useragent, 
+                 tbl_episode, 
+                 tbl_posts)
 
   # set names of resulting data frames
   

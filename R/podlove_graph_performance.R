@@ -13,11 +13,13 @@
 #' @return A ggplot object
 #' 
 #' @examples 
+#' \dontrun{
 #' # plot episode performance stats with a launch period of 2 days and a
 #' # post-launch period of 5 days
 #' 
 #' perf <- podlove_performance_stats(podcast_example_data, launch = 2, post_launch = 5)
 #' podlove_graph_performance(perf)
+#' }
 #' 
 #' @importFrom ggplot2 ggplot aes
 #' 
@@ -30,8 +32,8 @@ podlove_graph_performance <- function(df_perfstats, printout = TRUE) {
   df_perfstats <- dplyr::filter(df_perfstats, !is.na(listeners_per_day_after_launch),
                                 !is.na(listeners_per_day_at_launch))
   
-  median_x <- median(df_perfstats$listeners_per_day_after_launch)
-  median_y <- median(df_perfstats$listeners_per_day_at_launch)
+  median_x <- stats::median(df_perfstats$listeners_per_day_after_launch)
+  median_y <- stats::median(df_perfstats$listeners_per_day_at_launch)
   
   g <- ggplot(df_perfstats,
               aes(x = listeners_per_day_after_launch,

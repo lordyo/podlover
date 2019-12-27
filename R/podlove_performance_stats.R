@@ -25,6 +25,7 @@
 #'     after launch)
 #' 
 #' @examples 
+#' \dontrun{
 #' # performance stats with a launch period of 2 days and a post-launch period
 #' # of 5 days
 #' podlove_performance_stats(podcast_example_data, launch = 2, post_launch = 5)
@@ -33,6 +34,7 @@
 #' # of 120 hours (= 5 days)
 #' podlove_performance_stats(podcast_example_data,
 #'                           launch = 2, post_launch = 5*24, limit_unit = "hours")
+#' }
 #' 
 #' @importFrom magrittr %>%
 #' 

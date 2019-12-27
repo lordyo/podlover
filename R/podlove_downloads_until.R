@@ -15,7 +15,8 @@
 #' @return A tidy table of episode downloads at the specified points in time, 
 #'     along with episode-related fields 
 #' 
-#' @examples 
+#' @examples
+#' \dontrun{ 
 #' # downloads after 3 days
 #' podlove_downloads_until(podcast_example_data, points_in_time = 3)
 #' 
@@ -25,6 +26,7 @@
 #' 
 #' # downloads after 1, 3, and 10 days
 #' podlove_downloads_until(podcast_example_data, points_in_time = c(1, 3, 10))
+#' }
 #' 
 #' @importFrom magrittr %>%
 #' @importFrom dplyr group_by summarize mutate filter

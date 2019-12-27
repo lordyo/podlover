@@ -15,6 +15,7 @@
 #'     in absolute dates (\code{TRUE}). Defaults to \code{TRUE}. 
 #'     
 #' @examples 
+#' \dontrun{
 #' # relative, daily plot by episode title
 #' podlove_prepare_stats_for_graph(podcast_example_data, gvar = title) 
 #' 
@@ -26,6 +27,7 @@
 #' 
 #' # abolute, hourly plot by podcast client name
 #' podlove_prepare_stats_for_graph(podcast_example_data, gvar = client_name, relative = FALSE) 
+#' }
 #' 
 #' @importFrom magrittr %>% 
 #' @importFrom dplyr group_by summarize ungroup mutate

@@ -14,17 +14,20 @@
 #'     along with episode-related fields 
 #' 
 #' @examples 
+#' \dontrun{
 #' # downloads after 12 hours
 #' podlove_prep_regtable(podcast_example_data, 12)
 #' 
 #' # downloads after 10 days
 #' podlove_prep_regtable(podcast_example_data, 10*24)
+#' }
 #' 
 #' @importFrom magrittr %>%
 #' @importFrom dplyr group_by summarize mutate filter
 
 podlove_prep_regtable <- function(df_tidy_data,
                                   point_in_time) {
+ 
   
   if (point_in_time > max(df_tidy_data$hours_since_release)) {
     warning(paste0("point_in_time (", point_in_time, " hours) is greater than podcast age: No data generated"))
