@@ -84,10 +84,17 @@ podlove_clean_stats <- function(df_stats,
   df_clean <- df_clean %>% 
     left_join(df_mediafile, by = c("media_file_id" = "id")) %>%
     left_join(df_user, by = c("user_agent_id" = "id")) %>%
+    filter(!is.na(title), !is.na(post_date)) %>% 
     mutate(
       hours_since_release = floor(interval(post_datetime, dldatetime) / lubridate::hours(1)),
       days_since_release = floor(hours_since_release / 24),
-      ep_number = as.character(ep_number),
+      # ep_number = as.character(ep_number),
+       
+      # add leading zeroes to episode numbers
+      ep_number = formatC(ep_number,
+                          width = max(floor(log10(ep_number)) + 1),
+                          format = "d",
+                          flag = "0"),
       ep_num_title = paste0(ep_number, ": ", title),
       ep_age_hours = floor(interval(post_datehour, max(dldatehour)) / lubridate::hours(1)),
       ep_age_days = floor(ep_age_hours / 24)) %>%
@@ -113,8 +120,7 @@ podlove_clean_stats <- function(df_stats,
       os_name) %>%
     dplyr::group_by_all() %>%
     summarize(dl_attempts = n()) %>%
-    ungroup() %>% 
-    filter(!is.na(title), !is.na(post_date))
+    ungroup() 
 
     df_clean
     
