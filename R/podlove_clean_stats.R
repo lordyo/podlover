@@ -71,12 +71,11 @@ podlove_clean_stats <- function(df_stats,
       dldate = date(dldatetime),
       weekday = lubridate::wday(dldatetime, label = TRUE),
       hour = lubridate::hour(dldatetime),
-      dldatehour = lubridate::ymd_h(
-        paste(year(dldatetime),
-              month(dldatetime),
-              day(dldatetime),
-              lubridate::hour(dldatetime),
-              sep = "-")))
+      dldatehour = lubridate::ymd_hms(
+        paste0(year(dldatetime), "-",
+              month(dldatetime), "-",
+              day(dldatetime), " ", 
+              lubridate::hour(dldatetime), ":00:00")))
   
   # filter for launchdate if parameter is not empty
   if (!is.null(launch_date)) filter(df_clean, dldate >= lubridate::ymd(launch_date))
@@ -96,6 +95,7 @@ podlove_clean_stats <- function(df_stats,
                           format = "d",
                           flag = "0"),
       ep_num_title = paste0(ep_number, ": ", title),
+      # THIS SEEMS TO BE WRONG 
       ep_age_hours = floor(interval(post_datehour, max(dldatehour)) / lubridate::hours(1)),
       ep_age_days = floor(ep_age_hours / 24)) %>%
     select(
