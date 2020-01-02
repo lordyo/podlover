@@ -21,7 +21,8 @@
 
 podlove_create_example_useragents <-
   function(n_useragents, df_ua_list = podcast_example_useragents, seed = NULL) {
-
+    
+    # set seed if given
     if (!is.null(seed)) set.seed(seed)
     
     #error handling n_useragents
@@ -29,11 +30,15 @@ podlove_create_example_useragents <-
       stop(paste0("n_useragents can't be higher than ", nrow(df_ua_list), "."))
     }
     
+    # construct table
     useragents <-
       tibble::tibble(
-      id = sample(df_ua_list$id, n_useragents, replace = FALSE),
+        # sample some ids from the user agent reference list      
+        id = sample(df_ua_list$id, n_useragents, replace = FALSE),
       ) %>%
+      # attach the reference list
       dplyr::left_join(df_ua_list, by = "id") %>% 
+      # renumber
       dplyr::mutate(id = dplyr::row_number())
     
     useragents

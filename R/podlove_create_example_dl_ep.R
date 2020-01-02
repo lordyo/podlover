@@ -89,9 +89,9 @@ podlove_create_example_dl_ep <-  function(n_dls,
     downloads <- downloads %>%
       dplyr::arrange(y) %>%
       mutate(media_file_id = media_file_id,
-             access_time = lubridate::as.period(y / b) / lubridate::seconds(1)) %>% 
+             access_time = y / b) %>% 
       # mutate(media_file_id = media_file_id,
-      #        access_time = lubridate::as.period(y / b) / lubridate::hours(1)) %>% 
+      #        access_time = lubridate::as.period(y / b) / lubridate::seconds(1)) %>% 
       select(-y)
     
     downloads

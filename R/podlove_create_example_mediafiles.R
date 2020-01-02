@@ -27,15 +27,23 @@
 
 podlove_create_example_mediafiles <-
   function(df_episodes, seed = NULL) {
-     
+    
+    # set seed if given 
     if (!is.null(seed)) set.seed(seed)
     
     mediafiles <-
       tibble::tibble(
+        # id corresponds to episode ids
         id = seq(min(df_episodes$id), max(df_episodes$id)),
         episode_id = id,
-        episode_asset_id = sample(1:3, nrow(df_episodes), prob = c(0.8, 0.15, 0.05), replace = TRUE),
+        # random asset ids with fixed probabilities
+        episode_asset_id = sample(1:3, 
+                                  nrow(df_episodes),
+                                  prob = c(0.8, 0.15, 0.05),
+                                  replace = TRUE),
+        # normal distributed file sizes around 30 MB
         size = rnorm(nrow(df_episodes), mean = 30e6, sd = 10e6),
+        # not used
         etag = NA)
     
     mediafiles
