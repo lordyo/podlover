@@ -52,8 +52,10 @@ podlove_create_example_posts <-
         post_date_gmt = post_date,
         # lipsum conent
         post_content = wakefield::lorem_ipsum(n_posts),
-        # random baby names as post titles
-        post_title = wakefield::name(n_posts),
+        # # random baby names as post titles
+        # post_title = wakefield::name(n_posts),
+        # random Wikipedia article titles as titles
+        post_title = sample(wp_featured_articles$article, n_posts, replace = FALSE),
         # excerpt same as conten 
         post_excerpt = post_content,
         # statuses fixed

@@ -23,7 +23,7 @@
 #' }
 #' 
 #' @importFrom magrittr %>%
-#' @importFrom dplyr group_by summarize mutate filter
+#' @importFrom dplyr group_by summarize mutate filter arrange
 
 podlove_prep_regtable <- function(df_tidy_data,
                                   point_in_time) {

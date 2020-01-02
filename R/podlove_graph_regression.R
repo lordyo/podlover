@@ -60,9 +60,9 @@ podlove_graph_regression <- function(df_regression_data,
   
   # error handling for data sets with more than one point_in_time
   
-  check_pits <- regression_data %>% 
-    group_by(measure_hour) %>% 
-    group_size() %>% 
+  check_pits <- df_regression_data %>% 
+    dplyr::group_by(measure_hour) %>% 
+    dplyr::group_size() %>% 
     length()
   
   if (check_pits != 1) stop("Data set must consist of one point_in_time.")
