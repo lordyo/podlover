@@ -16,9 +16,9 @@
 #' @param dl_per_ep_day Downloads per episode and day throughout its runtime. 
 #'     Be careful, this is a powerful parameter which will strongly increase the 
 #'     size of your dataset. Use the following formula to estimate this parameter:
-#'     dl_per_ep_day = (episodes \* total podcast runtime) / (2 \* total downloads)
+#'     dl_per_ep_day =  (2 \* total downloads) / (episodes \* total podcast runtime)
 #'     e.g. to create a set of 5000 downloads for 10 episodes over one year, use
-#'     (10 eps \* 365 days) / (2 \* 5000 downloads) = 0.365 downloads per ep/day.
+#'     (2 \* 5000 downloads) / (10 eps \* 365 days) = 2.74 downloads per ep/day.
 #' @param seed parameter to fix randomization via \code{set.seed()}
 #'
 #' @return a tibble with downloads per episode
@@ -47,6 +47,8 @@ podlove_create_example_downloads <- function(df_posts,
                                              runtime,
                                              dl_per_ep_day,
                                              seed) {
+  # set seed if given
+  if (!is.null(seed)) set.seed(seed)
   
   # get episode numbers and relesase dates
   episodes <- df_mediafiles %>% 
