@@ -11,11 +11,12 @@
 #' @param db_user username of the database 
 #' @param db_password password of the database
 #' @param launch_date date of the first official podcast episode release
-#' @param tbl_downloads name of the MySQL table for clean downloads
-#' @param tbl_mediafile name of the MySQL table for mediafiles
-#' @param tbl_useragent name of the MySQL table for useragents
-#' @param tbl_episode name of the MySQL table for episodes
-#' @param tbl_posts name of the MySQL table for posts
+#' @param tbl_prefix prefix of the MySLQ table names, defaults to `wp_`
+#' @param tbl_downloads name of the MySQL table for clean downloads (without the prefix)
+#' @param tbl_mediafile name of the MySQL table for mediafiles (without the prefix)
+#' @param tbl_useragent name of the MySQL table for useragents (without the prefix)
+#' @param tbl_episode name of the MySQL table for episodes (without the prefix)
+#' @param tbl_posts name of the MySQL table for posts (without the prefix)
 #' 
 #' @return a dataframe containing all episode download attempts
 #' 
@@ -38,24 +39,25 @@
 #' @export
 
 
-podlove_get_and_clean <- function(db_name = rstudioapi::askForSecret(name = "dbname"),
-                                  db_host = rstudioapi::askForSecret(name = "host"),
-                                  db_user = rstudioapi::askForSecret(name = "user"),
-                                  db_password = rstudioapi::askForSecret(name = "password"),
+podlove_get_and_clean <- function(db_name = rstudioapi::askForSecret(name = "dbname", message = "Enter the name of the database", title = "Database Name"),
+                                  db_host = rstudioapi::askForSecret(name = "host", message = "Enter the hostname of the database", title = "Hostname"),
+                                  db_user = rstudioapi::askForSecret(name = "user", message = "Enter the user name of the database", title = "User Name"),
+                                  db_password = rstudioapi::askForSecret(name = "password", message = "Enter the Password", title = "Password"),
 																	launch_date = NULL,
-																	tbl_downloads = "wp_podlove_downloadintentclean",
-																	tbl_mediafile = "wp_podlove_mediafile",
-																	tbl_useragent = "wp_podlove_useragent",
-																	tbl_episode = "wp_podlove_episode",
-																	tbl_posts = "wp_posts")  {
+																	tbl_prefix = "wp_",
+																	tbl_downloads = "podlove_downloadintentclean",
+																	tbl_mediafile = "podlove_mediafile",
+																	tbl_useragent = "podlove_useragent",
+																	tbl_episode = "podlove_episode",
+																	tbl_posts = "posts")  {
   
   # define which tables to fetch
   
-  tbl_names <-	c(tbl_downloads, 
-                 tbl_mediafile, 
-                 tbl_useragent, 
-                 tbl_episode, 
-                 tbl_posts)
+  tbl_names <-	paste0(tbl_prefix, c(tbl_downloads, 
+                                    tbl_mediafile, 
+                                    tbl_useragent, 
+                                    tbl_episode, 
+                                    tbl_posts))
 
   # set names of resulting data frames
   
@@ -106,6 +108,8 @@ podlove_get_and_clean <- function(db_name = rstudioapi::askForSecret(name = "dbn
 	                                  tables[[df_names[4]]],
 	                                  tables[[df_names[5]]],
 																		launch_date)
+	
+	message("tables connected and data cleaned")
 	
 	dlic_clean
 }

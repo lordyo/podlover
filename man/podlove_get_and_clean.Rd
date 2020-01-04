@@ -5,16 +5,21 @@
 \title{Fetch and prepare all download data}
 \usage{
 podlove_get_and_clean(
-  db_name = rstudioapi::askForSecret(name = "dbname"),
-  db_host = rstudioapi::askForSecret(name = "host"),
-  db_user = rstudioapi::askForSecret(name = "user"),
-  db_password = rstudioapi::askForSecret(name = "password"),
+  db_name = rstudioapi::askForSecret(name = "dbname", message =
+    "Enter the name of the database", title = "Database Name"),
+  db_host = rstudioapi::askForSecret(name = "host", message =
+    "Enter the hostname of the database", title = "Hostname"),
+  db_user = rstudioapi::askForSecret(name = "user", message =
+    "Enter the user name of the database", title = "User Name"),
+  db_password = rstudioapi::askForSecret(name = "password", message =
+    "Enter the Password", title = "Password"),
   launch_date = NULL,
-  tbl_downloads = "wp_podlove_downloadintentclean",
-  tbl_mediafile = "wp_podlove_mediafile",
-  tbl_useragent = "wp_podlove_useragent",
-  tbl_episode = "wp_podlove_episode",
-  tbl_posts = "wp_posts"
+  tbl_prefix = "wp_",
+  tbl_downloads = "podlove_downloadintentclean",
+  tbl_mediafile = "podlove_mediafile",
+  tbl_useragent = "podlove_useragent",
+  tbl_episode = "podlove_episode",
+  tbl_posts = "posts"
 )
 }
 \arguments{
@@ -28,15 +33,17 @@ podlove_get_and_clean(
 
 \item{launch_date}{date of the first official podcast episode release}
 
-\item{tbl_downloads}{name of the MySQL table for clean downloads}
+\item{tbl_prefix}{prefix of the MySLQ table names, defaults to `wp_`}
 
-\item{tbl_mediafile}{name of the MySQL table for mediafiles}
+\item{tbl_downloads}{name of the MySQL table for clean downloads (without the prefix)}
 
-\item{tbl_useragent}{name of the MySQL table for useragents}
+\item{tbl_mediafile}{name of the MySQL table for mediafiles (without the prefix)}
 
-\item{tbl_episode}{name of the MySQL table for episodes}
+\item{tbl_useragent}{name of the MySQL table for useragents (without the prefix)}
 
-\item{tbl_posts}{name of the MySQL table for posts}
+\item{tbl_episode}{name of the MySQL table for episodes (without the prefix)}
+
+\item{tbl_posts}{name of the MySQL table for posts (without the prefix)}
 }
 \value{
 a dataframe containing all episode download attempts
