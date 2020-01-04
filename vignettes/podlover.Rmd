@@ -1,0 +1,191 @@
+---
+title: "Analyzing Podcast Data with Podlover"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{podlover}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Podlove - a Wordpress plugin for Podcasting
+
+The **[Podlove](https://podlove.org/)** podcasting suite is an open source toolset to help you publish and manage a podcast within a Wordpress blog. Over the years it has become the de facto standard for easy while flexible podcast publishing in the German-speaking podcast community. 
+
+Podlove includes an analytics dashboard to give you an overview of how your podcast is performing over time and various dimensions such as media formats. While being a practical overview for everyday analytics, it is limited when it comes to more complex or fine-grained analytics.
+
+## podlover Brings Podlove Data into R
+
+The `podlover` package allows you to access the access data behind the Podlove dashboard. It connects to the relevant Wordpress MySQL tables, fetches the raw data, connects and cleans it into a tidy dataset with one row per download attempt.
+
+Furthermore, it allows you to: 
+
+* plot download data for multiple episodes as point, line, area and ridgeline graphs
+* use options for absolute vs relative display (think: release dates vs. days since release) and cumulative vs. non-cumulative display.
+* compare episodes, epsiode formats, sources/contexts, podcast clients, and operating systems over time
+* create and compare performance data for episode launches and long-term performance
+* calculate and plot regressions to see if you are gaining or losing listeners over time.
+
+This vignette demonstrates what `podlover` can do.
+
+## Installation
+
+This package is based on the statistical programming framework R. If you're a podcast producer who is new R, you will need to install R as well as its programming environment RStudio and familiarize yourself with it. Both of them are free open source tools. [Start here to get RStudio and R](https://rstudio.com/products/rstudio/download/).
+
+`podlover` is available as a package from GitHub at https://github.com/lordyo/podlover and can be installed via `devtools`:
+
+```r
+# install devtools if you don't have it already
+install.packages("devtools")
+
+# install podlover from GitHub
+devtools::install_github("lordyo/podlover")
+```
+Once installed, you can load the package.
+
+```{r setup}
+library(podlover)
+```
+
+## Ways to Access Podlove Data
+
+There are two ways to get your download data into `podlover`:
+
+* You either **fetch the data directly** from the Wordpress data base with `podlove_get_and_clean()`. This will give you the most recent data and, once established, is the most comfortable way of accessing data. Establishing the connection can be tricky though.
+* Or you **download the necessary tables** and feed it to podlover with `podlove_clean_stats()`. This is easier, but takes longer and will only give you a snapshot of the data at a certain point in time. 
+
+## Fetching Download Data via a Database Connection
+
+Behind every Wordpress site is a MySQL database containing almost everything that's stored in the blog. When installing Podlove under Wordpress, the plugin creates additional database tables containing podcast-specific data. The function `podlove_get_and_clean()` fetches those.
+
+To make that happen, you will need:
+
+1. `db_name`: The Wordpress database's name. 
+1. `db_host`: The (external) hostname of the database.
+1. `db_user`: The databases's user name (usually not the same as your Wordpress login)
+1. `db_password`: The user's password for database (usually not the same as your Worpdress password)
+1. Permissions to access your database from an external IP address. 
+1. The names of the database tables
+
+### Database name, user and password
+
+`db_name`, `db_user` and `db_password` can be found in the `wp-config.php` file in the root folder of your podcast's Wordpress directory. Look for the following passage:
+
+```php
+// ** MySQL settings - You can get this info from your web host ** //
+/** The name of the database for WordPress */
+define( 'DB_NAME', 'lorem_wp_ipsum' );
+
+/** MySQL database username */
+define( 'DB_USER', 'lorem_dolor' );
+
+/** MySQL database password */
+define( 'DB_PASSWORD', 'my_password' );
+```
+### External Database Hostname
+
+Note that this file also includes a hostname, but this is the internal hostname - you're looking for the **external hostname**. This you will need to get from your hoster's admin panel, usually where MySQL databases are managed. Check your hoster's support section if you get stuck.
+
+### Access permissions
+
+MySQL databases are sensitive to hacking attacks, which is why they usually aren't accessible to just any visitor - even if she has the correct access information. You will probably need to set allow an **access permission** to your database and user from the IP address R is running on ("whitelisting"). This is also done via your hoster's admin panel. Check your hoster's support sections for more info. (Note: Some hosters are stricter and don't allow any access except via SSH tunnels. `podlover` doesn't provide that option yet.)
+
+### Prefix of the Table Names
+
+Finally, you might need to check if the **tables name prefix** in your Wordpress database corresponds to the usual naming conventions. Most Wordpress installations start the tables with `wp_`, but sometimes, this prefix differs (e.g. `wp_wtig_`). For starters, you can just try to use the default prefix built into the function. If the prefix is different than the default, you will get an error message. If that's the case, access your hoster's MySQL management tool (e.g. phpMyAdmin, PHP Workbench), open your database and check if the tables are starting with something else than just `wp_...` and write down the prefix. You can of course also use a locally installed MySQL tool to do so (e.g. HeidiSQL). 
+
+### Downloading the data
+
+Once you gathered all this, it's time to access your data and store it to a data frame:
+
+```r
+download_data <- podlove_get_and_clean()
+```
+Four input prompts will show up, asking for the database name, user, password and host. You have the option to save these values to your system's keyring, so you don't have to enter them repeatedly. Use `?rstudioapi::askForSecret` to learn more about where these values are stored or `?keyring` to learn more how keyrings and how they are used within R. 
+
+After entering the information, you should see something like this:
+```
+connection established
+fetched table wp_podlove_downloadintentclean
+fetched table wp_podlove_mediafile
+fetched table wp_podlove_useragent
+fetched table wp_podlove_episode
+fetched table wp_posts
+connection closed
+```
+### Troubleshooting
+
+You might also get an error message, meaning something went wrong. If you see the following error message...
+```
+Error in .local(drv, ...) : 
+  Failed to connect to database: Error: Access denied for user 'username'@'XX.XX.XX.XXX' to database 'databasename'
+```
+...then the function couldn't access the databse. This means either that there's something wrong with your database name, user name, password or host name (see sections "Database name, user name, password" or "External Database Hostname" above) Or it could mean that access to this database with this username is restricted, i.e. your IP is not whitelisted (see "Access Permissions" above). If you can't make that work, you're only option is to  download the tables yourself (see "Working with Local Table Downloads"). 
+
+If your error says...
+```
+connection established
+Error in .local(conn, statement, ...) : 
+  could not run statement: Table 'dbname.tablename' doesn't exist
+```
+...this means you were able to access the database (congrats!), but the table names/prefix are incorrect. Check your table name prefix as described under "Prefix of the table names" and try again while specifying the prefix:
+```r
+download_data <- podlove_get_and_clean(tbl_prefix = "PREFIX")
+```
+
+## Working with Local Table Downloads
+
+If you can't or don't want to work with `podlove_get_and_clean()`, you can still analyze your data by downloading the individual database tables yourself and feed it directly to the cleaning function `podlove_clean_stats()`. 
+
+First, you will need to get the necessary tables. The easiest way is to use your hoster's database management tool, e.g. phpMyAdmin or PHP Workbench. These can usually be accessed from your hosting administration overview: Look for a "databases", "MySQL" or "phpMyAdmin" option, find a list of tables, usually starting with `wp_...`, select the table and look for an "export" option. Export the tables to CSV. If you get stuck, check your hoster's support section. 
+
+**Warning: When using database tools, you can break things - i.e. your site and your podcast. To be on the safe side, always make a backup first, don't change any names or options, and don't delete anything!**
+
+You will need the following tables, each in its own CSV file with headings (column titles):
+
+* `wp_podlove_downloadintentclean`
+* `wp_podlove_episode`
+* `wp_podlove_mediafile`
+* `wp_podlove_useragent`
+* `wp_posts`
+
+Note: The prefix of the tables (here `wp_`) might be different or longer in your case.
+
+Once you have downloaded the tables, you need to import them into R as data frames: to use the `podlove_clean_stats()` function to connect the table and clean the data:
+
+```r
+# replace file names with your own
+download_table <- read.csv("wp_podlove_downloadintentclean.csv", as.is = TRUE)
+episode_table <- read.csv("wp_podlove_episode.csv", as.is = TRUE)
+mediafile_table <- read.csv("wp_podlove_mediafile.csv", as.is = TRUE)
+useragent_table <- read.csv("wp_podlove_useragent.csv", as.is = TRUE)
+posts_table <- read.csv("wp_posts.csv", as.is = TRUE)
+
+# connect & clean the tables
+download_data <- podlove_clean_stats(df_stats = download_table,
+                                     df_episode = episode-table,
+                                     df_mediafile = mediafile_table,
+                                     df_user = useragent_table,
+                                     df_posts = posts_table)
+```
+
+## The Example Data Generator
+
+`podlover` includes a number of functions to generate example download tables. This can be useful if you want to test the package without having real data, or to write reproducible examples for a vignette like this :-).
+
+Let's generate some data with the function `podlove_create_example()` with ~10.000 downloads in total:
+
+```{r}
+table_list <- podlove_create_example(total_dls = 10000, seed = 11)
+```
+The `seed` parameter fixes the randomization to give you the same data as in this example. The result is a list of 5 named tables wrapped in a list.
+```{r}
+str(table_list)
+```
+
