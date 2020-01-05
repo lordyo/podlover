@@ -17,7 +17,6 @@
 #' example_useragents <- podlove_create_example_useragents(n_useragents = 100)
 #' }
 #' 
-#' @export 
 
 podlove_create_example_useragents <-
   function(n_useragents, df_ua_list = podcast_example_useragents, seed = NULL) {

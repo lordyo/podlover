@@ -19,7 +19,6 @@
 #' podlove_create_example_episodes(n_episodes = 30, 
 #'                                 df_posts = example_posts)
 #' 
-#' @export 
 
 podlove_create_example_episodes <-
   function(n_episodes, df_posts, seed = NULL) {
@@ -70,7 +69,8 @@ podlove_create_example_episodes <-
         license_url = rep(NA, n_episodes)
       ) %>% 
       # attach post titles
-      dplyr::left_join(select(df_posts, post_id = ID, title = post_title)) %>%
+      dplyr::left_join(select(df_posts, post_id = ID, title = post_title), 
+                       by = "post_id") %>%
       # sort by post number for correct id
       dplyr::arrange(post_id) %>% 
       # id, number, slug

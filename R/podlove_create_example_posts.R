@@ -22,7 +22,6 @@
 #'                              end_date = "2019-12-24",
 #'                              seed = 10)
 #' 
-#' @export 
 
 podlove_create_example_posts <-
   function(n_posts, start_date, end_date, seed = NULL) {

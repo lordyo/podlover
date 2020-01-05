@@ -23,7 +23,6 @@
 #' # create mediafiles
 #' podlove_create_example_mediafiles(df_episodes = example_eps)
 #' 
-#' @export 
 
 podlove_create_example_mediafiles <-
   function(df_episodes, seed = NULL) {

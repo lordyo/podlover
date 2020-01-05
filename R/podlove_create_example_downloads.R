@@ -38,7 +38,6 @@
 #'                                                   dl_per_ep_day = 0.93)
 #' }
 #' 
-#' @export 
 
 podlove_create_example_downloads <- function(df_posts,
                                              df_episodes,
