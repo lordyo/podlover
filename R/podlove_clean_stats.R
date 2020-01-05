@@ -38,7 +38,7 @@ podlove_clean_stats <- function(df_stats,
                                 df_user,
                                 df_episodes,
                                 df_posts,
-                                launch_date) {
+                                launch_date = NULL) {
   
   # clean reference data
   df_user <-
@@ -95,7 +95,6 @@ podlove_clean_stats <- function(df_stats,
                           format = "d",
                           flag = "0"),
       ep_num_title = paste0(ep_number, ": ", title),
-      # THIS SEEMS TO BE WRONG 
       ep_age_hours = floor(interval(post_datehour, max(dldatehour)) / lubridate::hours(1)),
       ep_age_days = floor(ep_age_hours / 24)) %>%
     select(

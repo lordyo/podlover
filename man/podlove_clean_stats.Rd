@@ -10,7 +10,7 @@ podlove_clean_stats(
   df_user,
   df_episodes,
   df_posts,
-  launch_date
+  launch_date = NULL
 )
 }
 \arguments{
