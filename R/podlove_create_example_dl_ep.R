@@ -23,7 +23,6 @@
 #' 
 #' @importFrom stats rlnorm rnorm runif
 #' 
-#' @export 
 
 podlove_create_example_dl_ep <-  function(n_dls,
            dl_startdate,

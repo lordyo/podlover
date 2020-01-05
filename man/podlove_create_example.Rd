@@ -2,7 +2,7 @@
 % Please edit documentation in R/podlove_create_example.R
 \name{podlove_create_example}
 \alias{podlove_create_example}
-\title{Create a List of Download Example Tables}
+\title{Create Podcast Example Data}
 \usage{
 podlove_create_example(
   n_posts = 15,
@@ -12,6 +12,7 @@ podlove_create_example(
   end_date = "2019-12-31",
   runtime = 30,
   total_dls = 5000,
+  clean = FALSE,
   seed = NULL
 )
 }
@@ -33,16 +34,23 @@ download to be generated.}
 
 \item{total_dls}{Total downloads to be generate. Defaults to 5000. Approximate value.}
 
+\item{clean}{Switcher: if `TRUE`, cleans the data,
+if `FALSE`, returns a list of tables}
+
 \item{seed}{parameter to fix randomization via \code{set.seed()}}
 }
 \value{
-A list of 5 named tables
+A list of 5 named tables or a cleaned dataframe of downloads
 }
 \description{
-This is a wrapper function to easily create example podcast download table.
+This is a wrapper function to easily create example podcast download tables
+    or a clean set of download data.
 }
 \examples{
 # create tables for ~10000 downloads
 test_list <- podlove_create_example(total_dls = 10000)
+
+# create clean podcast data
+test_df <- podlove_create_example(total_dls = 10000, clean = TRUE)
 
 }
