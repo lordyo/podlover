@@ -175,17 +175,56 @@ download_data <- podlove_clean_stats(df_stats = download_table,
                                      df_posts = posts_table)
 ```
 
-## The Example Data Generator
+## Create Example Data
 
-`podlover` includes a number of functions to generate example download tables. This can be useful if you want to test the package without having real data, or to write reproducible examples for a vignette like this :-).
+`podlover` includes a number of functions to generate example download tables. This can be useful if you want to test the package without having real data, or to write reproducible examples for a vignette like this. We will use an example data set for the next chapters.
 
-Let's generate some data with the function `podlove_create_example()` with ~10.000 downloads in total:
+Generate some random data with the function `podlove_create_example()` with ~10.000 downloads in total:
 
 ```{r}
-table_list <- podlove_create_example(total_dls = 10000, seed = 11)
-```
-The `seed` parameter fixes the randomization to give you the same data as in this example. The result is a list of 5 named tables wrapped in a list.
-```{r}
-str(table_list)
+table_list <- podlove_create_example(total_dls = 10000, seed = 12)
 ```
 
+The `seed` parameter fixes the randomization to give you the same data as in this example. The result is a list of 5 named tables (`posts`, `episodes`, `mediafiles`, `useragents`, `downloads`) wrapped in a list. Now all you have to do is feed them to the cleaning function:
+
+```{r}
+downloads <- podlove_clean_stats(df_stats = table_list$downloads,
+                                 df_mediafile = table_list$mediafiles,
+                                 df_user = table_list$useragents,
+                                 df_episodes = table_list$episodes,
+                                 df_posts = table_list$posts)
+```
+
+Here it is:
+
+```{r}
+print(downloads)
+```
+
+Nice - this is all the data you need for further analysis. It contains information about the episode (what was downloaded?), the download (when was it downloaded?) and the user agent (how / by which agent was it downloaded?).
+
+By the way, if you want get clean data directly without having to create tables, you can set the `podlove_create_example()` parameter `clean = TRUE`:
+
+```{r}
+downloads <- podlove_create_example(total_dls = 10000, seed = 12, clean = TRUE)
+```
+
+## Summary
+
+Now that you have the clean download data, it's time to check it out. `podlover` includes a simple summary function to give you an overview of the data:
+
+```{r}
+podlove_podcast_summary(downloads)
+```
+
+If you set the parameter `return_params` to `TRUE`, you can access the individual indicators directly. The `verbose` parameter defines if you want to see the printed summary.
+
+```{r}
+pod_sum <- podlove_podcast_summary(downloads, return_params = TRUE, verbose = FALSE)
+
+names(pod_sum)
+
+pod_sum$n_downloads
+pod_sum$dl_last_date
+
+```
