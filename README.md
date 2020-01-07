@@ -1,8 +1,7 @@
 Podlover - A Package to Analyze Podcasting Data
 ===============================================
 
-=======
->>>>>>> ea5f5af59096ec858a5fee00eb7d3ac30410ffd6
+
 The Backstory: Podlove - a Wordpress plugin for Podcasting
 ----------------------------------------------------------
 
