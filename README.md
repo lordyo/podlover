@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 Podlover - A Package to Analyze Podcasting Data
 ===============================================
 
