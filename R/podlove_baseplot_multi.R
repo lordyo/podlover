@@ -43,14 +43,14 @@ podlove_baseplot_multi <- function(df_tidy_data,
   # switcher for cumulative data (use listeners or listeners-total)
   if (cumulative == TRUE) {
     
-    g_dl_curves <- ggplot2::ggplot(plot_data,
+    g_dl_curves <- ggplot2::ggplot(df_tidy_data,
                                    ggplot2::aes_string(x = "time", 
                                                        y = gvar, 
                                                        height = "listeners_total"))
     
   } else {
     
-    g_dl_curves <- ggplot2::ggplot(plot_data,
+    g_dl_curves <- ggplot2::ggplot(df_tidy_data,
                                    ggplot2::aes_string(x = "time", 
                                                        y = gvar, 
                                                        height = "listeners"))

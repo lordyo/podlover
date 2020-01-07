@@ -91,7 +91,7 @@ podlove_clean_stats <- function(df_stats,
        
       # add leading zeroes to episode numbers
       ep_number = formatC(ep_number,
-                          width = max(floor(log10(ep_number)) + 1),
+                          width = max(floor(log10(as.numeric(ep_number))) + 1),
                           format = "d",
                           flag = "0"),
       ep_num_title = paste0(ep_number, ": ", title),
