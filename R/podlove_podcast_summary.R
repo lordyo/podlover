@@ -63,19 +63,19 @@ podlove_podcast_summary <- function(df_tidy_data,
   # printout
   
   if (verbose) {
-  
+    
     msg = paste0("'", deparse(substitute(df_tidy_data)), "': \n\n",
                  
                  "A podcast with ", n_ep, " episodes, released between ",
                  lubridate::as_date(ep_first_date), " and ", 
-                   lubridate::as_date(ep_last_date), ".\n\n",
+                 lubridate::as_date(ep_last_date), ".\n\n",
                  
                  "Total runtime:  ", runtime, ".\n",
                  "Average time between episodes: ", ep_interval, ".\n\n",
                  
                  "Episodes were downloaded ", n_dl, " times between ", 
-                   lubridate::as_date(dl_first_date), " and ", 
-                   lubridate::as_date(dl_last_date), ".\n",
+                 lubridate::as_date(dl_first_date), " and ", 
+                 lubridate::as_date(dl_last_date), ".\n",
                  
                  ifelse(dl_first_date < ep_first_date,
                         "(Note: first download lies before release of first episode)\n\n",
@@ -83,18 +83,18 @@ podlove_podcast_summary <- function(df_tidy_data,
                  
                  "Downloads per episode: ", round(dl_ep, 1), "\n",
                  "min: ", dl_ep_5num[1],
-                   " | 25p: ", dl_ep_5num[2],
-                   " | med: ", dl_ep_5num[3],
-                   " | 75p: ", dl_ep_5num[4],
-                   " | max: ", dl_ep_5num[5], "\n\n", 
+                 " | 25p: ", dl_ep_5num[2],
+                 " | med: ", dl_ep_5num[3],
+                 " | 75p: ", dl_ep_5num[4],
+                 " | max: ", dl_ep_5num[5], "\n\n", 
                  
                  "Downloads per day: ", round(dl_day, 1), "\n",
                  "min: ", dl_day_5num[1],
-                   " | 25p: ", dl_day_5num[2],
-                   " | med: ", dl_day_5num[3],
-                   " | 75p: ", dl_day_5num[4],
-                   " | max: ", dl_day_5num[5] 
-                 )
+                 " | 25p: ", dl_day_5num[2],
+                 " | med: ", dl_day_5num[3],
+                 " | 75p: ", dl_day_5num[4],
+                 " | max: ", dl_day_5num[5] 
+    )
     
     message(msg)
     
@@ -102,21 +102,21 @@ podlove_podcast_summary <- function(df_tidy_data,
   
   
   # output
- 
+  
   if (return_params) {
-   
-  out <- list(n_episodes = n_ep,
-                   ep_first_date = ep_first_date,
-                   ep_last_date = ep_last_date,
-                   runtime = runtime,
-                   ep_interval = ep_interval,
-                   n_downloads = n_dl,
-                   dl_first_date = dl_first_date,
-                   dl_last_date = dl_last_date,
-                   downloads_per_episode_mean = dl_ep,
-                   downloads_per_episode_5num = dl_ep_5num,
-                   downloads_per_day_mean = dl_day,
-                   downloads_per_day_5num = dl_day_5num) 
+    
+    out <- list(n_episodes = n_ep,
+                ep_first_date = ep_first_date,
+                ep_last_date = ep_last_date,
+                runtime = runtime,
+                ep_interval = ep_interval,
+                n_downloads = n_dl,
+                dl_first_date = dl_first_date,
+                dl_last_date = dl_last_date,
+                downloads_per_episode_mean = dl_ep,
+                downloads_per_episode_5num = dl_ep_5num,
+                downloads_per_day_mean = dl_day,
+                downloads_per_day_5num = dl_day_5num) 
   } else {
     
     out = NULL 
