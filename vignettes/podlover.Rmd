@@ -179,20 +179,10 @@ download_data <- podlove_clean_stats(df_stats = download_table,
 
 `podlover` includes a number of functions to generate example download tables. This can be useful if you want to test the package without having real data, or to write reproducible examples for a vignette like this. We will use an example data set for the next chapters.
 
-Generate some random data with the function `podlove_create_example()` with ~10.000 downloads in total:
+Generate some random data with the function `podlove_create_example()` with ~10.000 downloads in total. The `seed` parameter fixes the randomization to give you the same data as in this example. The `clean` parameter states that you want a dataframe of cleaned data, not raw input tables.
 
 ```{r}
-table_list <- podlove_create_example(total_dls = 10000, seed = 12)
-```
-
-The `seed` parameter fixes the randomization to give you the same data as in this example. The result is a list of 5 named tables (`posts`, `episodes`, `mediafiles`, `useragents`, `downloads`) wrapped in a list. Now all you have to do is feed them to the cleaning function:
-
-```{r}
-downloads <- podlove_clean_stats(df_stats = table_list$downloads,
-                                 df_mediafile = table_list$mediafiles,
-                                 df_user = table_list$useragents,
-                                 df_episodes = table_list$episodes,
-                                 df_posts = table_list$posts)
+downloads <- podlove_create_example(total_dls = 10000, seed = 12, clean = TRUE)
 ```
 
 Here it is:
@@ -203,10 +193,19 @@ print(downloads)
 
 Nice - this is all the data you need for further analysis. It contains information about the episode (what was downloaded?), the download (when was it downloaded?) and the user agent (how / by which agent was it downloaded?).
 
-By the way, if you want get clean data directly without having to create tables, you can set the `podlove_create_example()` parameter `clean = TRUE`:
+By the way, if you want get access the raw data or try out the cleaning function, you can set the `podlove_create_example()` parameter `clean = FALSE`:
+```{r}
+table_list <- podlove_create_example(total_dls = 10000, seed = 12)
+```
+
+The result is a list of 5 named tables (`posts`, `episodes`, `mediafiles`, `useragents`, `downloads`) wrapped in a list. Now all you have to do is feed them to the cleaning function:
 
 ```{r}
-downloads <- podlove_create_example(total_dls = 10000, seed = 12, clean = TRUE)
+downloads <- podlove_clean_stats(df_stats = table_list$downloads,
+                                 df_mediafile = table_list$mediafiles,
+                                 df_user = table_list$useragents,
+                                 df_episodes = table_list$episodes,
+                                 df_posts = table_list$posts)
 ```
 
 ## Summary
@@ -228,3 +227,120 @@ pod_sum$n_downloads
 pod_sum$dl_last_date
 
 ```
+
+## Download curves
+
+One of the main features of the `podlover` package is that it lets you plot all kinds of download curves over time - aggregated and grouped, with relative and absolute starting points. The plotting function relies on the `ggplot2` package and the data needs to be prepared first. The function `podlove_prepare_stats_for_graph()` does just that, and the function `podlove_graph_download_curves()` takes care of the plotting.
+
+### Parameters
+The functional combo of `podlove_prepare_stats_for_graph()` and `podlove_graph_download_curves()` accepts the following parameters for a graph:
+
+* `df_stats`: The clean data to be analyzed, as prepared by the import or cleaning function.
+* `gvar`: The grouping variable. Defining one will create multiple curves, one for each group. This needs to be one of the variables (columns) in the clean data:
+  * `ep_number`: The episode's official number
+  * `title`: The episode's title
+  * `ep_num_title`: The episode's title with the number in front
+  * `source`: The dowload source - e.g. "feed" for RSS, "webplayer" for plays on a website, "download" for file downloads
+  * `context`: The file type for feeds and downloads, "episode" for feed accesses
+  * `client_name`: The client application (e.g. the podcatcher's or brower's name)
+  * `client_type`: A more coarse grouping of the clients, e.g. "mediaplayer", "browser", "mobile app".
+  * `os_name`: The operating system's name of the client (e.g. Android, Linux, Mac)
+  * Any other grouping variable you create yourself from the existing data.
+* `hourly` (`podlove_prepare_stats_for_graph()` only): If set to `TRUE`, the downloads will be shown per hour, otherwise per day
+* `relative` (`podlove_prepare_stats_for_graph()` only): If set to `TRUE`, the downloads will be shown relative to their publishing date, i.e. all curves starting at 0. Otherwise, the curves will show the download on their specific dates.
+* `cumulative` (`podlove_graph_download_curves()` only): If set to `TRUE`, the downloads will accumulate and show the total sum over time (rising curve). Otherwise, they will uncumulated downloads (scattered peaks).
+* `plot_type` (`podlove_graph_download_curves()` only): What kind of plot to use - either line plots (`"line"`) on one graph, or individual ridgeline plots (`"ridge"`).
+* `labelmethod` (`podlove_graph_download_curves()` only): Where to attach the labels (`"first.points"` for the beginning of the line, `"last.points"` for the end of the line)
+
+### Total downloads over time
+
+Let's say you want to see the daily total downloads of your podcast over time, in accumulated fashion. First, you prepare the graphics data necessary:
+
+```{r}
+
+total_dls_acc <- podlove_prepare_stats_for_graph(df_stats = downloads, 
+                                                 hourly = FALSE, 
+                                                 relative = FALSE)
+
+```
+
+Here, you are not specifying any `gvar` (which means you'll get just one curve instead of many). `hourly` is set to `FALSE` (= daily data) and `relative` is set `FALSE` (absolute dates). Now feed this data over to the plotting function:
+
+```{r fig.height=5, fig.width=7}
+g_tdlacc <- podlove_graph_download_curves(df_tidy_data = total_dls_acc,
+                                          cumulative = TRUE, 
+                                          plot_type = "line",
+                                          printout = FALSE)
+
+print(g_tdlacc)
+```
+
+If we don't cumulate the data, we can see the individual spikes of the episode launches:
+
+```{r fig.height=5, fig.width=7}
+g_tdl <- podlove_graph_download_curves(df_tidy_data = total_dls_acc,
+                                          cumulative = FALSE, 
+                                          plot_type = "line",
+                                          printout = FALSE)
+
+print(g_tdl)
+```
+
+### Downloads by episode
+
+Now you want to look at the individual episodes. For this, you will need to use the `gvar` parameter. For an episode overviewer, you can either set it to `title`, `ep_number` or `ep_num_title`. Here, we're using `title` (unquoted!), and add specify the `labelmethod` to show the labels at the beginning of the curves.
+
+```{r fig.height=5, fig.width=7}
+
+ep_dls_acc <- podlove_prepare_stats_for_graph(df_stats = downloads,  
+                                              gvar = title, # group by episode title
+                                              hourly = FALSE,  
+                                              relative = FALSE)
+
+g_ep_dlsacc <- podlove_graph_download_curves(df_tidy_data = ep_dls_acc,
+                                             gvar = title, # use the same gvar!
+                                             cumulative = TRUE,
+                                             plot_type = "line", 
+                                             labelmethod = "first.points",
+                                             printout = FALSE)
+
+print(g_ep_dlsacc)
+```
+
+As you can see, this shows the curves spread over the calendar X axis. But how do the episodes hold up against each other? For this, we will use the parameter `relative = TRUE`, which lets all curves start at the same point. The labelling paramter `labelmethod = "last.points"` works better for this kind of curve.
+
+```{r fig.height=5, fig.width=7}
+
+ep_dls_acc <- podlove_prepare_stats_for_graph(df_stats = downloads,  
+                                              gvar = title,
+                                              hourly = FALSE,  
+                                              relative = TRUE) # relative plotting
+
+g_ep_dlsacc <- podlove_graph_download_curves(df_tidy_data = ep_dls_acc,
+                                             gvar = title,
+                                             cumulative = TRUE,
+                                             plot_type = "line", 
+                                             labelmethod = "last.points",
+                                             printout = FALSE)
+
+print(g_ep_dlsacc)
+```
+
+If you want to look at the uncumulated data, the line plot doesn't work very well. For this, a ridge plot is the right choice (but only if you don't have too many episodes):
+
+```{r fig.height=10, fig.width=7}
+
+ep_dls_acc <- podlove_prepare_stats_for_graph(df_stats = downloads,  
+                                              gvar = title,
+                                              hourly = FALSE,  
+                                              relative = FALSE)
+
+g_ep_dlsacc <- podlove_graph_download_curves(df_tidy_data = ep_dls_acc,
+                                             gvar = title,
+                                             cumulative = FALSE, # no cumulation
+                                             plot_type = "ridge", # use a ridgeline plot
+                                             printout = FALSE)
+
+print(g_ep_dlsacc)
+```
+
