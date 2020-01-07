@@ -69,19 +69,19 @@ podlove_performance_stats <- function(df_tidy_data,
 
     pl_stats <- pl_stats %>%
       dplyr::select(title,
-                    listeners = listeners_total.x,
-                    listeners_per_day = listeners_per_day.x,
-                    listeners_per_day_at_launch = listeners_per_day.y,
-                    listeners_per_day_after_launch = listeners_per_day)
+                    dls = dls_total.x,
+                    dls_per_day = dls_per_day.x,
+                    dls_per_day_at_launch = dls_per_day.y,
+                    dls_per_day_after_launch = dls_per_day)
 
   } else if (limit_unit == "hours") {
 
     pl_stats <- pl_stats %>%
       dplyr::select(title,
-                    listeners = listeners_total.x,
-                    listeners_per_hour = listeners_per_hour.x,
-                    listeners_per_hour_at_launch = listeners_per_hour.y,
-                    listeners_per_hour_after_launch = listeners_per_hour)
+                    dls = dls_total.x,
+                    dls_per_hour = dls_per_hour.x,
+                    dls_per_hour_at_launch = dls_per_hour.y,
+                    dls_per_hour_after_launch = dls_per_hour)
 
   }
 

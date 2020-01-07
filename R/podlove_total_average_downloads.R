@@ -60,24 +60,24 @@ podlove_total_average_downloads <- function(df_tidy_data,
     dplyr::group_by_at(gvar) %>%
     # additional grouping for time since launch
     dplyr::group_by(hours_since_release, add = TRUE) %>%
-    dplyr::summarize(listeners_total = n()) %>% 
+    dplyr::summarize(dls_total = n()) %>% 
     dplyr::ungroup()  %>% 
     # set limits
     dplyr::filter(hours_since_release <= upper_limit,
             hours_since_release >= lower_limit) %>% 
     # calculate sum and averages
     dplyr::group_by_at(gvar) %>% 
-    dplyr::summarize(listeners_total = sum(listeners_total),
+    dplyr::summarize(dls_total = sum(dls_total),
               maxtime = max(hours_since_release)) %>% 
-    dplyr::mutate(listeners_per_day = listeners_total / maxtime) %>% 
-    dplyr::select({{gvar}}, listeners_total, listeners_per_day)
+    dplyr::mutate(dls_per_day = dls_total / maxtime) %>% 
+    dplyr::select({{gvar}}, dls_total, dls_per_day)
   
   
   # set average unit
   if (limit_unit == "days") {
-    tad <- dplyr::mutate(tad, listeners_per_day = listeners_per_day * 24)
+    tad <- dplyr::mutate(tad, dls_per_day = dls_per_day * 24)
   } else {
-    tad <- dplyr::rename(tad, listeners_per_hour = listeners_per_day)
+    tad <- dplyr::rename(tad, dls_per_hour = dls_per_day)
   }
 
   tad
