@@ -14,7 +14,12 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Podlove - a Wordpress plugin for Podcasting
+```{r include=FALSE}
+library(dplyr)
+```
+
+
+## The Backstory: Podlove - a Wordpress plugin for Podcasting
 
 The **[Podlove](https://podlove.org/)** podcasting suite is an open source toolset to help you publish and manage a podcast within a Wordpress blog. Over the years it has become the de facto standard for easy while flexible podcast publishing in the German-speaking podcast community. 
 
@@ -311,36 +316,129 @@ As you can see, this shows the curves spread over the calendar X axis. But how d
 
 ```{r fig.height=5, fig.width=7}
 
-ep_dls_acc <- podlove_prepare_stats_for_graph(df_stats = downloads,  
+ep_dls_acc_rel <- podlove_prepare_stats_for_graph(df_stats = downloads,  
                                               gvar = title,
                                               hourly = FALSE,  
                                               relative = TRUE) # relative plotting
 
-g_ep_dlsacc <- podlove_graph_download_curves(df_tidy_data = ep_dls_acc,
+g_ep_dlsaccrel <- podlove_graph_download_curves(df_tidy_data = ep_dls_acc_rel,
                                              gvar = title,
                                              cumulative = TRUE,
                                              plot_type = "line", 
                                              labelmethod = "last.points",
                                              printout = FALSE)
 
-print(g_ep_dlsacc)
+print(g_ep_dlsaccrel)
 ```
 
 If you want to look at the uncumulated data, the line plot doesn't work very well. For this, a ridge plot is the right choice (but only if you don't have too many episodes):
 
 ```{r fig.height=10, fig.width=7}
 
-ep_dls_acc <- podlove_prepare_stats_for_graph(df_stats = downloads,  
-                                              gvar = title,
+ep_dls <- podlove_prepare_stats_for_graph(df_stats = downloads,  
+                                              gvar = ep_num_title, # better for sorting
                                               hourly = FALSE,  
                                               relative = FALSE)
 
-g_ep_dlsacc <- podlove_graph_download_curves(df_tidy_data = ep_dls_acc,
-                                             gvar = title,
+g_ep_dls <- podlove_graph_download_curves(df_tidy_data = ep_dls,
+                                             gvar = ep_num_title,
                                              cumulative = FALSE, # no cumulation
                                              plot_type = "ridge", # use a ridgeline plot
                                              printout = FALSE)
 
-print(g_ep_dlsacc)
+print(g_ep_dls)
 ```
 
+### Downloads by other parameters
+
+You can compare not only episodes, but also aspects of episodes or downloads. Let's look at the parameter `source`, which lists by what way our listeners get their episodes. The labelmethod here is set to `angled.boxes`:
+
+```{r fig.height=5, fig.width=8}
+
+source_acc <- podlove_prepare_stats_for_graph(df_stats = downloads,  
+                                              gvar = source, # new gvar
+                                              hourly = FALSE,  
+                                              relative = FALSE) 
+
+g_source_acc <- podlove_graph_download_curves(df_tidy_data = source_acc,
+                                             gvar = source,  # same as above!
+                                             cumulative = TRUE,
+                                             plot_type = "line", 
+                                             labelmethod = "angled.boxes",
+                                             printout = FALSE)
+
+print(g_source_acc)
+```
+
+## Epsiode Performance
+
+Podcast episode downloads typically follow a "heavy front, long tail" distribution: Many downloads are made over automatic downloads by podcatchers, while fewer are downloaded in the long-term. It therefore helps to distinguish between the episode launch period (the heavy front) and the long term performance (the long tail). For this, you can use the function `podlove_performance_stats()`, which creates a table of performance stats per episode. For this, you will first need to define how long a "launch" goes and when the long-term period starts. Those two don't have to be the same. Here, we'll use 0-3 days for the launch and 30 and above for the long-term.
+
+```{r}
+perf <- podlove_performance_stats(downloads, launch = 3, post_launch = 30)
+
+perf
+
+colnames(perf)
+```
+
+The table shows four values per episode: The overall downlaods, the overall average downloads, the average downloads during the launch and the average downloads during the post-launch period. If you want to see a ranking of the best launches, you can just sort the list:
+
+```{r}
+perf %>%
+  dplyr::select(title, dls_per_day_at_launch) %>% 
+  dplyr::arrange(desc(dls_per_day_at_launch))
+```
+
+So there are episodes with different launches strengths long-term performance. Can you plot them against each other? Yes, you can! The function `podlove_graph_performance()` gives you a nice four-box grid. The top right corner is showing "evergreen" episodes with strong launches and long-term performance, the top left the "shooting stars" with strong launches and loss of interest over time, the bottom right shows "slow burners" which took a while to get an audience, and the bottom left is showing... well, the rest.
+
+```{r fig.height=7, fig.width=7}
+g_perf <- podlove_graph_performance(perf, printout = FALSE)
+
+print(g_perf)
+```
+
+## Regression Analysis: Is your podcast gaining or losing listeners?
+
+The one question every podcast producer is asking themselves is: "Is my podcast's audience growing?". This is not an easy question to answer, because you're dealing with lagging time series data. One approach to deal answer the question is to calculate a regression model of downloads against time or episode number (tip of the hat to [Bernhard Fischer, who prototyped this idea](https://community.podlove.org/t/implementation-of-regression-prototype/1994)). If the number of downloads after a specified date after launch is rising over time, the podcast is gaining listeners. If it falls, it's losing listeners. If it stays stable, it's keeping listeners.
+
+To prepare the regression, you first need to use the function `podlove_downloads_until()` to create a dataset of downloads at a specific point. The longer the period between launch and measuring point is, the more valid the model will be - but you'll also have less data points. For this example, we'll pick a period of 30 days after launch:
+
+```{r}
+du <- podlove_downloads_until(downloads, 30)
+
+du
+
+```
+
+This dataset we can feed into the regression function `podlove_episode_regression()`. You can choose if you want to use the `post_datehour` parameter (better if your episodes don't come out regularly), or `ep_rank`, which corresponds to the episode number (it has a different name because episode numbers are strings):
+
+```{r}
+reg <- podlove_episode_regression(du, terms = "ep_rank")
+
+```
+
+If you're statistically inclined, you can check out the model directly and see if your model is significant:
+
+```{r}
+summary(reg)
+```
+
+Or you could just check out the regression plot with the function `podlove_graph_regression()` and see in which direction the line points:
+
+```{r fig.height=5, fig.width=7}
+g_reg <- podlove_graph_regression(du, predictor = ep_rank)
+
+```
+
+Oh noes! It seems like your podcast is steadily losing listeners at the rate of `r round(reg$coefficients[2],0)` listeners per episode!
+
+## Finally
+
+There could be much more possible with Podlove data and R and `podlover`. For example, some of the download data have not yet been included in the import script, such as the geolocation data. Some of the functions are still too manual and require wrapping functions to quickly analyze data. If you want to contribute, check out the GitHub repo under:
+
+https://github.com/lordyo/podlover
+
+And if you want to use or contribute to the Podlove project (the Podcasting tools), check out:
+
+https://podlove.org

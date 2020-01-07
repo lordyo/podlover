@@ -1,7 +1,7 @@
 Package: podlover
 Type: Package
 Title: Collects, Cleans and Analyzes Podcast Download Data from Podlove Publisher
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: person("Timm", "Suess", email = "catchall@sporez.com", 
     role = c("aut", "cre"))
 URL: https://github.com/lordyo/podlover
@@ -9,7 +9,7 @@ BugReports: https://github.com/lordyo/podlover/issues
 Description: Connects to a specified Worpdress MySQL database running the
     Podlove Publisher plugin, collects all necessary tables for analysis of
     podcast download data, cleans the data for processing and provides various
-    functions for descriptive and graphical analysis.
+    functions for descriptive, statistical and graphical analysis.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
