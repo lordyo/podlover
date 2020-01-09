@@ -148,7 +148,7 @@ course also use a locally installed MySQL tool to do so (e.g. HeidiSQL).
 Once you gathered all this, it’s time to access your data and store it
 to a data frame:
 
-    download_data <- podlove_get_and_clean()
+    downloads <- podlove_get_and_clean()
 
 Four input prompts will show up, asking for the database name, user,
 password and host. You have the option to save these values to your
@@ -195,7 +195,7 @@ table names/prefix are incorrect. Check your table name prefix as
 described under “Prefix of the table names” and try again while
 specifying the prefix:
 
-    download_data <- podlove_get_and_clean(tbl_prefix = "PREFIX")
+    downloads <- podlove_get_and_clean(tbl_prefix = "PREFIX")
 
 Working with Local Table Downloads
 ----------------------------------
@@ -241,7 +241,7 @@ table and clean the data:
     posts_table <- read.csv("wp_posts.csv", as.is = TRUE)
 
     # connect & clean the tables
-    download_data <- podlove_clean_stats(df_stats = download_table,
+    downloads <- podlove_clean_stats(df_stats = download_table,
                                          df_episode = episode_table,
                                          df_mediafile = mediafile_table,
                                          df_user = useragent_table,

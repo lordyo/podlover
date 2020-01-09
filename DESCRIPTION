@@ -1,7 +1,7 @@
 Package: podlover
 Type: Package
 Title: Collects, Cleans and Analyzes Podcast Download Data from Podlove Publisher
-Version: 1.0.0
+Version: 1.0.2
 Authors@R: person("Timm", "Suess", email = "catchall@sporez.com", 
     role = c("aut", "cre"))
 URL: https://github.com/lordyo/podlover
@@ -33,5 +33,6 @@ Depends: R (>= 2.10)
 RoxygenNote: 7.0.2
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat
 VignetteBuilder: knitr
