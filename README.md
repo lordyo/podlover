@@ -1,7 +1,6 @@
 Podlover - A Package to Analyze Podcasting Data
 ===============================================
 
-
 The Backstory: Podlove - a Wordpress plugin for Podcasting
 ----------------------------------------------------------
 
@@ -243,7 +242,7 @@ table and clean the data:
 
     # connect & clean the tables
     download_data <- podlove_clean_stats(df_stats = download_table,
-                                         df_episode = episode-table,
+                                         df_episode = episode_table,
                                          df_mediafile = mediafile_table,
                                          df_user = useragent_table,
                                          df_posts = posts_table)
