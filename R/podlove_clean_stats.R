@@ -43,8 +43,9 @@ podlove_clean_stats <- function(df_stats,
   # clean reference data
   df_user <-
     select(df_user, id, client_name, client_type, os_name)
-  df_episodes <-
-    select(df_episodes, id, post_id, ep_number = number, title, duration) 
+  df_episodes <- df_episodes %>% 
+    mutate(duration = lubridate::as.duration(lubridate::hms(duration))) %>% 
+    select(id, post_id, ep_number = number, title, duration) 
   df_posts <- select(df_posts, ID, post_date)
   df_mediafile <- df_mediafile %>%
     select(id, episode_id) %>%
@@ -118,7 +119,7 @@ podlove_clean_stats <- function(df_stats,
       client_type,
       os_name) %>%
     dplyr::group_by_all() %>%
-    summarize(dl_attempts = n()) %>%
+    summarize(dl_attempts = dplyr::n()) %>%
     ungroup() 
 
     df_clean
