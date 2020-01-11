@@ -30,7 +30,7 @@
 #' }
 #' 
 #' @importFrom magrittr %>% 
-#' @importFrom dplyr group_by summarize ungroup mutate
+#' @importFrom dplyr group_by summarize ungroup mutate n
 #' 
 #' @export 
 
