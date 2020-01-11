@@ -10,6 +10,13 @@ t_clean <- podlove_clean_stats(df_stats = t_exmpl$downloads,
 																 df_episodes = t_exmpl$episodes,
 																 df_posts = t_exmpl$posts) 
 
+t_clean_ld <- podlove_clean_stats(df_stats = t_exmpl$downloads, 
+																	df_mediafile = t_exmpl$mediafiles, 
+																	df_user = t_exmpl$useragents,
+																	df_episodes = t_exmpl$episodes,
+																	df_posts = t_exmpl$posts,
+																	launch_date = "2019-10-14") 
+
 t_cn <- colnames(t_clean)
 
 test_that("clean_stats returns a dataframe", {
@@ -19,6 +26,7 @@ test_that("clean_stats returns a dataframe", {
 test_that("clean_stats returns correct dimensions", {
 	expect_equal(ncol(t_clean), 20)
 	expect_equal(nrow(t_clean), 4310)
+	expect_equal(nrow(t_clean_ld), 1167) # launchdate filter works
 })
 
 test_that("clean_stats has the correct column names", {
@@ -44,4 +52,27 @@ test_that("clean_stats has the correct column names", {
 	expect_equal(t_cn[20], "dl_attempts")
 })
 
-rm(t_exmpl, t_clean, t_cn)
+test_that("clean_stats has the correct column class", {
+	expect_is(t_clean$ep_number, "character")
+	expect_is(t_clean$title, "character")
+	expect_is(t_clean$ep_num_title, "character")
+	expect_is(t_clean$duration, "Duration")
+	expect_is(t_clean$post_date, "Date")
+	expect_is(t_clean$post_datehour, "POSIXct")
+	expect_is(t_clean$ep_age_hours, "numeric")
+	expect_is(t_clean$ep_age_days, "numeric")
+	expect_is(t_clean$hours_since_release, "numeric")
+	expect_is(t_clean$days_since_release, "numeric")
+	expect_is(t_clean$source, "character")
+	expect_is(t_clean$context, "character")
+	expect_is(t_clean$dldate, "Date")
+	expect_is(t_clean$dldatehour, "POSIXct")
+	expect_is(t_clean$weekday, "factor")
+	expect_is(t_clean$hour, "integer")
+	expect_is(t_clean$client_name, "character")
+	expect_is(t_clean$client_type, "character")
+	expect_is(t_clean$os_name, "character")
+	expect_is(t_clean$dl_attempts, "integer")
+})
+
+rm(t_exmpl, t_clean, t_clean_ld, t_cn)
