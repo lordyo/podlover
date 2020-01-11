@@ -79,7 +79,7 @@ podlove_clean_stats <- function(df_stats,
               lubridate::hour(dldatetime), ":00:00")))
   
   # filter for launchdate if parameter is not empty
-  if (!is.null(launch_date)) filter(df_clean, dldate >= lubridate::ymd(launch_date))
+  if (!is.null(launch_date)) df_clean <- filter(df_clean, dldate >= lubridate::ymd(launch_date))
   
   df_clean <- df_clean %>% 
     left_join(df_mediafile, by = c("media_file_id" = "id")) %>%
