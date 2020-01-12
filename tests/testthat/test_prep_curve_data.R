@@ -2,7 +2,7 @@ context("Preparing curve data")
 
 library(podlover)
 
-t_exmpl <- podlove_create_example(clean = TRUE, seed = 1)
+t_exmpl <- t_exmpl
 
 # simple totals
 t_prep_11 <- podlove_prepare_stats_for_graph(df_stats = t_exmpl, 

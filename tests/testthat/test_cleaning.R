@@ -2,19 +2,19 @@ context("Cleaning")
 
 library(podlover)
 
-t_exmpl <- podlove_create_example(seed = 1)
+t_exmpl_list <- t_exmpl_list
 
-t_clean <- podlove_clean_stats(df_stats = t_exmpl$downloads, 
-																 df_mediafile = t_exmpl$mediafiles, 
-																 df_user = t_exmpl$useragents,
-																 df_episodes = t_exmpl$episodes,
-																 df_posts = t_exmpl$posts) 
+t_clean <- podlove_clean_stats(df_stats = t_exmpl_list$downloads, 
+															 df_mediafile = t_exmpl_list$mediafiles, 
+															 df_user = t_exmpl_list$useragents,
+															 df_episodes = t_exmpl_list$episodes,
+															 df_posts = t_exmpl_list$posts) 
 
-t_clean_ld <- podlove_clean_stats(df_stats = t_exmpl$downloads, 
-																	df_mediafile = t_exmpl$mediafiles, 
-																	df_user = t_exmpl$useragents,
-																	df_episodes = t_exmpl$episodes,
-																	df_posts = t_exmpl$posts,
+t_clean_ld <- podlove_clean_stats(df_stats = t_exmpl_list$downloads, 
+																	df_mediafile = t_exmpl_list$mediafiles, 
+																	df_user = t_exmpl_list$useragents,
+																	df_episodes = t_exmpl_list$episodes,
+																	df_posts = t_exmpl_list$posts,
 																	launch_date = "2019-10-14") 
 
 t_cn <- colnames(t_clean)
@@ -75,4 +75,4 @@ test_that("clean_stats has the correct column class", {
 	expect_is(t_clean$dl_attempts, "integer")
 })
 
-rm(t_exmpl, t_clean, t_clean_ld, t_cn)
+rm(t_exmpl_list, t_clean, t_clean_ld, t_cn)
