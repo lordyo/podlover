@@ -85,4 +85,4 @@ test_that("regression model coefficients are correct", {
 })
 
 # cleanup
-rm(t_exmpl, t_du, t_du_downloads)
+rm(t_exmpl, t_du, t_du_downloads, t_reg_coef, t_reg)
