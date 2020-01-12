@@ -27,7 +27,9 @@
 
 
 
-podlove_graph_performance <- function(df_perfstats, printout = TRUE) {
+podlove_graph_performance <- function(df_perfstats, 
+                                      label = TRUE,
+                                      printout = TRUE) {
   
   df_perfstats <- dplyr::filter(df_perfstats, !is.na(dls_per_day_after_launch),
                                 !is.na(dls_per_day_at_launch))
@@ -44,9 +46,13 @@ podlove_graph_performance <- function(df_perfstats, printout = TRUE) {
     ggplot2::scale_y_continuous(name = "dls per Day during Launch",
                        limits = c(0,max(df_perfstats$dls_per_day_at_launch))) +
     ggplot2::geom_hline(yintercept = median_y, alpha = 0.3) +
-    ggplot2::geom_vline(xintercept = median_x, alpha = 0.3) +
-    ggrepel::geom_label_repel()
+    ggplot2::geom_vline(xintercept = median_x, alpha = 0.3)
+  
+  if (label) {
     
+    g <- g + ggrepel::geom_label_repel()
+    
+  }
   
   if (printout) print(g)
   
