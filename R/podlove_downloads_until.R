@@ -57,6 +57,8 @@ podlove_downloads_until <- function(df_tidy_data,
   regtables <- purrr::map_df(.x = points_in_time, 
                              .f = podlove_prep_regtable, 
                              df_tidy_data = df_tidy_data)
+  
+  regtables <- mutate(regtables, duration = lubridate::as.duration(duration))
 
   regtables
 }
