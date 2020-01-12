@@ -40,7 +40,7 @@
 
 
 podlove_get_and_clean <- function(db_name = rstudioapi::askForSecret(name = "dbname", message = "Enter the name of the database", title = "Database Name"),
-                                  db_host = rstudioapi::askForSecret(name = "host", message = "Enter the hostname of the database", title = "Hostname"),
+																	db_host = rstudioapi::askForSecret(name = "host", message = "Enter the hostname of the database", title = "Hostname"),
                                   db_user = rstudioapi::askForSecret(name = "user", message = "Enter the user name of the database", title = "User Name"),
                                   db_password = rstudioapi::askForSecret(name = "password", message = "Enter the Password", title = "Password"),
 																	launch_date = NULL,

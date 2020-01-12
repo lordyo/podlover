@@ -35,6 +35,8 @@ podlove_prep_regtable <- function(df_tidy_data,
   
   reg_prep <- df_tidy_data %>% 
     
+    mutate(duration = as.numeric(duration)) %>%
+    
     filter(ep_age_hours >= point_in_time,
            hours_since_release <= point_in_time) %>%
  
