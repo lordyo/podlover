@@ -60,8 +60,8 @@ t_prep_33 <- podlove_prepare_stats_for_graph(df_stats = t_exmpl,
 
 t_prep_34 <- podlove_prepare_stats_for_graph(df_stats = t_exmpl, 
 																						 gvar = context, 
-																					hourly = TRUE, 
-																					relative = FALSE)
+																						 hourly = TRUE, 
+																						 relative = FALSE)
 
 #### no gvar ###
 
