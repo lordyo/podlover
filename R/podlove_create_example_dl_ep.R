@@ -57,9 +57,12 @@ podlove_create_example_dl_ep <-  function(n_dls,
     dl_un <- tibble::tibble(
       y = runif(n_un, 0, max_ln))
       
-    create_peak <- function(n_values, max_y) {
+    create_peak <- function(n_values, max_y, seed = NULL) {
       # helper function to create one random normal distributed peak
       # (viral tune-ins)
+      
+      if (!is.null(seed)) set.seed(seed)
+      
       pk <- tibble::tibble(
         y = rnorm(n = n_values,
                   mean = sample(1:max_y, 1),

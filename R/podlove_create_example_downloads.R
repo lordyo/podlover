@@ -86,7 +86,10 @@ podlove_create_example_downloads <- function(df_posts,
   n_total_dls <- nrow(downloads)
   
   # helper function to create random hex strings (for request_id)
-  randhex <- function(n_chars) {
+  randhex <- function(n_chars, seed = NULL) {
+    
+    if (!is.null(seed)) set.seed(seed)
+    
     paste(sample(c(0:9, letters[1:6]), n_chars, TRUE), collapse = "")
   }
   
@@ -108,7 +111,7 @@ podlove_create_example_downloads <- function(df_posts,
                                          prob = wakefield::probs(nrow(df_useragents)))) %>% 
     # generate random request_ids
     dplyr::rowwise() %>% 
-      dplyr::mutate(request_id = randhex(32)) %>% 
+      dplyr::mutate(request_id = randhex(32, seed = seed)) %>% 
     dplyr::ungroup() %>%
     
     # join the release dates from the mediafile df and calculate download times
