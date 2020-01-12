@@ -3,4 +3,6 @@
 .RData
 .Ruserdata
 podlover.Rproj
+.Rbuildignore
+README.Rmd
 inst/doc
