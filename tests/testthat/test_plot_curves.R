@@ -179,4 +179,5 @@ test_that("plots look as expected", {
 })
 
 # cleanup
-rm(t_exmpl, data1, g1, g2)
+rm(t_exmpl, data1)
+rm(list = ls(pat = "g1?[0-9]"))
