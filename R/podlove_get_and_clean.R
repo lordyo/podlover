@@ -10,6 +10,8 @@
 #' @param db_host hostname of the database
 #' @param db_user username of the database 
 #' @param db_password password of the database
+#' @param ddupe boolean switcher for legacy deduplication. Don't use this until
+#'     you know what you're doing.
 #' @param launch_date date of the first official podcast episode release
 #' @param tbl_prefix prefix of the MySLQ table names, defaults to `wp_`
 #' @param tbl_downloads name of the MySQL table for clean downloads (without the prefix)
@@ -44,6 +46,7 @@ podlove_get_and_clean <- function(db_name = rstudioapi::askForSecret(name = "dbn
                                   db_user = rstudioapi::askForSecret(name = "user", message = "Enter the user name of the database", title = "User Name"),
                                   db_password = rstudioapi::askForSecret(name = "password", message = "Enter the Password", title = "Password"),
 																	launch_date = NULL,
+																	ddupe = FALSE,
 																	tbl_prefix = "wp_",
 																	tbl_downloads = "podlove_downloadintentclean",
 																	tbl_mediafile = "podlove_mediafile",
@@ -107,7 +110,8 @@ podlove_get_and_clean <- function(db_name = rstudioapi::askForSecret(name = "dbn
 	                                  tables[[df_names[3]]],
 	                                  tables[[df_names[4]]],
 	                                  tables[[df_names[5]]],
-																		launch_date)
+																		launch_date,
+																		ddupe = ddupe)
 	
 	message("tables connected and data cleaned")
 	
