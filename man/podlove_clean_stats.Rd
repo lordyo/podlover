@@ -10,6 +10,7 @@ podlove_clean_stats(
   df_user,
   df_episodes,
   df_posts,
+  ddupe = FALSE,
   launch_date = NULL
 )
 }
@@ -23,6 +24,9 @@ podlove_clean_stats(
 \item{df_episodes}{contents of the MySQL table \code{wp_podlove_episode}}
 
 \item{df_posts}{contents of the MySQL table \code{wp_posts}}
+
+\item{ddupe}{boolean switcher for legacy deduplication. Don't use this until
+you know what you're doing.}
 
 \item{launch_date}{date of the first official podcast episode release,
 defaults to date of first download attempt (which may be before the first

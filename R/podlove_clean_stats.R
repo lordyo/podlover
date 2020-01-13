@@ -11,6 +11,8 @@
 #' @param df_user contents of the MySQL table \code{wp_podlove_useragent} 
 #' @param df_episodes contents of the MySQL table \code{wp_podlove_episode}
 #' @param df_posts contents of the MySQL table \code{wp_posts}
+#' @param ddupe boolean switcher for legacy deduplication. Don't use this until
+#'     you know what you're doing.
 #' @param launch_date date of the first official podcast episode release,
 #' defaults to date of first download attempt (which may be before the first
 #' episode was released)
@@ -38,6 +40,7 @@ podlove_clean_stats <- function(df_stats,
                                 df_user,
                                 df_episodes,
                                 df_posts,
+                                ddupe = FALSE,
                                 launch_date = NULL) {
   
   # clean reference data
@@ -117,10 +120,24 @@ podlove_clean_stats <- function(df_stats,
       hour,
       client_name,
       client_type,
-      os_name) %>%
-    dplyr::group_by_all() %>%
-    summarize(dl_attempts = dplyr::n()) %>%
-    ungroup() 
+      os_name)
+  
+  # if deduplication should be done
+  if (ddupe) {
+    
+    # count each combination of variables as as download
+    df_clean <- df_clean %>% 
+      dplyr::group_by_all() %>%
+      summarize(dl_attempts = dplyr::n()) %>%
+      ungroup() 
+    
+  } else {
+    
+    # else treat each entry as one download (no deduping)
+    df_clean <- df_clean %>% 
+      dplyr::mutate(dl_attempts = 1,
+                    dl_attempts = as.integer(dl_attempts))
+  }
 
     df_clean
     

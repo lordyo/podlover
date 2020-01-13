@@ -25,8 +25,8 @@ test_that("clean_stats returns a dataframe", {
 
 test_that("clean_stats returns correct dimensions", {
 	expect_equal(ncol(t_clean), 20)
-	expect_equal(nrow(t_clean), 4310)
-	expect_equal(nrow(t_clean_ld), 1167) # launchdate filter works
+	expect_equal(nrow(t_clean), 5140)
+	expect_equal(nrow(t_clean_ld), 1188) # launchdate filter works
 })
 
 test_that("clean_stats has the correct column names", {
