@@ -14,6 +14,7 @@ podlove_get_and_clean(
   db_password = rstudioapi::askForSecret(name = "password", message =
     "Enter the Password", title = "Password"),
   launch_date = NULL,
+  ddupe = FALSE,
   tbl_prefix = "wp_",
   tbl_downloads = "podlove_downloadintentclean",
   tbl_mediafile = "podlove_mediafile",
@@ -32,6 +33,9 @@ podlove_get_and_clean(
 \item{db_password}{password of the database}
 
 \item{launch_date}{date of the first official podcast episode release}
+
+\item{ddupe}{boolean switcher for legacy deduplication. Don't use this until
+you know what you're doing.}
 
 \item{tbl_prefix}{prefix of the MySLQ table names, defaults to `wp_`}
 
