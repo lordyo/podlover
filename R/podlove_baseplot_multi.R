@@ -36,31 +36,31 @@
 #' @importFrom ggplot2 ggplot 
 
 podlove_baseplot_multi <- function(df_tidy_data,
-                             gvar = NULL,
-                             cumulative = TRUE,
-                             ...) {
- 
+                                   gvar = NULL,
+                                   cumulative = TRUE,
+                                   ...) {
+  
   # switcher for cumulative data (use listeners or listeners-total)
   if (cumulative == TRUE) {
     
     g_dl_curves <- ggplot2::ggplot(df_tidy_data,
-                                   ggplot2::aes_string(x = "time", 
-                                                       y = gvar, 
-                                                       height = "listeners_total"))
+                                   ggplot2::aes(x = time, 
+                                                y = {{gvar}}, 
+                                                height = listeners_total))
     
   } else {
     
     g_dl_curves <- ggplot2::ggplot(df_tidy_data,
-                                   ggplot2::aes_string(x = "time", 
-                                                       y = gvar, 
-                                                       height = "listeners"))
+                                   ggplot2::aes(x = time, 
+                                                y = {{gvar}}, 
+                                                height = listeners))
   }
-
+  
   
   # add ridgeline plot
   g_dl_curves <- g_dl_curves + ggridges::geom_density_ridges(stat = "identity",
                                                              ...)
-
+  
   g_dl_curves
   
 }

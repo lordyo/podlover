@@ -62,24 +62,19 @@ podlove_graph_download_curves <- function(df_tidy_data,
                                           printout = TRUE,
                                           ...) {
   
-  # get string version of gvar for handover to base constructor
-  gvar_q = deparse(substitute(gvar))
-
   # construct graph (switcher for line vs ridge)
   
   if (plot_type == "line") {
     g_dl_curves <- podlove_baseplot(df_tidy_data, 
-                                    gvar = gvar_q, 
+                                    gvar = {{gvar}}, 
                                     cumulative = cumulative,
                                     ...)
-    if (gvar_q != "NULL") {
-      g_dl_curves <-  g_dl_curves +
-        directlabels::geom_dl(aes(label = {{gvar}}), method = list(labelmethod, cex = 0.8))
-    }
+    g_dl_curves <-  g_dl_curves +
+      directlabels::geom_dl(aes(label = {{gvar}}), method = list(labelmethod, cex = 0.8))
     
   } else if (plot_type == "ridge") {
     g_dl_curves <- podlove_baseplot_multi(df_tidy_data,
-                                          gvar = gvar_q,
+                                          gvar = {{gvar}},
                                           cumulative = cumulative,
                                           ...)
     
