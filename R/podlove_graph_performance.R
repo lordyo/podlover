@@ -8,6 +8,7 @@
 #'     limit. 
 #'
 #' @param  df_perfstats a tidy data frame created by \code{performance_stats()}
+#' @param label Switcher to attach labels to points (defaults to TRUE)
 #' @param printout Switcher to automatically print out the plot (default TRUE)
 #'     
 #' @return A ggplot object

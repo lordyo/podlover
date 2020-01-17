@@ -9,6 +9,8 @@ podlove_graph_performance(df_perfstats, label = TRUE, printout = TRUE)
 \arguments{
 \item{df_perfstats}{a tidy data frame created by \code{performance_stats()}}
 
+\item{label}{Switcher to attach labels to points (defaults to TRUE)}
+
 \item{printout}{Switcher to automatically print out the plot (default TRUE)}
 }
 \value{
