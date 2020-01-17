@@ -133,7 +133,128 @@ g16 <- podlove_graph_download_curves(data8,
 																		plot_type = "line",
 																		printout = FALSE)
 
-	
+### plot wrapper 
+
+g17 <- podlove_plot_curves(dldata = t_exmpl, 
+													 hourly = TRUE, 
+													 relative = TRUE, 
+													 cumulative = TRUE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g18 <- podlove_plot_curves(dldata = t_exmpl, 
+													 hourly = TRUE, 
+													 relative = FALSE, 
+													 cumulative = TRUE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g19 <- podlove_plot_curves(dldata = t_exmpl, 
+													 hourly = FALSE, 
+													 relative = TRUE, 
+													 cumulative = TRUE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g20 <- podlove_plot_curves(dldata = t_exmpl, 
+													 hourly = FALSE, 
+													 relative = FALSE, 
+													 cumulative = TRUE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g21 <- podlove_plot_curves(dldata = t_exmpl, 
+													 hourly = TRUE, 
+													 relative = TRUE, 
+													 cumulative = FALSE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g22 <- podlove_plot_curves(dldata = t_exmpl, 
+													 hourly = TRUE, 
+													 relative = FALSE, 
+													 cumulative = FALSE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g23 <- podlove_plot_curves(dldata = t_exmpl, 
+													 hourly = FALSE, 
+													 relative = TRUE, 
+													 cumulative = FALSE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g24 <- podlove_plot_curves(dldata = t_exmpl, 
+													 hourly = FALSE, 
+													 relative = FALSE, 
+													 cumulative = FALSE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g25 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = TRUE, 
+													 relative = TRUE, 
+													 cumulative = TRUE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g26 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = TRUE, 
+													 relative = FALSE, 
+													 cumulative = TRUE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g27 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = FALSE, 
+													 relative = TRUE, 
+													 cumulative = TRUE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g28 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = FALSE, 
+													 relative = FALSE, 
+													 cumulative = TRUE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g29 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = TRUE, 
+													 relative = TRUE, 
+													 cumulative = FALSE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g30 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = TRUE, 
+													 relative = FALSE, 
+													 cumulative = FALSE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g31 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = FALSE, 
+													 relative = TRUE, 
+													 cumulative = FALSE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g32 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = FALSE, 
+													 relative = FALSE, 
+													 cumulative = FALSE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
 # tests
 test_that("plots are ggplot objects", {
 	
@@ -144,7 +265,6 @@ test_that("plots are ggplot objects", {
 	expect_is(g5, "ggplot")
 	expect_is(g6, "ggplot")
 	expect_is(g7, "ggplot")
-	expect_is(g8, "ggplot")
 	expect_is(g9, "ggplot")
 	expect_is(g10, "ggplot")
 	expect_is(g11, "ggplot")
@@ -176,6 +296,23 @@ test_that("plots look as expected", {
 	vdiffr::expect_doppelganger("title DL hou abs cum line",  g15)
 	vdiffr::expect_doppelganger("title DL hou abs ncum line", g16)
 	
+	vdiffr::expect_doppelganger("Wrap Total DL day rel cum line",  g17)	
+	vdiffr::expect_doppelganger("Wrap Total DL day rel ncum line", g18)
+	vdiffr::expect_doppelganger("Wrap Total DL day abs cum line",  g19)
+	vdiffr::expect_doppelganger("Wrap Total DL day abs ncum line", g20)
+	vdiffr::expect_doppelganger("Wrap Total DL hou rel cum line",  g21)
+	vdiffr::expect_doppelganger("Wrap Total DL hou rel ncum line", g22)
+	vdiffr::expect_doppelganger("Wrap Total DL hou abs cum line",  g23)
+	vdiffr::expect_doppelganger("Wrap Total DL hou abs ncum line", g24)
+	
+	vdiffr::expect_doppelganger("Wrap title DL day rel cum line",  g25)
+	vdiffr::expect_doppelganger("Wrap title DL day rel ncum line", g26)
+	vdiffr::expect_doppelganger("Wrap title DL day abs cum line",  g27)
+	vdiffr::expect_doppelganger("Wrap title DL day abs ncum line", g28)
+	vdiffr::expect_doppelganger("Wrap title DL hou rel cum line",  g29)
+	vdiffr::expect_doppelganger("Wrap title DL hou rel ncum line", g30)
+	vdiffr::expect_doppelganger("Wrap title DL hou abs cum line",  g31)
+	vdiffr::expect_doppelganger("Wrap title DL hou abs ncum line", g32)
 })
 
 # cleanup
