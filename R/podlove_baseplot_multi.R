@@ -36,7 +36,7 @@
 #' @importFrom ggplot2 ggplot 
 
 podlove_baseplot_multi <- function(df_tidy_data,
-                                   gvar = NULL,
+                                   gvar = "Total",
                                    cumulative = TRUE,
                                    ...) {
   

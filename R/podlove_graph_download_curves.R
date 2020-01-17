@@ -55,7 +55,7 @@
 #' @export
 
 podlove_graph_download_curves <- function(df_tidy_data,
-                                          gvar = NULL,
+                                          gvar = "Total",
                                           cumulative = TRUE,
                                           plot_type = "line", 
                                           labelmethod = "last.points",
