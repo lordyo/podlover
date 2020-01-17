@@ -14,20 +14,24 @@ data1 <- podlove_performance_stats(df_tidy_data = t_exmpl,
 																	 limit_unit = "days")
 
 g1 <- podlove_graph_performance(data1, label = FALSE, printout = FALSE)
+
+g2 <- podlove_plot_performance(t_exmpl, label = FALSE, printout = FALSE)
 																		
 # tests
 test_that("plots are ggplot objects", {
 	
 	expect_is(g1, "ggplot")
+	expect_is(g2, "ggplot")
 	
 })
 
 test_that("plots look as expected", {
 	
 	vdiffr::expect_doppelganger("Performance Plot",  g1)
+	vdiffr::expect_doppelganger("Wrap Performance Plot",  g2)
 	
 })
 
 # cleanup
 rm(t_exmpl, data1)
-rm(list = ls(pat = "g1?[0-9]"))
+rm(list = ls(pat = "g[0-9]"))
