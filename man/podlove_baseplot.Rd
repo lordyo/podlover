@@ -4,7 +4,7 @@
 \alias{podlove_baseplot}
 \title{Construct a basic podcast download line plot}
 \usage{
-podlove_baseplot(df_tidy_data, gvar = NULL, cumulative = TRUE, ...)
+podlove_baseplot(df_tidy_data, gvar = "Total", cumulative = TRUE, ...)
 }
 \arguments{
 \item{df_tidy_data}{A tidy data frame with download data, as constructed
