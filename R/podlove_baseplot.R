@@ -38,35 +38,35 @@
 #' @importFrom ggplot2 ggplot 
 
 podlove_baseplot <- function(df_tidy_data,
-                             gvar = NULL,
+                             gvar = "Total",
                              cumulative = TRUE,
                              ...) {
   # switcher for cumulative data (use listeners or listeners-total)
   
- 
+  
   if (cumulative == TRUE) {
-
+    
     g_dl_curves <- ggplot(df_tidy_data,
-                                   ggplot2::aes_string(x = "time",
-                                                       y = "listeners_total",
-                                                       color = gvar)) +
-
+                          ggplot2::aes(x = time,
+                                       y = listeners_total,
+                                       color = {{gvar}})) +
+      
       ggplot2::coord_cartesian(ylim = c(0, max(df_tidy_data$listeners_total)))
     
   } else {
-
+    
     g_dl_curves <- ggplot2::ggplot(df_tidy_data,
-                                   ggplot2::aes_string(x = "time",
-                                                       y = "listeners",
-                                                       color = gvar)) +
-
+                                   ggplot2::aes(x = time,
+                                                y = listeners,
+                                                color = {{gvar}})) +
+      
       ggplot2::coord_cartesian(ylim = c(0, max(df_tidy_data$listeners)))
   } 
   
   g_dl_curves <-  g_dl_curves +
     ggplot2::geom_line(...) +
     ggplot2::guides(color = FALSE) 
-
+  
   g_dl_curves
   
 }

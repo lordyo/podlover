@@ -6,7 +6,7 @@
 \usage{
 podlove_graph_download_curves(
   df_tidy_data,
-  gvar = NULL,
+  gvar = "Total",
   cumulative = TRUE,
   plot_type = "line",
   labelmethod = "last.points",

@@ -133,7 +133,128 @@ g16 <- podlove_graph_download_curves(data8,
 																		plot_type = "line",
 																		printout = FALSE)
 
-	
+### plot wrapper 
+
+g17 <- podlove_plot_curves(dldata = t_exmpl, 
+													 hourly = TRUE, 
+													 relative = TRUE, 
+													 cumulative = TRUE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g18 <- podlove_plot_curves(dldata = t_exmpl, 
+													 hourly = TRUE, 
+													 relative = FALSE, 
+													 cumulative = TRUE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g19 <- podlove_plot_curves(dldata = t_exmpl, 
+													 hourly = FALSE, 
+													 relative = TRUE, 
+													 cumulative = TRUE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g20 <- podlove_plot_curves(dldata = t_exmpl, 
+													 hourly = FALSE, 
+													 relative = FALSE, 
+													 cumulative = TRUE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g21 <- podlove_plot_curves(dldata = t_exmpl, 
+													 hourly = TRUE, 
+													 relative = TRUE, 
+													 cumulative = FALSE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g22 <- podlove_plot_curves(dldata = t_exmpl, 
+													 hourly = TRUE, 
+													 relative = FALSE, 
+													 cumulative = FALSE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g23 <- podlove_plot_curves(dldata = t_exmpl, 
+													 hourly = FALSE, 
+													 relative = TRUE, 
+													 cumulative = FALSE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g24 <- podlove_plot_curves(dldata = t_exmpl, 
+													 hourly = FALSE, 
+													 relative = FALSE, 
+													 cumulative = FALSE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g25 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = TRUE, 
+													 relative = TRUE, 
+													 cumulative = TRUE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g26 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = TRUE, 
+													 relative = FALSE, 
+													 cumulative = TRUE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g27 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = FALSE, 
+													 relative = TRUE, 
+													 cumulative = TRUE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g28 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = FALSE, 
+													 relative = FALSE, 
+													 cumulative = TRUE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g29 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = TRUE, 
+													 relative = TRUE, 
+													 cumulative = FALSE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g30 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = TRUE, 
+													 relative = FALSE, 
+													 cumulative = FALSE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g31 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = FALSE, 
+													 relative = TRUE, 
+													 cumulative = FALSE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
+g32 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = FALSE, 
+													 relative = FALSE, 
+													 cumulative = FALSE, 
+													 plot_type = "line", 
+													 printout = FALSE)
+
 # tests
 test_that("plots are ggplot objects", {
 	
@@ -144,7 +265,6 @@ test_that("plots are ggplot objects", {
 	expect_is(g5, "ggplot")
 	expect_is(g6, "ggplot")
 	expect_is(g7, "ggplot")
-	expect_is(g8, "ggplot")
 	expect_is(g9, "ggplot")
 	expect_is(g10, "ggplot")
 	expect_is(g11, "ggplot")
@@ -153,28 +273,106 @@ test_that("plots are ggplot objects", {
 	expect_is(g14, "ggplot")
 	expect_is(g15, "ggplot")
 	expect_is(g16, "ggplot")
+	expect_is(g17, "ggplot")
+	expect_is(g18, "ggplot")
+	expect_is(g19, "ggplot")
+	expect_is(g20, "ggplot")
+	expect_is(g21, "ggplot")
+	expect_is(g22, "ggplot")
+	expect_is(g23, "ggplot")
+	expect_is(g24, "ggplot")
+	expect_is(g25, "ggplot")
+	expect_is(g26, "ggplot")
+	expect_is(g27, "ggplot")
+	expect_is(g28, "ggplot")
+	expect_is(g29, "ggplot")
+	expect_is(g30, "ggplot")
+	expect_is(g31, "ggplot")
+	expect_is(g32, "ggplot")
 	
 })
 
 test_that("plots look as expected", {
 	
-	vdiffr::expect_doppelganger("Total DL day rel cum line",  g1)
-	vdiffr::expect_doppelganger("Total DL day rel ncum line", g2)
-	vdiffr::expect_doppelganger("Total DL day abs cum line",  g3)
-	vdiffr::expect_doppelganger("Total DL day abs ncum line", g4)
-	vdiffr::expect_doppelganger("Total DL hou rel cum line",  g5)
-	vdiffr::expect_doppelganger("Total DL hou rel ncum line", g6)
-	vdiffr::expect_doppelganger("Total DL hou abs cum line",  g7)
-	vdiffr::expect_doppelganger("Total DL hou abs ncum line", g8)
+	os <- Sys.info()["sysname"]
 	
-	vdiffr::expect_doppelganger("title DL day rel cum line",  g9)
-	vdiffr::expect_doppelganger("title DL day rel ncum line", g10)
-	vdiffr::expect_doppelganger("title DL day abs cum line",  g11)
-	vdiffr::expect_doppelganger("title DL day abs ncum line", g12)
-	vdiffr::expect_doppelganger("title DL hou rel cum line",  g13)
-	vdiffr::expect_doppelganger("title DL hou rel ncum line", g14)
-	vdiffr::expect_doppelganger("title DL hou abs cum line",  g15)
-	vdiffr::expect_doppelganger("title DL hou abs ncum line", g16)
+	if (os == "Windows") {
+	
+	vdiffr::expect_doppelganger("Win Total DL day rel cum line",  g1)
+	vdiffr::expect_doppelganger("Win Total DL day rel ncum line", g2)
+	vdiffr::expect_doppelganger("Win Total DL day abs cum line",  g3)
+	vdiffr::expect_doppelganger("Win Total DL day abs ncum line", g4)
+	vdiffr::expect_doppelganger("Win Total DL hou rel cum line",  g5)
+	vdiffr::expect_doppelganger("Win Total DL hou rel ncum line", g6)
+	vdiffr::expect_doppelganger("Win Total DL hou abs cum line",  g7)
+	vdiffr::expect_doppelganger("Win Total DL hou abs ncum line", g8)
+	
+	vdiffr::expect_doppelganger("Win title DL day rel cum line",  g9)
+	vdiffr::expect_doppelganger("Win title DL day rel ncum line", g10)
+	vdiffr::expect_doppelganger("Win title DL day abs cum line",  g11)
+	vdiffr::expect_doppelganger("Win title DL day abs ncum line", g12)
+	vdiffr::expect_doppelganger("Win title DL hou rel cum line",  g13)
+	vdiffr::expect_doppelganger("Win title DL hou rel ncum line", g14)
+	vdiffr::expect_doppelganger("Win title DL hou abs cum line",  g15)
+	vdiffr::expect_doppelganger("Win title DL hou abs ncum line", g16)
+	
+	vdiffr::expect_doppelganger("Win Wrap Total DL day rel cum line",  g17)	
+	vdiffr::expect_doppelganger("Win Wrap Total DL day rel ncum line", g18)
+	vdiffr::expect_doppelganger("Win Wrap Total DL day abs cum line",  g19)
+	vdiffr::expect_doppelganger("Win Wrap Total DL day abs ncum line", g20)
+	vdiffr::expect_doppelganger("Win Wrap Total DL hou rel cum line",  g21)
+	vdiffr::expect_doppelganger("Win Wrap Total DL hou rel ncum line", g22)
+	vdiffr::expect_doppelganger("Win Wrap Total DL hou abs cum line",  g23)
+	vdiffr::expect_doppelganger("Win Wrap Total DL hou abs ncum line", g24)
+	
+	vdiffr::expect_doppelganger("Win Wrap title DL day rel cum line",  g25)
+	vdiffr::expect_doppelganger("Win Wrap title DL day rel ncum line", g26)
+	vdiffr::expect_doppelganger("Win Wrap title DL day abs cum line",  g27)
+	vdiffr::expect_doppelganger("Win Wrap title DL day abs ncum line", g28)
+	vdiffr::expect_doppelganger("Win Wrap title DL hou rel cum line",  g29)
+	vdiffr::expect_doppelganger("Win Wrap title DL hou rel ncum line", g30)
+	vdiffr::expect_doppelganger("Win Wrap title DL hou abs cum line",  g31)
+	vdiffr::expect_doppelganger("Win Wrap title DL hou abs ncum line", g32)
+	
+	} else if (os == "Unix") {
+		
+	vdiffr::expect_doppelganger("Linux Total DL day rel cum line",  g1)
+	vdiffr::expect_doppelganger("Linux Total DL day rel ncum line", g2)
+	vdiffr::expect_doppelganger("Linux Total DL day abs cum line",  g3)
+	vdiffr::expect_doppelganger("Linux Total DL day abs ncum line", g4)
+	vdiffr::expect_doppelganger("Linux Total DL hou rel cum line",  g5)
+	vdiffr::expect_doppelganger("Linux Total DL hou rel ncum line", g6)
+	vdiffr::expect_doppelganger("Linux Total DL hou abs cum line",  g7)
+	vdiffr::expect_doppelganger("Linux Total DL hou abs ncum line", g8)
+	
+	vdiffr::expect_doppelganger("Linux title DL day rel cum line",  g9)
+	vdiffr::expect_doppelganger("Linux title DL day rel ncum line", g10)
+	vdiffr::expect_doppelganger("Linux title DL day abs cum line",  g11)
+	vdiffr::expect_doppelganger("Linux title DL day abs ncum line", g12)
+	vdiffr::expect_doppelganger("Linux title DL hou rel cum line",  g13)
+	vdiffr::expect_doppelganger("Linux title DL hou rel ncum line", g14)
+	vdiffr::expect_doppelganger("Linux title DL hou abs cum line",  g15)
+	vdiffr::expect_doppelganger("Linux title DL hou abs ncum line", g16)
+	
+	vdiffr::expect_doppelganger("Linux Wrap Total DL day rel cum line",  g17)	
+	vdiffr::expect_doppelganger("Linux Wrap Total DL day rel ncum line", g18)
+	vdiffr::expect_doppelganger("Linux Wrap Total DL day abs cum line",  g19)
+	vdiffr::expect_doppelganger("Linux Wrap Total DL day abs ncum line", g20)
+	vdiffr::expect_doppelganger("Linux Wrap Total DL hou rel cum line",  g21)
+	vdiffr::expect_doppelganger("Linux Wrap Total DL hou rel ncum line", g22)
+	vdiffr::expect_doppelganger("Linux Wrap Total DL hou abs cum line",  g23)
+	vdiffr::expect_doppelganger("Linux Wrap Total DL hou abs ncum line", g24)
+	
+	vdiffr::expect_doppelganger("Linux Wrap title DL day rel cum line",  g25)
+	vdiffr::expect_doppelganger("Linux Wrap title DL day rel ncum line", g26)
+	vdiffr::expect_doppelganger("Linux Wrap title DL day abs cum line",  g27)
+	vdiffr::expect_doppelganger("Linux Wrap title DL day abs ncum line", g28)
+	vdiffr::expect_doppelganger("Linux Wrap title DL hou rel cum line",  g29)
+	vdiffr::expect_doppelganger("Linux Wrap title DL hou rel ncum line", g30)
+	vdiffr::expect_doppelganger("Linux Wrap title DL hou abs cum line",  g31)
+	vdiffr::expect_doppelganger("Linux Wrap title DL hou abs ncum line", g32)
+		
+	}
 	
 })
 
