@@ -1,4 +1,4 @@
-#' Plot Regression from Download Data
+#' Plot Performance Diagram from Download Data
 #' 
 #' Wrapper function to prepare and generate a performance plot with all episodes
 #'     on an X/Y grid, X showing long-term average downloads, Y showing average
