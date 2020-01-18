@@ -235,12 +235,12 @@ pod_sum$dl_last_date
 
 ## Download curves
 
-One of the main features of the `podlover` package is that it lets you plot all kinds of download curves over time - aggregated and grouped, with relative and absolute starting points. The plotting function relies on the `ggplot2` package and the data needs to be prepared first. The function `podlove_prepare_stats_for_graph()` does just that, and the function `podlove_graph_download_curves()` takes care of the plotting.
+One of the main features of the `podlover` package is that it lets you plot all kinds of download curves over time - aggregated and grouped, with relative and absolute starting points. The `podlove_plot_curves()` function (which is based on the `ggplo2` package) helps you do that. 
 
 ### Parameters
-The functional combo of `podlove_prepare_stats_for_graph()` and `podlove_graph_download_curves()` accepts the following parameters for a graph:
+`podlove_plot_curves()` accepts the following parameters for a graph:
 
-* `df_stats`: The clean data to be analyzed, as prepared by the import or cleaning function.
+* `dldata`: The clean data to be analyzed, as prepared by the import or cleaning function.
 * `gvar`: The grouping variable. Defining one will create multiple curves, one for each group. This needs to be one of the variables (columns) in the clean data:
   * `ep_number`: The episode's official number
   * `title`: The episode's title
@@ -252,41 +252,37 @@ The functional combo of `podlove_prepare_stats_for_graph()` and `podlove_graph_d
   * `os_name`: The operating system's name of the client (e.g. Android, Linux, Mac)
   * Any other grouping variable you create yourself from the existing data.
 * `hourly` (`podlove_prepare_stats_for_graph()` only): If set to `TRUE`, the downloads will be shown per hour, otherwise per day
-* `relative` (`podlove_prepare_stats_for_graph()` only): If set to `TRUE`, the downloads will be shown relative to their publishing date, i.e. all curves starting at 0. Otherwise, the curves will show the download on their specific dates.
-* `cumulative` (`podlove_graph_download_curves()` only): If set to `TRUE`, the downloads will accumulate and show the total sum over time (rising curve). Otherwise, they will uncumulated downloads (scattered peaks).
-* `plot_type` (`podlove_graph_download_curves()` only): What kind of plot to use - either line plots (`"line"`) on one graph, or individual ridgeline plots (`"ridge"`).
-* `labelmethod` (`podlove_graph_download_curves()` only): Where to attach the labels (`"first.points"` for the beginning of the line, `"last.points"` for the end of the line)
+* `relative`: If set to `TRUE`, the downloads will be shown relative to their publishing date, i.e. all curves starting at 0. Otherwise, the curves will show the download on their specific dates.
+* `cumulative`: If set to `TRUE`, the downloads will accumulate and show the total sum over time (rising curve). Otherwise, they will uncumulated downloads (scattered peaks).
+* `plot_type`: What kind of plot to use - either line plots (`"line"`) on one graph, or individual ridgeline plots (`"ridge"`).
+* `labelmethod`: Where to attach the labels (`"first.points"` for the beginning of the line, `"last.points"` for the end of the line)
+* `printout`: If you want to print the plot directly from the function without handing it over to a ggplot object.
 
 ### Total downloads over time
 
-Let's say you want to see the daily total downloads of your podcast over time, in accumulated fashion. First, you prepare the graphics data necessary:
-
-```{r}
-
-total_dls_acc <- podlove_prepare_stats_for_graph(df_stats = downloads, 
-                                                 hourly = FALSE, 
-                                                 relative = FALSE)
-
-```
-
-Here, you are not specifying any `gvar` (which means you'll get just one curve instead of many). `hourly` is set to `FALSE` (= daily data) and `relative` is set `FALSE` (absolute dates). Now feed this data over to the plotting function:
+Let's say you want to see the daily total downloads of your podcast over time, in accumulated fashion. Here, you are not specifying any `gvar` (which means you'll get just one curve instead of many). `hourly` is set to `FALSE` (= daily data) and `relative` is set `FALSE` (absolute dates). 
 
 ```{r fig.height=5, fig.width=7}
-g_tdlacc <- podlove_graph_download_curves(df_tidy_data = total_dls_acc,
-                                          cumulative = TRUE, 
-                                          plot_type = "line",
-                                          printout = FALSE)
+g_tdlacc <- podlove_plot_curves(dldata = downloads, 
+                                hourly = FALSE, 
+                                relative = FALSE, 
+                                cumulative = TRUE, 
+                                plot_type = "line",
+                                printout = FALSE)
 
 print(g_tdlacc)
+
 ```
 
 If we don't cumulate the data, we can see the individual spikes of the episode launches:
 
 ```{r fig.height=5, fig.width=7}
-g_tdl <- podlove_graph_download_curves(df_tidy_data = total_dls_acc,
-                                          cumulative = FALSE, 
-                                          plot_type = "line",
-                                          printout = FALSE)
+g_tdl <- podlove_plot_curves(dldata = downloads, 
+                              hourly = FALSE, 
+                              relative = FALSE, 
+                              cumulative = FALSE, 
+                              plot_type = "line",
+                              printout = FALSE)
 
 print(g_tdl)
 ```
@@ -297,17 +293,14 @@ Now you want to look at the individual episodes. For this, you will need to use 
 
 ```{r fig.height=5, fig.width=7}
 
-ep_dls_acc <- podlove_prepare_stats_for_graph(df_stats = downloads,  
-                                              gvar = title, # group by episode title
-                                              hourly = FALSE,  
-                                              relative = FALSE)
-
-g_ep_dlsacc <- podlove_graph_download_curves(df_tidy_data = ep_dls_acc,
-                                             gvar = title, # use the same gvar!
-                                             cumulative = TRUE,
-                                             plot_type = "line", 
-                                             labelmethod = "first.points",
-                                             printout = FALSE)
+g_ep_dlsacc <- podlove_plot_curves(dldata = downloads, 
+                                   gvar = title, 
+                                   hourly = FALSE, 
+                                   relative = FALSE, 
+                                   cumulative = TRUE, 
+                                   plot_type = "line",
+                                   labelmethod = "first.points",
+                                   printout = FALSE)
 
 print(g_ep_dlsacc)
 ```
@@ -316,37 +309,33 @@ As you can see, this shows the curves spread over the calendar X axis. But how d
 
 ```{r fig.height=5, fig.width=7}
 
-ep_dls_acc_rel <- podlove_prepare_stats_for_graph(df_stats = downloads,  
-                                              gvar = title,
-                                              hourly = FALSE,  
-                                              relative = TRUE) # relative plotting
-
-g_ep_dlsaccrel <- podlove_graph_download_curves(df_tidy_data = ep_dls_acc_rel,
-                                             gvar = title,
-                                             cumulative = TRUE,
-                                             plot_type = "line", 
-                                             labelmethod = "last.points",
-                                             printout = FALSE)
+g_ep_dlsaccrel <- podlove_plot_curves(dldata = downloads, 
+                                   gvar = title, 
+                                   hourly = FALSE, 
+                                   relative = TRUE, 
+                                   cumulative = TRUE, 
+                                   plot_type = "line",
+                                   labelmethod = "last.points",
+                                   printout = FALSE)
 
 print(g_ep_dlsaccrel)
+
 ```
 
 If you want to look at the uncumulated data, the line plot doesn't work very well. For this, a ridge plot is the right choice (but only if you don't have too many episodes):
 
 ```{r fig.height=10, fig.width=7}
 
-ep_dls <- podlove_prepare_stats_for_graph(df_stats = downloads,  
-                                              gvar = ep_num_title, # better for sorting
-                                              hourly = FALSE,  
-                                              relative = FALSE)
-
-g_ep_dls <- podlove_graph_download_curves(df_tidy_data = ep_dls,
-                                             gvar = ep_num_title,
-                                             cumulative = FALSE, # no cumulation
-                                             plot_type = "ridge", # use a ridgeline plot
-                                             printout = FALSE)
+g_ep_dls <- podlove_plot_curves(dldata = downloads, 
+                                   gvar = ep_num_title, # better for sorting
+                                   hourly = FALSE, 
+                                   relative = FALSE, 
+                                   cumulative = FALSE, # no cumulation
+                                   plot_type = "ridge", # use a ridgeline plot
+                                   printout = FALSE)
 
 print(g_ep_dls)
+
 ```
 
 ### Downloads by other parameters
@@ -355,19 +344,45 @@ You can compare not only episodes, but also aspects of episodes or downloads. Le
 
 ```{r fig.height=5, fig.width=8}
 
-source_acc <- podlove_prepare_stats_for_graph(df_stats = downloads,  
-                                              gvar = source, # new gvar
-                                              hourly = FALSE,  
-                                              relative = FALSE) 
-
-g_source_acc <- podlove_graph_download_curves(df_tidy_data = source_acc,
-                                             gvar = source,  # same as above!
-                                             cumulative = TRUE,
-                                             plot_type = "line", 
-                                             labelmethod = "angled.boxes",
-                                             printout = FALSE)
+g_source_acc <- podlove_plot_curves(dldata = downloads, 
+                                gvar = source,
+                                hourly = FALSE, 
+                                relative = FALSE, 
+                                cumulative = TRUE,
+                                plot_type = "line", 
+                                labelmethod = "angled.boxes", #looks nice
+                                printout = FALSE)
 
 print(g_source_acc)
+
+```
+
+### Doing More with Curves
+
+The `podlove_plot_curves()` function is actually a wrapper function combining the data preparation function `podlove_prepare_stats_for_graph()` and the plotting function `podlove_graph_download_curves()`. If you want to tweak the data behind the plots, create your own plots or automate certain parts of the plotting, consider using a two-step process with those two functions. Learn more about how they work by reading their help files:
+
+```
+?podlove_prepare_stats_for_graph
+
+?podlove_graph_download_curves
+```
+You can of course also go to the source of these plots - the clean data (`downloads` in the examples above). There's no rule against adding your own variables to the data set and using those in the plots. For example, you might know that episodes 2, 3, 5 and 8 had guests while the other episodes hadn't. 
+
+```{r fig.height=5, fig.width=8}
+
+# create a guest table showing which episodes had guests
+guest_episodes <- tibble::tibble(
+  ep_number = c("01", "02", "03", "04", "05", "06", "07", "08", "09", "10"),
+  guest =     c(  F,    T,    T,    F,    T,    F,    F,    T,    F,    F)
+)
+
+# join the guest table to the downloads table
+downloads_with_guests <- downloads %>% 
+  dplyr::left_join(guest_episodes, by = "ep_number")
+
+# plot the downloads with your new variable "guest"
+podlove_plot_curves(downloads_with_guests, gvar = guest, printout = FALSE)
+
 ```
 
 ## Epsiode Performance
@@ -392,11 +407,19 @@ perf %>%
 
 So there are episodes with different launches strengths long-term performance. Can you plot them against each other? Yes, you can! The function `podlove_graph_performance()` gives you a nice four-box grid. The top right corner is showing "evergreen" episodes with strong launches and long-term performance, the top left the "shooting stars" with strong launches and loss of interest over time, the bottom right shows "slow burners" which took a while to get an audience, and the bottom left is showing... well, the rest.
 
-```{r fig.height=7, fig.width=7}
+```{r echo=TRUE, fig.height=7, fig.width=7}
 g_perf <- podlove_graph_performance(perf, printout = FALSE)
 
 print(g_perf)
 ```
+
+Or, if you want to skip the step of generating data and just get the plot, use the wrapper function `podlove_plot_performance()`:
+
+```
+podlove_plot_performance(dldata = downloads, launch = 3, post_launch = 30)
+
+```
+
 
 ## Regression Analysis: Is your podcast gaining or losing listeners?
 
@@ -414,7 +437,7 @@ du
 This dataset we can feed into the regression function `podlove_episode_regression()`. You can choose if you want to use the `post_datehour` parameter (better if your episodes don't come out regularly), or `ep_rank`, which corresponds to the episode number (it has a different name because episode numbers are strings):
 
 ```{r}
-reg <- podlove_episode_regression(du, terms = "ep_rank")
+reg <- podlove_episode_regression(df_regression_data = du, terms = "ep_rank")
 
 ```
 

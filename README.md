@@ -1,6 +1,3 @@
-Podlover - A Package to Analyze Podcasting Data
-===============================================
-
 The Backstory: Podlove - a Wordpress plugin for Podcasting
 ----------------------------------------------------------
 
@@ -266,24 +263,24 @@ input tables.
 Here it is:
 
     print(downloads)
-    #> # A tibble: 6,739 x 20
-    #>    ep_number title ep_num_title duration post_date  post_datehour      
-    #>    <chr>     <fct> <chr>        <chr>    <date>     <dttm>             
-    #>  1 01        Asht~ 01: Ashton-~ 00:32:2~ 2019-01-01 2019-01-01 00:00:00
-    #>  2 01        Asht~ 01: Ashton-~ 00:32:2~ 2019-01-01 2019-01-01 00:00:00
-    #>  3 01        Asht~ 01: Ashton-~ 00:32:2~ 2019-01-01 2019-01-01 00:00:00
-    #>  4 01        Asht~ 01: Ashton-~ 00:32:2~ 2019-01-01 2019-01-01 00:00:00
-    #>  5 01        Asht~ 01: Ashton-~ 00:32:2~ 2019-01-01 2019-01-01 00:00:00
-    #>  6 01        Asht~ 01: Ashton-~ 00:32:2~ 2019-01-01 2019-01-01 00:00:00
-    #>  7 01        Asht~ 01: Ashton-~ 00:32:2~ 2019-01-01 2019-01-01 00:00:00
-    #>  8 01        Asht~ 01: Ashton-~ 00:32:2~ 2019-01-01 2019-01-01 00:00:00
-    #>  9 01        Asht~ 01: Ashton-~ 00:32:2~ 2019-01-01 2019-01-01 00:00:00
-    #> 10 01        Asht~ 01: Ashton-~ 00:32:2~ 2019-01-01 2019-01-01 00:00:00
-    #> # ... with 6,729 more rows, and 14 more variables: ep_age_hours <dbl>,
-    #> #   ep_age_days <dbl>, hours_since_release <dbl>, days_since_release <dbl>,
-    #> #   source <chr>, context <chr>, dldate <date>, dldatehour <dttm>,
-    #> #   weekday <ord>, hour <int>, client_name <chr>, client_type <chr>,
-    #> #   os_name <chr>, dl_attempts <int>
+    #> # A tibble: 9,116 x 20
+    #>    ep_number title ep_num_title duration                   post_date 
+    #>    <chr>     <chr> <chr>        <Duration>                 <date>    
+    #>  1 01        Asht~ 01: Ashton-~ 1948.105s (~32.47 minutes) 2019-01-01
+    #>  2 01        Asht~ 01: Ashton-~ 1948.105s (~32.47 minutes) 2019-01-01
+    #>  3 01        Asht~ 01: Ashton-~ 1948.105s (~32.47 minutes) 2019-01-01
+    #>  4 01        Asht~ 01: Ashton-~ 1948.105s (~32.47 minutes) 2019-01-01
+    #>  5 01        Asht~ 01: Ashton-~ 1948.105s (~32.47 minutes) 2019-01-01
+    #>  6 01        Asht~ 01: Ashton-~ 1948.105s (~32.47 minutes) 2019-01-01
+    #>  7 01        Asht~ 01: Ashton-~ 1948.105s (~32.47 minutes) 2019-01-01
+    #>  8 01        Asht~ 01: Ashton-~ 1948.105s (~32.47 minutes) 2019-01-01
+    #>  9 01        Asht~ 01: Ashton-~ 1948.105s (~32.47 minutes) 2019-01-01
+    #> 10 01        Asht~ 01: Ashton-~ 1948.105s (~32.47 minutes) 2019-01-01
+    #> # ... with 9,106 more rows, and 15 more variables: post_datehour <dttm>,
+    #> #   ep_age_hours <dbl>, ep_age_days <dbl>, hours_since_release <dbl>,
+    #> #   days_since_release <dbl>, source <chr>, context <chr>, dldate <date>,
+    #> #   dldatehour <dttm>, weekday <ord>, hour <int>, client_name <chr>,
+    #> #   client_type <chr>, os_name <chr>, dl_attempts <int>
 
 Nice - this is all the data you need for further analysis. It contains
 information about the episode (what was downloaded?), the download (when
@@ -321,13 +318,13 @@ the data:
     #> Total runtime:  11m 4d 22H 0M 0S.
     #> Average time between episodes: 2928240s (~4.84 weeks).
     #> 
-    #> Episodes were downloaded 6739 times between 2019-01-01 and 2020-01-04.
+    #> Episodes were downloaded 9116 times between 2019-01-01 and 2020-01-04.
     #> 
-    #> Downloads per episode: 673.9
-    #> min: 132 | 25p: 375 | med: 703 | 75p: 791 | max: 1327
+    #> Downloads per episode: 911.6
+    #> min: 148 | 25p: 413 | med: 872 | 75p: 1330 | max: 1859
     #> 
-    #> Downloads per day: 18.3
-    #> min: 1 | 25p: 3 | med: 7 | 75p: 16 | max: 572
+    #> Downloads per day: 24.7
+    #> min: 1 | 25p: 3 | med: 7 | 75p: 16 | max: 1095
     #> NULL
 
 If you set the parameter `return_params` to `TRUE`, you can access the
@@ -345,7 +342,7 @@ want to see the printed summary.
     #> [11] "downloads_per_day_mean"     "downloads_per_day_5num"
 
     pod_sum$n_downloads
-    #> [1] 6739
+    #> [1] 9116
     pod_sum$dl_last_date
     #> [1] "2020-01-04 22:00:00 UTC"
 
@@ -354,18 +351,14 @@ Download curves
 
 One of the main features of the `podlover` package is that it lets you
 plot all kinds of download curves over time - aggregated and grouped,
-with relative and absolute starting points. The plotting function relies
-on the `ggplot2` package and the data needs to be prepared first. The
-function `podlove_prepare_stats_for_graph()` does just that, and the
-function `podlove_graph_download_curves()` takes care of the plotting.
+with relative and absolute starting points. The `podlove_plot_curves()`
+function (which is based on the `ggplo2` package) helps you do that.
 
 ### Parameters
 
-The functional combo of `podlove_prepare_stats_for_graph()` and
-`podlove_graph_download_curves()` accepts the following parameters for a
-graph:
+`podlove_plot_curves()` accepts the following parameters for a graph:
 
--   `df_stats`: The clean data to be analyzed, as prepared by the import
+-   `dldata`: The clean data to be analyzed, as prepared by the import
     or cleaning function.
 -   `gvar`: The grouping variable. Defining one will create multiple
     curves, one for each group. This needs to be one of the variables
@@ -387,57 +380,51 @@ graph:
         existing data.
 -   `hourly` (`podlove_prepare_stats_for_graph()` only): If set to
     `TRUE`, the downloads will be shown per hour, otherwise per day
--   `relative` (`podlove_prepare_stats_for_graph()` only): If set to
-    `TRUE`, the downloads will be shown relative to their publishing
-    date, i.e. all curves starting at 0. Otherwise, the curves will show
-    the download on their specific dates.
--   `cumulative` (`podlove_graph_download_curves()` only): If set to
-    `TRUE`, the downloads will accumulate and show the total sum over
-    time (rising curve). Otherwise, they will uncumulated downloads
-    (scattered peaks).
--   `plot_type` (`podlove_graph_download_curves()` only): What kind of
-    plot to use - either line plots (`"line"`) on one graph, or
-    individual ridgeline plots (`"ridge"`).
--   `labelmethod` (`podlove_graph_download_curves()` only): Where to
-    attach the labels (`"first.points"` for the beginning of the line,
-    `"last.points"` for the end of the line)
+-   `relative`: If set to `TRUE`, the downloads will be shown relative
+    to their publishing date, i.e. all curves starting at 0. Otherwise,
+    the curves will show the download on their specific dates.
+-   `cumulative`: If set to `TRUE`, the downloads will accumulate and
+    show the total sum over time (rising curve). Otherwise, they will
+    uncumulated downloads (scattered peaks).
+-   `plot_type`: What kind of plot to use - either line plots (`"line"`)
+    on one graph, or individual ridgeline plots (`"ridge"`).
+-   `labelmethod`: Where to attach the labels (`"first.points"` for the
+    beginning of the line, `"last.points"` for the end of the line)
+-   `printout`: If you want to print the plot directly from the function
+    without handing it over to a ggplot object.
 
 ### Total downloads over time
 
 Let’s say you want to see the daily total downloads of your podcast over
-time, in accumulated fashion. First, you prepare the graphics data
-necessary:
+time, in accumulated fashion. Here, you are not specifying any `gvar`
+(which means you’ll get just one curve instead of many). `hourly` is set
+to `FALSE` (= daily data) and `relative` is set `FALSE` (absolute
+dates).
 
-
-    total_dls_acc <- podlove_prepare_stats_for_graph(df_stats = downloads, 
-                                                     hourly = FALSE, 
-                                                     relative = FALSE)
-
-Here, you are not specifying any `gvar` (which means you’ll get just one
-curve instead of many). `hourly` is set to `FALSE` (= daily data) and
-`relative` is set `FALSE` (absolute dates). Now feed this data over to
-the plotting function:
-
-    g_tdlacc <- podlove_graph_download_curves(df_tidy_data = total_dls_acc,
-                                              cumulative = TRUE, 
-                                              plot_type = "line",
-                                              printout = FALSE)
+    g_tdlacc <- podlove_plot_curves(dldata = downloads, 
+                                    hourly = FALSE, 
+                                    relative = FALSE, 
+                                    cumulative = TRUE, 
+                                    plot_type = "line",
+                                    printout = FALSE)
 
     print(g_tdlacc)
 
-![](README_files/figure-markdown_strict/unnamed-chunk-10-1.png)
+![](README_files/figure-markdown_strict/unnamed-chunk-9-1.png)
 
 If we don’t cumulate the data, we can see the individual spikes of the
 episode launches:
 
-    g_tdl <- podlove_graph_download_curves(df_tidy_data = total_dls_acc,
-                                              cumulative = FALSE, 
-                                              plot_type = "line",
-                                              printout = FALSE)
+    g_tdl <- podlove_plot_curves(dldata = downloads, 
+                                  hourly = FALSE, 
+                                  relative = FALSE, 
+                                  cumulative = FALSE, 
+                                  plot_type = "line",
+                                  printout = FALSE)
 
     print(g_tdl)
 
-![](README_files/figure-markdown_strict/unnamed-chunk-11-1.png)
+![](README_files/figure-markdown_strict/unnamed-chunk-10-1.png)
 
 ### Downloads by episode
 
@@ -448,21 +435,18 @@ set it to `title`, `ep_number` or `ep_num_title`. Here, we’re using
 labels at the beginning of the curves.
 
 
-    ep_dls_acc <- podlove_prepare_stats_for_graph(df_stats = downloads,  
-                                                  gvar = title, # group by episode title
-                                                  hourly = FALSE,  
-                                                  relative = FALSE)
-
-    g_ep_dlsacc <- podlove_graph_download_curves(df_tidy_data = ep_dls_acc,
-                                                 gvar = title, # use the same gvar!
-                                                 cumulative = TRUE,
-                                                 plot_type = "line", 
-                                                 labelmethod = "first.points",
-                                                 printout = FALSE)
+    g_ep_dlsacc <- podlove_plot_curves(dldata = downloads, 
+                                       gvar = title, 
+                                       hourly = FALSE, 
+                                       relative = FALSE, 
+                                       cumulative = TRUE, 
+                                       plot_type = "line",
+                                       labelmethod = "first.points",
+                                       printout = FALSE)
 
     print(g_ep_dlsacc)
 
-![](README_files/figure-markdown_strict/unnamed-chunk-12-1.png)
+![](README_files/figure-markdown_strict/unnamed-chunk-11-1.png)
 
 As you can see, this shows the curves spread over the calendar X axis.
 But how do the episodes hold up against each other? For this, we will
@@ -471,41 +455,35 @@ same point. The labelling paramter `labelmethod = "last.points"` works
 better for this kind of curve.
 
 
-    ep_dls_acc_rel <- podlove_prepare_stats_for_graph(df_stats = downloads,  
-                                                  gvar = title,
-                                                  hourly = FALSE,  
-                                                  relative = TRUE) # relative plotting
-
-    g_ep_dlsaccrel <- podlove_graph_download_curves(df_tidy_data = ep_dls_acc_rel,
-                                                 gvar = title,
-                                                 cumulative = TRUE,
-                                                 plot_type = "line", 
-                                                 labelmethod = "last.points",
-                                                 printout = FALSE)
+    g_ep_dlsaccrel <- podlove_plot_curves(dldata = downloads, 
+                                       gvar = title, 
+                                       hourly = FALSE, 
+                                       relative = TRUE, 
+                                       cumulative = TRUE, 
+                                       plot_type = "line",
+                                       labelmethod = "last.points",
+                                       printout = FALSE)
 
     print(g_ep_dlsaccrel)
 
-![](README_files/figure-markdown_strict/unnamed-chunk-13-1.png)
+![](README_files/figure-markdown_strict/unnamed-chunk-12-1.png)
 
 If you want to look at the uncumulated data, the line plot doesn’t work
 very well. For this, a ridge plot is the right choice (but only if you
 don’t have too many episodes):
 
 
-    ep_dls <- podlove_prepare_stats_for_graph(df_stats = downloads,  
-                                                  gvar = ep_num_title, # better for sorting
-                                                  hourly = FALSE,  
-                                                  relative = FALSE)
-
-    g_ep_dls <- podlove_graph_download_curves(df_tidy_data = ep_dls,
-                                                 gvar = ep_num_title,
-                                                 cumulative = FALSE, # no cumulation
-                                                 plot_type = "ridge", # use a ridgeline plot
-                                                 printout = FALSE)
+    g_ep_dls <- podlove_plot_curves(dldata = downloads, 
+                                       gvar = ep_num_title, # better for sorting
+                                       hourly = FALSE, 
+                                       relative = FALSE, 
+                                       cumulative = FALSE, # no cumulation
+                                       plot_type = "ridge", # use a ridgeline plot
+                                       printout = FALSE)
 
     print(g_ep_dls)
 
-![](README_files/figure-markdown_strict/unnamed-chunk-14-1.png)
+![](README_files/figure-markdown_strict/unnamed-chunk-13-1.png)
 
 ### Downloads by other parameters
 
@@ -515,19 +493,52 @@ our listeners get their episodes. The labelmethod here is set to
 `angled.boxes`:
 
 
-    source_acc <- podlove_prepare_stats_for_graph(df_stats = downloads,  
-                                                  gvar = source, # new gvar
-                                                  hourly = FALSE,  
-                                                  relative = FALSE) 
-
-    g_source_acc <- podlove_graph_download_curves(df_tidy_data = source_acc,
-                                                 gvar = source,  # same as above!
-                                                 cumulative = TRUE,
-                                                 plot_type = "line", 
-                                                 labelmethod = "angled.boxes",
-                                                 printout = FALSE)
+    g_source_acc <- podlove_plot_curves(dldata = downloads, 
+                                    gvar = source,
+                                    hourly = FALSE, 
+                                    relative = FALSE, 
+                                    cumulative = TRUE,
+                                    plot_type = "line", 
+                                    labelmethod = "angled.boxes", #looks nice
+                                    printout = FALSE)
 
     print(g_source_acc)
+
+![](README_files/figure-markdown_strict/unnamed-chunk-14-1.png)
+
+### Doing More with Curves
+
+The `podlove_plot_curves()` function is actually a wrapper function
+combining the data preparation function
+`podlove_prepare_stats_for_graph()` and the plotting function
+`podlove_graph_download_curves()`. If you want to tweak the data behind
+the plots, create your own plots or automate certain parts of the
+plotting, consider using a two-step process with those two functions.
+Learn more about how they work by reading their help files:
+
+    ?podlove_prepare_stats_for_graph
+
+    ?podlove_graph_download_curves
+
+You can of course also go to the source of these plots - the clean data
+(`downloads` in the examples above). There’s no rule against adding your
+own variables to the data set and using those in the plots. For example,
+you might know that episodes 2, 3, 5 and 8 had guests while the other
+episodes hadn’t.
+
+
+    # create a guest table showing which episodes had guests
+    guest_episodes <- tibble::tibble(
+      ep_number = c("01", "02", "03", "04", "05", "06", "07", "08", "09", "10"),
+      guest =     c(  F,    T,    T,    F,    T,    F,    F,    T,    F,    F)
+    )
+
+    # join the guest table to the downloads table
+    downloads_with_guests <- downloads %>% 
+      dplyr::left_join(guest_episodes, by = "ep_number")
+
+    # plot the downloads with your new variable "guest"
+    podlove_plot_curves(downloads_with_guests, gvar = guest, printout = FALSE)
 
 ![](README_files/figure-markdown_strict/unnamed-chunk-15-1.png)
 
@@ -550,17 +561,17 @@ don’t have to be the same. Here, we’ll use 0-3 days for the launch and
     perf
     #> # A tibble: 10 x 5
     #>    title               dls dls_per_day dls_per_day_at_lau~ dls_per_day_after_la~
-    #>    <fct>             <int>       <dbl>               <dbl>                 <dbl>
-    #>  1 Acute myeloid le~   669        4.17               131                  1.20  
-    #>  2 Ashton-under-Lyne  1243        3.37               198.                 1.46  
-    #>  3 Cortinarius viol~   375        4.57                75.4                1.05  
-    #>  4 Debora Green        132        4.40                39                  0.0333
-    #>  5 Ficus aurea         461        4.26                86.2                1.17  
-    #>  6 Gwoyeu Romatzyh     776        4.16               132.                 1.23  
-    #>  7 Mary Toft          1327        3.87               226.                 1.49  
-    #>  8 Samantha Smith      737        2.79               133.                 1.38  
-    #>  9 Shapinsay           791        3.72               140                  1.33  
-    #> 10 White-winged fai~   228        4.07                61.5                0.732
+    #>    <chr>             <int>       <dbl>               <dbl>                 <dbl>
+    #>  1 Acute myeloid le~   808        5.04               177.                 1.20  
+    #>  2 Ashton-under-Lyne  1859        5.04               404.                 1.48  
+    #>  3 Cortinarius viol~   413        5.03                88.2                1.05  
+    #>  4 Debora Green        148        4.93                45.9                0.0333
+    #>  5 Ficus aurea         542        5.01               114.                 1.17  
+    #>  6 Gwoyeu Romatzyh     936        5.02               184.                 1.23  
+    #>  7 Mary Toft          1727        5.04               359.                 1.49  
+    #>  8 Samantha Smith     1330        5.03               366.                 1.38  
+    #>  9 Shapinsay          1072        5.05               233.                 1.33  
+    #> 10 White-winged fai~   281        5.01                83.8                0.732
 
     colnames(perf)
     #> [1] "title"                    "dls"                     
@@ -577,17 +588,17 @@ a ranking of the best launches, you can just sort the list:
       dplyr::arrange(desc(dls_per_day_at_launch))
     #> # A tibble: 10 x 2
     #>    title                  dls_per_day_at_launch
-    #>    <fct>                                  <dbl>
-    #>  1 Mary Toft                              226. 
-    #>  2 Ashton-under-Lyne                      198. 
-    #>  3 Shapinsay                              140  
-    #>  4 Samantha Smith                         133. 
-    #>  5 Gwoyeu Romatzyh                        132. 
-    #>  6 Acute myeloid leukemia                 131  
-    #>  7 Ficus aurea                             86.2
-    #>  8 Cortinarius violaceus                   75.4
-    #>  9 White-winged fairywren                  61.5
-    #> 10 Debora Green                            39
+    #>    <chr>                                  <dbl>
+    #>  1 Ashton-under-Lyne                      404. 
+    #>  2 Samantha Smith                         366. 
+    #>  3 Mary Toft                              359. 
+    #>  4 Shapinsay                              233. 
+    #>  5 Gwoyeu Romatzyh                        184. 
+    #>  6 Acute myeloid leukemia                 177. 
+    #>  7 Ficus aurea                            114. 
+    #>  8 Cortinarius violaceus                   88.2
+    #>  9 White-winged fairywren                  83.8
+    #> 10 Debora Green                            45.9
 
 So there are episodes with different launches strengths long-term
 performance. Can you plot them against each other? Yes, you can! The
@@ -603,6 +614,11 @@ bottom left is showing… well, the rest.
     print(g_perf)
 
 ![](README_files/figure-markdown_strict/unnamed-chunk-18-1.png)
+
+Or, if you want to skip the step of generating data and just get the
+plot, use the wrapper function `podlove_plot_performance()`:
+
+    podlove_plot_performance(dldata = downloads, launch = 3, post_launch = 30)
 
 Regression Analysis: Is your podcast gaining or losing listeners?
 -----------------------------------------------------------------
@@ -628,20 +644,21 @@ points. For this example, we’ll pick a period of 30 days after launch:
 
     du
     #> # A tibble: 10 x 12
-    #>    ep_number title ep_num_title duration post_date  post_datehour      
-    #>    <chr>     <fct> <chr>        <chr>    <date>     <dttm>             
-    #>  1 01        Asht~ 01: Ashton-~ 00:32:2~ 2019-01-01 2019-01-01 00:00:00
-    #>  2 02        Mary~ 02: Mary To~ 00:46:0~ 2019-01-27 2019-01-27 01:00:00
-    #>  3 03        Sama~ 03: Samanth~ 00:30:3~ 2019-04-15 2019-04-15 06:00:00
-    #>  4 04        Shap~ 04: Shapins~ 00:41:1~ 2019-06-06 2019-06-06 10:00:00
-    #>  5 05        Gwoy~ 05: Gwoyeu ~ 00:27:0~ 2019-07-02 2019-07-02 12:00:00
-    #>  6 06        Acut~ 06: Acute m~ 00:23:4~ 2019-07-28 2019-07-28 13:00:00
-    #>  7 07        Ficu~ 07: Ficus a~ 00:33:2~ 2019-09-18 2019-09-18 17:00:00
-    #>  8 08        Cort~ 08: Cortina~ 00:19:0~ 2019-10-14 2019-10-14 18:00:00
-    #>  9 09        Whit~ 09: White-w~ 00:18:3~ 2019-11-09 2019-11-09 20:00:00
-    #> 10 10        Debo~ 10: Debora ~ 00:28:5~ 2019-12-05 2019-12-05 22:00:00
-    #> # ... with 6 more variables: ep_age_hours <dbl>, ep_age_days <dbl>,
-    #> #   ep_rank <int>, measure_day <dbl>, measure_hour <dbl>, downloads <int>
+    #>    ep_number title ep_num_title duration                   post_date 
+    #>    <chr>     <chr> <chr>        <Duration>                 <date>    
+    #>  1 01        Asht~ 01: Ashton-~ 1948.105s (~32.47 minutes) 2019-01-01
+    #>  2 02        Mary~ 02: Mary To~ 2762.547s (~46.04 minutes) 2019-01-27
+    #>  3 03        Sama~ 03: Samanth~ 1833.42s (~30.56 minutes)  2019-04-15
+    #>  4 04        Shap~ 04: Shapins~ 2478.45s (~41.31 minutes)  2019-06-06
+    #>  5 05        Gwoy~ 05: Gwoyeu ~ 1622.871s (~27.05 minutes) 2019-07-02
+    #>  6 06        Acut~ 06: Acute m~ 1425.373s (~23.76 minutes) 2019-07-28
+    #>  7 07        Ficu~ 07: Ficus a~ 2009.489s (~33.49 minutes) 2019-09-18
+    #>  8 08        Cort~ 08: Cortina~ 1141.42s (~19.02 minutes)  2019-10-14
+    #>  9 09        Whit~ 09: White-w~ 1117.564s (~18.63 minutes) 2019-11-09
+    #> 10 10        Debo~ 10: Debora ~ 1737.592s (~28.96 minutes) 2019-12-05
+    #> # ... with 7 more variables: post_datehour <dttm>, ep_age_hours <dbl>,
+    #> #   ep_age_days <dbl>, ep_rank <int>, measure_day <dbl>, measure_hour <dbl>,
+    #> #   downloads <int>
 
 This dataset we can feed into the regression function
 `podlove_episode_regression()`. You can choose if you want to use the
@@ -649,7 +666,7 @@ This dataset we can feed into the regression function
 regularly), or `ep_rank`, which corresponds to the episode number (it
 has a different name because episode numbers are strings):
 
-    reg <- podlove_episode_regression(du, terms = "ep_rank")
+    reg <- podlove_episode_regression(df_regression_data = du, terms = "ep_rank")
 
 If you’re statistically inclined, you can check out the model directly
 and see if your model is significant:
@@ -661,18 +678,18 @@ and see if your model is significant:
     #> 
     #> Residuals:
     #>     Min      1Q  Median      3Q     Max 
-    #> -222.21  -23.69  -11.74   57.09  155.70 
+    #> -81.218 -36.058  -4.682  41.853  81.424 
     #> 
     #> Coefficients:
     #>             Estimate Std. Error t value Pr(>|t|)    
-    #> (Intercept)   789.47      71.28  11.075 3.94e-06 ***
-    #> ep_rank       -64.08      11.49  -5.578 0.000523 ***
+    #> (Intercept) 1397.933     39.849   35.08 4.77e-10 ***
+    #> ep_rank     -131.679      6.422  -20.50 3.35e-08 ***
     #> ---
     #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     #> 
-    #> Residual standard error: 104.3 on 8 degrees of freedom
-    #> Multiple R-squared:  0.7955, Adjusted R-squared:  0.7699 
-    #> F-statistic: 31.12 on 1 and 8 DF,  p-value: 0.0005233
+    #> Residual standard error: 58.33 on 8 degrees of freedom
+    #> Multiple R-squared:  0.9813, Adjusted R-squared:  0.979 
+    #> F-statistic: 420.4 on 1 and 8 DF,  p-value: 3.35e-08
 
 Or you could just check out the regression plot with the function
 `podlove_graph_regression()` and see in which direction the line points:
@@ -682,7 +699,7 @@ Or you could just check out the regression plot with the function
 ![](README_files/figure-markdown_strict/unnamed-chunk-22-1.png)
 
 Oh noes! It seems like your podcast is steadily losing listeners at the
-rate of -64 listeners per episode!
+rate of -132 listeners per episode!
 
 Finally
 -------
