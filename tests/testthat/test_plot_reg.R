@@ -71,13 +71,28 @@ test_that("plots are ggplot objects", {
 })
 
 test_that("plots look as expected", {
+
+	os <- Sys.info()["sysname"]
 	
-	vdiffr::expect_doppelganger("Regression Line",  g1)
-	vdiffr::expect_doppelganger("Regression Point",  g2)
-	vdiffr::expect_doppelganger("Regression Area",  g3)
-	vdiffr::expect_doppelganger("Regression no regline",  g4)
-	vdiffr::expect_doppelganger("Regression no ribbon",  g5)
-	vdiffr::expect_doppelganger("Regression no styling",  g6)
+	if (os == "Windows") {
+		
+		vdiffr::expect_doppelganger("Win Regression Line",  g1)
+		vdiffr::expect_doppelganger("Win Regression Point",  g2)
+		vdiffr::expect_doppelganger("Win Regression Area",  g3)
+		vdiffr::expect_doppelganger("Win Regression no regline",  g4)
+		vdiffr::expect_doppelganger("Win Regression no ribbon",  g5)
+		vdiffr::expect_doppelganger("Win Regression no styling",  g6)
+	
+	} else if (os == "Unix") {
+		
+		vdiffr::expect_doppelganger("Linux Regression Line",  g1)
+		vdiffr::expect_doppelganger("Linux Regression Point",  g2)
+		vdiffr::expect_doppelganger("Linux Regression Area",  g3)
+		vdiffr::expect_doppelganger("Linux Regression no regline",  g4)
+		vdiffr::expect_doppelganger("Linux Regression no ribbon",  g5)
+		vdiffr::expect_doppelganger("Linux Regression no styling",  g6)
+		
+	}
 	
 })
 

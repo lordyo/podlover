@@ -27,8 +27,18 @@ test_that("plots are ggplot objects", {
 
 test_that("plots look as expected", {
 	
-	vdiffr::expect_doppelganger("Performance Plot",  g1)
-	vdiffr::expect_doppelganger("Wrap Performance Plot",  g2)
+	os <- Sys.info()["sysname"]
+	
+	if (os == "Windows") {
+	
+		vdiffr::expect_doppelganger("Win Performance Plot",  g1)
+		vdiffr::expect_doppelganger("Win Wrap Performance Plot",  g2)
+		
+	} else if (os == "Unix") {
+		
+		vdiffr::expect_doppelganger("Linux Performance Plot",  g1)
+		vdiffr::expect_doppelganger("Linux Wrap Performance Plot",  g2)
+	}
 	
 })
 
