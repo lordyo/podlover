@@ -12,7 +12,9 @@
 #'     hourly data.  
 #' @param relative Boolean switching parameter to define if the data is 
 #'     rendered relative to the respective episode release date (\code{TRUE}) or
-#'     in absolute dates (\code{TRUE}). Defaults to \code{TRUE}. 
+#'     in absolute dates (\code{TRUE}). Defaults to \code{TRUE}.
+#' @param last_n Number of most recent episodes to filter for. Defaults to 0 (no filtering),
+#'     use negative numbers to filter for first n episodes. 
 #'     
 #' @examples 
 #' \dontrun{
@@ -35,12 +37,34 @@
 #' @export 
 
 
-podlove_prepare_stats_for_graph <- function(df_stats, gvar, hourly = FALSE, relative = TRUE) {
+podlove_prepare_stats_for_graph <- function(df_stats, 
+                                            gvar, 
+                                            hourly = FALSE, 
+                                            relative = TRUE,
+                                            last_n = 0) {
   
   # prepare for tidy evaluation
   gvar <- dplyr::enquo(gvar)
   
   prep_stats <- df_stats
+  
+  # apply last_n settings
+  if (last_n != 0) {
+    
+    #create reference table with ep ranks
+    epnrs <- df_stats %>% 
+      group_by(ep_num_title, post_datehour) %>% 
+      summarize() %>%
+      ungroup() %>% 
+      arrange(post_datehour) %>% 
+      mutate(ep_rank = dplyr::row_number()) %>% 
+      select(-post_datehour) %>% 
+      dplyr::top_n(last_n)
+    
+    #attach ep ranks and filter via join
+    prep_stats <- dplyr::right_join(prep_stats, epnrs, by = "ep_num_title") %>% 
+      select(-ep_rank)
+  }
 
   # switcher for hourly/realative combinations
   

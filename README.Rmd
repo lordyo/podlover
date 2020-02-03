@@ -1,11 +1,9 @@
 ---
-title: "Analyzing Podcast Data with Podlover"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{podlover}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+title: "Podlover - A Package to Analyze Podcasting Data"
+output: rmarkdown::md_document
+
 ---
+
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(

@@ -13,6 +13,7 @@ podlove_plot_curves(
   plot_type = "line",
   labelmethod = "last.points",
   printout = TRUE,
+  last_n = 0,
   ...
 )
 }
@@ -42,6 +43,9 @@ ridgeline plot (\code{"ridge"}).}
 the end of the curves \code{"first.points"})}
 
 \item{printout}{Switcher to automatically print out the plot (default TRUE)}
+
+\item{last_n}{Number of most recent episodes to filter for. Defaults to 0 
+(no filtering), use negative numbers to filter for first n episodes.}
 
 \item{...}{additional formating parameters for \code{ggplot2::geom_line()}
 or \code{ggridges::geom_density_ridges}.}
