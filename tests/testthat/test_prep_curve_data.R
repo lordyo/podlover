@@ -63,6 +63,31 @@ t_prep_34 <- podlove_prepare_stats_for_graph(df_stats = t_exmpl,
 																						 hourly = TRUE, 
 																						 relative = FALSE)
 
+# gvar = episode related + last_n
+t_prep_41 <- podlove_prepare_stats_for_graph(df_stats = t_exmpl,
+																						 gvar = title, 
+																					hourly = FALSE, 
+																					relative = TRUE,
+																					last_n = 3)
+
+t_prep_42 <- podlove_prepare_stats_for_graph(df_stats = t_exmpl,
+																						 gvar = title, 
+																					hourly = FALSE, 
+																					relative = FALSE,
+																					last_n = 3)
+
+t_prep_43 <- podlove_prepare_stats_for_graph(df_stats = t_exmpl, 
+																						 gvar = title, 
+																					hourly = TRUE, 
+																					relative = TRUE,
+																					last_n = 3)
+
+t_prep_44 <- podlove_prepare_stats_for_graph(df_stats = t_exmpl, 
+																						 gvar = title, 
+																					hourly = TRUE, 
+																					relative = FALSE,
+																					last_n = 3)
+
 #### no gvar ###
 
 test_that("prep data without gvar have correct dimensions", {
@@ -214,6 +239,52 @@ test_that("prep data with gvar=title have correct colnames", {
 	expect_equal(cnam(t_prep_34, 2), "context")
 	expect_equal(cnam(t_prep_34, 3), "listeners")
 	expect_equal(cnam(t_prep_34, 4), "listeners_total")
+	
+})
+
+#### gvar = episode-related + last_n ####
+
+test_that("prep data with gvar=title and last_n have correct dimensions", {
+	
+	expect_equal(ncol(t_prep_41), 4)
+	expect_equal(ncol(t_prep_42), 4)
+	expect_equal(ncol(t_prep_43), 4)
+	expect_equal(ncol(t_prep_44), 4)
+	
+	expect_equal(nrow(t_prep_41), 88)
+	expect_equal(nrow(t_prep_42), 92)
+	expect_equal(nrow(t_prep_43), 247)
+	expect_equal(nrow(t_prep_44), 249)
+	
+})
+
+test_that("prep data with gvar=title and last_n have correct colnames", {
+	
+	cnam <- function(df, i) {
+		nams <- colnames(df)
+		
+		nams[i]
+	} 
+	
+	expect_equal(cnam(t_prep_41, 1), "time")
+	expect_equal(cnam(t_prep_41, 2), "title")
+	expect_equal(cnam(t_prep_41, 3), "listeners")
+	expect_equal(cnam(t_prep_41, 4), "listeners_total")
+	
+	expect_equal(cnam(t_prep_42, 1), "time")
+	expect_equal(cnam(t_prep_42, 2), "title")
+	expect_equal(cnam(t_prep_42, 3), "listeners")
+	expect_equal(cnam(t_prep_42, 4), "listeners_total")
+	
+	expect_equal(cnam(t_prep_43, 1), "time")
+	expect_equal(cnam(t_prep_43, 2), "title")
+	expect_equal(cnam(t_prep_43, 3), "listeners")
+	expect_equal(cnam(t_prep_43, 4), "listeners_total")
+	
+	expect_equal(cnam(t_prep_44, 1), "time")
+	expect_equal(cnam(t_prep_44, 2), "title")
+	expect_equal(cnam(t_prep_44, 3), "listeners")
+	expect_equal(cnam(t_prep_44, 4), "listeners_total")
 	
 })
 

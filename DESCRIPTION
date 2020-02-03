@@ -1,7 +1,7 @@
 Package: podlover
 Type: Package
 Title: Collects, Cleans and Analyzes Podcast Download Data from Podlove Publisher
-Version: 1.1.2
+Version: 1.2.0
 Authors@R: person("Timm", "Suess", email = "catchall@sporez.com", 
     role = c("aut", "cre"))
 URL: https://github.com/lordyo/podlover

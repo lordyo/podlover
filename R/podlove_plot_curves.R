@@ -26,6 +26,8 @@
 #' @param printout Switcher to automatically print out the plot (default TRUE)
 #' @param ... additional formating parameters for \code{ggplot2::geom_line()}
 #'     or \code{ggridges::geom_density_ridges}.
+#' @param last_n Number of most recent episodes to filter for. Defaults to 0 
+#'     (no filtering), use negative numbers to filter for first n episodes. 
 #' 
 #' @return A ggplot object
 #' 
@@ -52,12 +54,14 @@ podlove_plot_curves <- function(dldata,
 																plot_type = "line", 
 																labelmethod = "last.points",
 																printout = TRUE,
+																last_n = 0,
 																...) {
   
 	g_data <- podlove_prepare_stats_for_graph(df_stats = dldata,
 																						gvar = {{gvar}},
 																						hourly = hourly,
-																						relative = relative)
+																						relative = relative, 
+																						last_n = last_n)
 	
 	g <- podlove_graph_download_curves(df_tidy_data = g_data,
 																		 gvar = {{gvar}},
