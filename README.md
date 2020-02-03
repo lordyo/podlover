@@ -132,7 +132,7 @@ hosters are stricter and don’t allow any access except via SSH tunnels.
 Finally, you might need to check if the **tables name prefix** in your
 Wordpress database corresponds to the usual naming conventions. Most
 Wordpress installations start the tables with `wp_`, but sometimes, this
-prefix differs (e.g. `wp_wtig_`). For starters, you can just try to use
+prefix differs (e.g. `wp_wtig_`). For starters, you can just try to use
 the default prefix built into the function. If the prefix is different
 than the default, you will get an error message. If that’s the case,
 access your hoster’s MySQL management tool (e.g. phpMyAdmin, PHP
@@ -244,6 +244,14 @@ table and clean the data:
                                          df_user = useragent_table,
                                          df_posts = posts_table)
 
+Note: If during reading of the CSV files you notice that your data
+frames consist of only one column, check your CSV files which separator
+is used. Some use semicolons (`;`) instead of commas (`,`). If that’s
+the case, use the option `sep = ";"` (or any other separator) inside
+your `read.csv()` commands, e.g.
+
+    download_table <- read.csv("wp_podlove_downloadintentclean.csv", as.is = TRUE, sep = ";")
+
 Create Example Data
 -------------------
 
@@ -263,20 +271,20 @@ input tables.
 Here it is:
 
     print(downloads)
-    #> # A tibble: 9,116 x 20
-    #>    ep_number title ep_num_title duration                   post_date 
-    #>    <chr>     <chr> <chr>        <Duration>                 <date>    
-    #>  1 01        Asht~ 01: Ashton-~ 1948.105s (~32.47 minutes) 2019-01-01
-    #>  2 01        Asht~ 01: Ashton-~ 1948.105s (~32.47 minutes) 2019-01-01
-    #>  3 01        Asht~ 01: Ashton-~ 1948.105s (~32.47 minutes) 2019-01-01
-    #>  4 01        Asht~ 01: Ashton-~ 1948.105s (~32.47 minutes) 2019-01-01
-    #>  5 01        Asht~ 01: Ashton-~ 1948.105s (~32.47 minutes) 2019-01-01
-    #>  6 01        Asht~ 01: Ashton-~ 1948.105s (~32.47 minutes) 2019-01-01
-    #>  7 01        Asht~ 01: Ashton-~ 1948.105s (~32.47 minutes) 2019-01-01
-    #>  8 01        Asht~ 01: Ashton-~ 1948.105s (~32.47 minutes) 2019-01-01
-    #>  9 01        Asht~ 01: Ashton-~ 1948.105s (~32.47 minutes) 2019-01-01
-    #> 10 01        Asht~ 01: Ashton-~ 1948.105s (~32.47 minutes) 2019-01-01
-    #> # ... with 9,106 more rows, and 15 more variables: post_datehour <dttm>,
+    #> # A tibble: 9,907 x 20
+    #>    ep_number title ep_num_title duration                  post_date 
+    #>    <chr>     <chr> <chr>        <Duration>                <date>    
+    #>  1 01        Port… 01: Portrai… 1641.22s (~27.35 minutes) 2019-01-01
+    #>  2 01        Port… 01: Portrai… 1641.22s (~27.35 minutes) 2019-01-01
+    #>  3 01        Port… 01: Portrai… 1641.22s (~27.35 minutes) 2019-01-01
+    #>  4 01        Port… 01: Portrai… 1641.22s (~27.35 minutes) 2019-01-01
+    #>  5 01        Port… 01: Portrai… 1641.22s (~27.35 minutes) 2019-01-01
+    #>  6 01        Port… 01: Portrai… 1641.22s (~27.35 minutes) 2019-01-01
+    #>  7 01        Port… 01: Portrai… 1641.22s (~27.35 minutes) 2019-01-01
+    #>  8 01        Port… 01: Portrai… 1641.22s (~27.35 minutes) 2019-01-01
+    #>  9 01        Port… 01: Portrai… 1641.22s (~27.35 minutes) 2019-01-01
+    #> 10 01        Port… 01: Portrai… 1641.22s (~27.35 minutes) 2019-01-01
+    #> # … with 9,897 more rows, and 15 more variables: post_datehour <dttm>,
     #> #   ep_age_hours <dbl>, ep_age_days <dbl>, hours_since_release <dbl>,
     #> #   days_since_release <dbl>, source <chr>, context <chr>, dldate <date>,
     #> #   dldatehour <dttm>, weekday <ord>, hour <int>, client_name <chr>,
@@ -318,13 +326,13 @@ the data:
     #> Total runtime:  11m 4d 22H 0M 0S.
     #> Average time between episodes: 2928240s (~4.84 weeks).
     #> 
-    #> Episodes were downloaded 9116 times between 2019-01-01 and 2020-01-04.
+    #> Episodes were downloaded 9907 times between 2019-01-01 and 2020-01-04.
     #> 
-    #> Downloads per episode: 911.6
-    #> min: 148 | 25p: 413 | med: 872 | 75p: 1330 | max: 1859
+    #> Downloads per episode: 990.7
+    #> min: 148 | 25p: 412 | med: 1069.5 | 75p: 1463 | max: 1861
     #> 
-    #> Downloads per day: 24.7
-    #> min: 1 | 25p: 3 | med: 7 | 75p: 16 | max: 1095
+    #> Downloads per day: 26.9
+    #> min: 1 | 25p: 4 | med: 9 | 75p: 16 | max: 1095
     #> NULL
 
 If you set the parameter `return_params` to `TRUE`, you can access the
@@ -342,7 +350,7 @@ want to see the printed summary.
     #> [11] "downloads_per_day_mean"     "downloads_per_day_5num"
 
     pod_sum$n_downloads
-    #> [1] 9116
+    #> [1] 9907
     pod_sum$dl_last_date
     #> [1] "2020-01-04 22:00:00 UTC"
 
@@ -366,14 +374,14 @@ function (which is based on the `ggplo2` package) helps you do that.
     -   `ep_number`: The episode’s official number
     -   `title`: The episode’s title
     -   `ep_num_title`: The episode’s title with the number in front
-    -   `source`: The dowload source - e.g. “feed” for RSS, “webplayer”
+    -   `source`: The dowload source - e.g. “feed” for RSS, “webplayer”
         for plays on a website, “download” for file downloads
     -   `context`: The file type for feeds and downloads, “episode” for
         feed accesses
     -   `client_name`: The client application (e.g. the podcatcher’s or
         brower’s name)
-    -   `client_type`: A more coarse grouping of the clients,
-        e.g. “mediaplayer”, “browser”, “mobile app”.
+    -   `client_type`: A more coarse grouping of the clients, e.g.
+        “mediaplayer”, “browser”, “mobile app”.
     -   `os_name`: The operating system’s name of the client
         (e.g. Android, Linux, Mac)
     -   Any other grouping variable you create yourself from the
@@ -560,18 +568,18 @@ don’t have to be the same. Here, we’ll use 0-3 days for the launch and
 
     perf
     #> # A tibble: 10 x 5
-    #>    title               dls dls_per_day dls_per_day_at_lau~ dls_per_day_after_la~
-    #>    <chr>             <int>       <dbl>               <dbl>                 <dbl>
-    #>  1 Acute myeloid le~   808        5.04               177.                 1.20  
-    #>  2 Ashton-under-Lyne  1859        5.04               404.                 1.48  
-    #>  3 Cortinarius viol~   413        5.03                88.2                1.05  
-    #>  4 Debora Green        148        4.93                45.9                0.0333
-    #>  5 Ficus aurea         542        5.01               114.                 1.17  
-    #>  6 Gwoyeu Romatzyh     936        5.02               184.                 1.23  
-    #>  7 Mary Toft          1727        5.04               359.                 1.49  
-    #>  8 Samantha Smith     1330        5.03               366.                 1.38  
-    #>  9 Shapinsay          1072        5.05               233.                 1.33  
-    #> 10 White-winged fai~   281        5.01                83.8                0.732
+    #>    title                   dls dls_per_day dls_per_day_at_la… dls_per_day_after…
+    #>    <chr>                 <int>       <dbl>              <dbl>              <dbl>
+    #>  1 Bruce Castle           1202        5.04              236               1.43  
+    #>  2 Castle                  674        5.02              163.              1.35  
+    #>  3 Ceilings of the Natu…   412        5.02              105               0.998 
+    #>  4 Construction of Rock…  1599        5.05              368.              1.36  
+    #>  5 Duke University        1463        5.03              309.              1.24  
+    #>  6 Giant otter             148        4.93               50.8             0.0333
+    #>  7 Jerome, Arizona         937        5.03              207               1.21  
+    #>  8 Limalok                 280        5.00               71.2             0.785 
+    #>  9 Portrait of Maria Po…  1861        5.04              404.              1.43  
+    #> 10 Robert Garran          1331        5.03              297.              1.17
 
     colnames(perf)
     #> [1] "title"                    "dls"                     
@@ -587,18 +595,18 @@ a ranking of the best launches, you can just sort the list:
       dplyr::select(title, dls_per_day_at_launch) %>% 
       dplyr::arrange(desc(dls_per_day_at_launch))
     #> # A tibble: 10 x 2
-    #>    title                  dls_per_day_at_launch
-    #>    <chr>                                  <dbl>
-    #>  1 Ashton-under-Lyne                      404. 
-    #>  2 Samantha Smith                         366. 
-    #>  3 Mary Toft                              359. 
-    #>  4 Shapinsay                              233. 
-    #>  5 Gwoyeu Romatzyh                        184. 
-    #>  6 Acute myeloid leukemia                 177. 
-    #>  7 Ficus aurea                            114. 
-    #>  8 Cortinarius violaceus                   88.2
-    #>  9 White-winged fairywren                  83.8
-    #> 10 Debora Green                            45.9
+    #>    title                                          dls_per_day_at_launch
+    #>    <chr>                                                          <dbl>
+    #>  1 Portrait of Maria Portinari                                    404. 
+    #>  2 Construction of Rockefeller Center                             368. 
+    #>  3 Duke University                                                309. 
+    #>  4 Robert Garran                                                  297. 
+    #>  5 Bruce Castle                                                   236  
+    #>  6 Jerome, Arizona                                                207  
+    #>  7 Castle                                                         163. 
+    #>  8 Ceilings of the Natural History Museum, London                 105  
+    #>  9 Limalok                                                         71.2
+    #> 10 Giant otter                                                     50.8
 
 So there are episodes with different launches strengths long-term
 performance. Can you plot them against each other? Yes, you can! The
@@ -646,17 +654,17 @@ points. For this example, we’ll pick a period of 30 days after launch:
     #> # A tibble: 10 x 12
     #>    ep_number title ep_num_title duration                   post_date 
     #>    <chr>     <chr> <chr>        <Duration>                 <date>    
-    #>  1 01        Asht~ 01: Ashton-~ 1948.105s (~32.47 minutes) 2019-01-01
-    #>  2 02        Mary~ 02: Mary To~ 2762.547s (~46.04 minutes) 2019-01-27
-    #>  3 03        Sama~ 03: Samanth~ 1833.42s (~30.56 minutes)  2019-04-15
-    #>  4 04        Shap~ 04: Shapins~ 2478.45s (~41.31 minutes)  2019-06-06
-    #>  5 05        Gwoy~ 05: Gwoyeu ~ 1622.871s (~27.05 minutes) 2019-07-02
-    #>  6 06        Acut~ 06: Acute m~ 1425.373s (~23.76 minutes) 2019-07-28
-    #>  7 07        Ficu~ 07: Ficus a~ 2009.489s (~33.49 minutes) 2019-09-18
-    #>  8 08        Cort~ 08: Cortina~ 1141.42s (~19.02 minutes)  2019-10-14
-    #>  9 09        Whit~ 09: White-w~ 1117.564s (~18.63 minutes) 2019-11-09
-    #> 10 10        Debo~ 10: Debora ~ 1737.592s (~28.96 minutes) 2019-12-05
-    #> # ... with 7 more variables: post_datehour <dttm>, ep_age_hours <dbl>,
+    #>  1 01        Port… 01: Portrai… 1641.22s (~27.35 minutes)  2019-01-01
+    #>  2 02        Cons… 02: Constru… 1179.396s (~19.66 minutes) 2019-02-22
+    #>  3 03        Duke… 03: Duke Un… 637.664s (~10.63 minutes)  2019-03-20
+    #>  4 04        Robe… 04: Robert … 3087.407s (~51.46 minutes) 2019-04-15
+    #>  5 05        Bruc… 05: Bruce C… 2247.582s (~37.46 minutes) 2019-05-11
+    #>  6 06        Jero… 06: Jerome,… 2622.9s (~43.72 minutes)   2019-07-02
+    #>  7 07        Cast… 07: Castle   1130.651s (~18.84 minutes) 2019-08-23
+    #>  8 08        Ceil… 08: Ceiling… 816.862s (~13.61 minutes)  2019-10-14
+    #>  9 09        Lima… 09: Limalok  2148.397s (~35.81 minutes) 2019-11-09
+    #> 10 10        Gian… 10: Giant o… 1363.267s (~22.72 minutes) 2019-12-05
+    #> # … with 7 more variables: post_datehour <dttm>, ep_age_hours <dbl>,
     #> #   ep_age_days <dbl>, ep_rank <int>, measure_day <dbl>, measure_hour <dbl>,
     #> #   downloads <int>
 
@@ -678,18 +686,18 @@ and see if your model is significant:
     #> 
     #> Residuals:
     #>     Min      1Q  Median      3Q     Max 
-    #> -81.218 -36.058  -4.682  41.853  81.424 
+    #> -65.188 -37.150  -2.358  37.727  73.473 
     #> 
     #> Coefficients:
     #>             Estimate Std. Error t value Pr(>|t|)    
-    #> (Intercept) 1397.933     39.849   35.08 4.77e-10 ***
-    #> ep_rank     -131.679      6.422  -20.50 3.35e-08 ***
+    #> (Intercept) 1499.867     35.100   42.73 9.92e-11 ***
+    #> ep_rank     -138.085      5.657  -24.41 8.47e-09 ***
     #> ---
     #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     #> 
-    #> Residual standard error: 58.33 on 8 degrees of freedom
-    #> Multiple R-squared:  0.9813, Adjusted R-squared:  0.979 
-    #> F-statistic: 420.4 on 1 and 8 DF,  p-value: 3.35e-08
+    #> Residual standard error: 51.38 on 8 degrees of freedom
+    #> Multiple R-squared:  0.9868, Adjusted R-squared:  0.9851 
+    #> F-statistic: 595.9 on 1 and 8 DF,  p-value: 8.468e-09
 
 Or you could just check out the regression plot with the function
 `podlove_graph_regression()` and see in which direction the line points:
@@ -699,7 +707,7 @@ Or you could just check out the regression plot with the function
 ![](README_files/figure-markdown_strict/unnamed-chunk-22-1.png)
 
 Oh noes! It seems like your podcast is steadily losing listeners at the
-rate of -132 listeners per episode!
+rate of -138 listeners per episode!
 
 Finally
 -------

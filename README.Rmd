@@ -177,6 +177,12 @@ downloads <- podlove_clean_stats(df_stats = download_table,
                                      df_posts = posts_table)
 ```
 
+Note: If during reading of the CSV files you notice that your data frames consist of only one column, check your CSV files which separator is used. Some use semicolons (`;`) instead of commas (`,`). If that's the case, use the option `sep = ";"` (or any other separator) inside your `read.csv()` commands, e.g.
+
+```
+download_table <- read.csv("wp_podlove_downloadintentclean.csv", as.is = TRUE, sep = ";")
+```
+
 ## Create Example Data
 
 `podlover` includes a number of functions to generate example download tables. This can be useful if you want to test the package without having real data, or to write reproducible examples for a vignette like this. We will use an example data set for the next chapters.
