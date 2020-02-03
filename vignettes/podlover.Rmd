@@ -391,6 +391,27 @@ podlove_plot_curves(downloads_with_guests, gvar = guest, printout = FALSE)
 
 ```
 
+### Reducing the number of episodes
+
+If you have a lot of episodes, the curve diagrams can become difficult to read. To reduce the number of curves, you can use the parameter `last_n` to show only the most recent n episodes. 
+
+```{r fig.height=5, fig.width=7}
+
+g_ep_dlsacc_red <- podlove_plot_curves(dldata = downloads, 
+                                   gvar = title, 
+                                   hourly = FALSE, 
+                                   relative = FALSE, 
+                                   cumulative = TRUE, 
+                                   plot_type = "line",
+                                   labelmethod = "first.points",
+                                   printout = FALSE,
+                                   last_n = 3)
+
+print(g_ep_dlsacc_red)
+```
+
+If you use a negative number for `last_n`, the first n epsiodes get shown. Of course, if you have more sophisticated filtering needs, you can always use `dplyr::filter()` to change the original data directly. 
+
 ## Epsiode Performance
 
 Podcast episode downloads typically follow a "heavy front, long tail" distribution: Many downloads are made over automatic downloads by podcatchers, while fewer are downloaded in the long-term. It therefore helps to distinguish between the episode launch period (the heavy front) and the long term performance (the long tail). For this, you can use the function `podlove_performance_stats()`, which creates a table of performance stats per episode. For this, you will first need to define how long a "launch" goes and when the long-term period starts. Those two don't have to be the same. Here, we'll use 0-3 days for the launch and 30 and above for the long-term.

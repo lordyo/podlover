@@ -550,6 +550,32 @@ episodes hadn’t.
 
 ![](README_files/figure-markdown_strict/unnamed-chunk-15-1.png)
 
+### Reducing the number of episodes
+
+If you have a lot of episodes, the curve diagrams can become difficult
+to read. To reduce the number of curves, you can use the parameter
+`last_n` to show only the most recent n episodes.
+
+
+    g_ep_dlsacc_red <- podlove_plot_curves(dldata = downloads, 
+                                       gvar = title, 
+                                       hourly = FALSE, 
+                                       relative = FALSE, 
+                                       cumulative = TRUE, 
+                                       plot_type = "line",
+                                       labelmethod = "first.points",
+                                       printout = FALSE,
+                                       last_n = 3)
+    #> Selecting by ep_rank
+
+    print(g_ep_dlsacc_red)
+
+![](README_files/figure-markdown_strict/unnamed-chunk-16-1.png)
+
+If you use a negative number for `last_n`, the first n epsiodes get
+shown. Of course, if you have more sophisticated filtering needs, you
+can always use `dplyr::filter()` to change the original data directly.
+
 Epsiode Performance
 -------------------
 
@@ -621,7 +647,7 @@ bottom left is showing… well, the rest.
 
     print(g_perf)
 
-![](README_files/figure-markdown_strict/unnamed-chunk-18-1.png)
+![](README_files/figure-markdown_strict/unnamed-chunk-19-1.png)
 
 Or, if you want to skip the step of generating data and just get the
 plot, use the wrapper function `podlove_plot_performance()`:
@@ -704,7 +730,7 @@ Or you could just check out the regression plot with the function
 
     g_reg <- podlove_graph_regression(du, predictor = ep_rank)
 
-![](README_files/figure-markdown_strict/unnamed-chunk-22-1.png)
+![](README_files/figure-markdown_strict/unnamed-chunk-23-1.png)
 
 Oh noes! It seems like your podcast is steadily losing listeners at the
 rate of -138 listeners per episode!
