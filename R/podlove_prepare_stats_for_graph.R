@@ -57,12 +57,12 @@ podlove_prepare_stats_for_graph <- function(df_stats,
       summarize() %>%
       ungroup() %>% 
       arrange(post_datehour) %>% 
-      mutate(ep_rank = row_number()) %>% 
+      mutate(ep_rank = dplyr::row_number()) %>% 
       select(-post_datehour) %>% 
-      top_n(last_n)
+      dplyr::top_n(last_n)
     
     #attach ep ranks and filter via join
-    prep_stats <- right_join(prep_stats, epnrs, by = "ep_num_title") %>% 
+    prep_stats <- dplyr::right_join(prep_stats, epnrs, by = "ep_num_title") %>% 
       select(-ep_rank)
   }
 
