@@ -255,6 +255,78 @@ g32 <- podlove_plot_curves(dldata = t_exmpl,
 													 plot_type = "line", 
 													 printout = FALSE)
 
+g33 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = TRUE, 
+													 relative = TRUE, 
+													 cumulative = TRUE, 
+													 plot_type = "line",
+													 sum_fun = mean, 
+													 printout = FALSE)
+
+g34 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = TRUE, 
+													 relative = FALSE, 
+													 cumulative = TRUE, 
+													 plot_type = "line",
+													 sum_fun = mean, 
+													 printout = FALSE)
+
+g35 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = FALSE, 
+													 relative = TRUE, 
+													 cumulative = TRUE, 
+													 plot_type = "line",
+													 sum_fun = mean, 
+													 printout = FALSE)
+
+g36 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = FALSE, 
+													 relative = FALSE, 
+													 cumulative = TRUE, 
+													 plot_type = "line",
+													 sum_fun = mean, 
+													 printout = FALSE)
+
+g37 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = TRUE, 
+													 relative = TRUE, 
+													 cumulative = FALSE, 
+													 plot_type = "line",
+													 sum_fun = mean, 
+													 printout = FALSE)
+
+g38 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = TRUE, 
+													 relative = FALSE, 
+													 cumulative = FALSE, 
+													 plot_type = "line",
+													 sum_fun = mean, 
+													 printout = FALSE)
+
+g39 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = FALSE, 
+													 relative = TRUE, 
+													 cumulative = FALSE, 
+													 plot_type = "line",
+													 sum_fun = mean, 
+													 printout = FALSE)
+
+g40 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = FALSE, 
+													 relative = FALSE, 
+													 cumulative = FALSE, 
+													 plot_type = "line",
+													 sum_fun = mean, 
+													 printout = FALSE)
+
 # tests
 test_that("plots are ggplot objects", {
 	
@@ -289,6 +361,14 @@ test_that("plots are ggplot objects", {
 	expect_is(g30, "ggplot")
 	expect_is(g31, "ggplot")
 	expect_is(g32, "ggplot")
+	expect_is(g33, "ggplot")
+	expect_is(g34, "ggplot")
+	expect_is(g35, "ggplot")
+	expect_is(g36, "ggplot")
+	expect_is(g37, "ggplot")
+	expect_is(g38, "ggplot")
+	expect_is(g39, "ggplot")
+	expect_is(g40, "ggplot")
 	
 })
 
@@ -334,6 +414,15 @@ test_that("plots look as expected", {
 	vdiffr::expect_doppelganger("Win Wrap title DL hou abs cum line",  g31)
 	vdiffr::expect_doppelganger("Win Wrap title DL hou abs ncum line", g32)
 	
+	vdiffr::expect_doppelganger("Win Wrap title DL day rel cum line sumfun",  g33)
+	vdiffr::expect_doppelganger("Win Wrap title DL day rel ncum line sumfun", g34)
+	vdiffr::expect_doppelganger("Win Wrap title DL day abs cum line sumfun",  g35)
+	vdiffr::expect_doppelganger("Win Wrap title DL day abs ncum line sumfun", g36)
+	vdiffr::expect_doppelganger("Win Wrap title DL hou rel cum line sumfun",  g37)
+	vdiffr::expect_doppelganger("Win Wrap title DL hou rel ncum line sumfun", g38)
+	vdiffr::expect_doppelganger("Win Wrap title DL hou abs cum line sumfun",  g39)
+	vdiffr::expect_doppelganger("Win Wrap title DL hou abs ncum line sumfun", g40)
+	
 	} else if (os == "Linux") {
 		
 	vdiffr::expect_doppelganger("Linux Total DL day rel cum line",  g1)
@@ -371,6 +460,15 @@ test_that("plots look as expected", {
 	vdiffr::expect_doppelganger("Linux Wrap title DL hou rel ncum line", g30)
 	vdiffr::expect_doppelganger("Linux Wrap title DL hou abs cum line",  g31)
 	vdiffr::expect_doppelganger("Linux Wrap title DL hou abs ncum line", g32)
+	
+	vdiffr::expect_doppelganger("Linux Wrap title DL day rel cum line sumfun",  g33)
+	vdiffr::expect_doppelganger("Linux Wrap title DL day rel ncum line sumfun", g34)
+	vdiffr::expect_doppelganger("Linux Wrap title DL day abs cum line sumfun",  g35)
+	vdiffr::expect_doppelganger("Linux Wrap title DL day abs ncum line sumfun", g36)
+	vdiffr::expect_doppelganger("Linux Wrap title DL hou rel cum line sumfun",  g37)
+	vdiffr::expect_doppelganger("Linux Wrap title DL hou rel ncum line sumfun", g38)
+	vdiffr::expect_doppelganger("Linux Wrap title DL hou abs cum line sumfun",  g39)
+	vdiffr::expect_doppelganger("Linux Wrap title DL hou abs ncum line sumfun", g40)
 		
 	}
 	
