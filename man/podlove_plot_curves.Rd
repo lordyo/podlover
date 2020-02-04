@@ -14,6 +14,7 @@ podlove_plot_curves(
   labelmethod = "last.points",
   printout = TRUE,
   last_n = 0,
+  sum_fun = NULL,
   ...
 )
 }
@@ -47,6 +48,11 @@ the end of the curves \code{"first.points"})}
 \item{last_n}{Number of most recent episodes to filter for. Defaults to 0 
 (no filtering), use negative numbers to filter for first n episodes.}
 
+\item{sum_fun}{Summary function used to draw a (smoothed) curve over all 
+\code{gvar} curves, e.g. \code{mean} or \code{median}. The summary is
+taken from all curves in the dataset, even if a \code{last_n} parameter 
+is set. Do not quote.}
+
 \item{...}{additional formating parameters for \code{ggplot2::geom_line()}
 or \code{ggridges::geom_density_ridges}.}
 }
@@ -66,7 +72,17 @@ dls <- podlove_create_example(clean = TRUE)
 
 podlove_plot_curves(dls, gvar = title, relative = TRUE, cumulative = TRUE)
 
-# see podlove_graph_download_curves() for more information.
+# add a mean curve
+podlove_plot_curves(dls, gvar = title, relative = TRUE, cumulative = TRUE,
+                    sum_fun = mean)
+     
+# show only the last 4 episodes' curves. Note how the summary curve remains 
+# the same as in the plot before.
+podlove_plot_curves(dls, gvar = title, relative = TRUE, cumulative = TRUE,
+                    sum_fun = mean, last_n = 4)
+                    sum_fun = mean, last_n = 4)
+
+# see podlove_graph_download_curves() for additional information.
 
 }
 \seealso{
