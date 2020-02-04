@@ -34,7 +34,7 @@ test_that("plots look as expected", {
 		vdiffr::expect_doppelganger("Win Performance Plot",  g1)
 		vdiffr::expect_doppelganger("Win Wrap Performance Plot",  g2)
 		
-	} else if (os == "Unix") {
+	} else if (os == "Linux") {
 		
 		vdiffr::expect_doppelganger("Linux Performance Plot",  g1)
 		vdiffr::expect_doppelganger("Linux Wrap Performance Plot",  g2)

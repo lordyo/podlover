@@ -83,7 +83,7 @@ test_that("plots look as expected", {
 		vdiffr::expect_doppelganger("Win Regression no ribbon",  g5)
 		vdiffr::expect_doppelganger("Win Regression no styling",  g6)
 	
-	} else if (os == "Unix") {
+	} else if (os == "Linux") {
 		
 		vdiffr::expect_doppelganger("Linux Regression Line",  g1)
 		vdiffr::expect_doppelganger("Linux Regression Point",  g2)

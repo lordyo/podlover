@@ -334,7 +334,7 @@ test_that("plots look as expected", {
 	vdiffr::expect_doppelganger("Win Wrap title DL hou abs cum line",  g31)
 	vdiffr::expect_doppelganger("Win Wrap title DL hou abs ncum line", g32)
 	
-	} else if (os == "Unix") {
+	} else if (os == "Linux") {
 		
 	vdiffr::expect_doppelganger("Linux Total DL day rel cum line",  g1)
 	vdiffr::expect_doppelganger("Linux Total DL day rel ncum line", g2)
