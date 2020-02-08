@@ -71,8 +71,9 @@ podlove_baseplot <- function(df_tidy_data,
     lim_terms_x <- c(min(df_tidy_data$time), max(df_tidy_data$time))
     
     g_dl_curves <- g_dl_curves + 
-      ggplot2::coord_cartesian(xlim = lim_terms_x,
-                               ylim = lim_terms_y)
+      ggplot2::scale_x_continuous(limits = lim_terms_x) +
+      ggplot2::scale_y_continuous(limits = lim_terms_y)
+      
   }
   
   # turn off legend if not used
