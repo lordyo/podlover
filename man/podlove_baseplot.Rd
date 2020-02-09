@@ -4,7 +4,14 @@
 \alias{podlove_baseplot}
 \title{Construct a basic podcast download line plot}
 \usage{
-podlove_baseplot(df_tidy_data, gvar = "Total", cumulative = TRUE, ...)
+podlove_baseplot(
+  df_tidy_data,
+  gvar = "Total",
+  cumulative = TRUE,
+  limit = TRUE,
+  legend = FALSE,
+  ...
+)
 }
 \arguments{
 \item{df_tidy_data}{A tidy data frame with download data, as constructed
@@ -16,6 +23,10 @@ in \code{df_tidy_data}.}
 
 \item{cumulative}{Boolean switch to show either cumulative data (TRUE, default),
 or non-comulative data (FALSE)}
+
+\item{limit}{Boolean switch to fix axis limtis (relevant when adding smoothers)}
+
+\item{legend}{Boolean switch to add a legend}
 
 \item{...}{Additional parameters to be handed over to \code{ggplot2::geom_line()}}
 }

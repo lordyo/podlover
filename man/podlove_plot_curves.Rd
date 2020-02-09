@@ -15,6 +15,8 @@ podlove_plot_curves(
   printout = TRUE,
   last_n = 0,
   sum_fun = NULL,
+  limit = TRUE,
+  legend = FALSE,
   ...
 )
 }
@@ -53,6 +55,8 @@ the end of the curves \code{"first.points"})}
 taken from all curves in the dataset, even if a \code{last_n} parameter 
 is set. Do not quote.}
 
+\item{limit}{Boolean switch to fix axis limtis (relevant when adding smoothers)}
+
 \item{...}{additional formating parameters for \code{ggplot2::geom_line()}
 or \code{ggridges::geom_density_ridges}.}
 }
@@ -80,7 +84,7 @@ podlove_plot_curves(dls, gvar = title, relative = TRUE, cumulative = TRUE,
 # the same as in the plot before.
 podlove_plot_curves(dls, gvar = title, relative = TRUE, cumulative = TRUE,
                     sum_fun = mean, last_n = 4)
-                    sum_fun = mean, last_n = 4)
+
 
 # see podlove_graph_download_curves() for additional information.
 

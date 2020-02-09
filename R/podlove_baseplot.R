@@ -11,6 +11,8 @@
 #'     in \code{df_tidy_data}.
 #' @param cumulative Boolean switch to show either cumulative data (TRUE, default),
 #'     or non-comulative data (FALSE) 
+#' @param limit Boolean switch to fix axis limtis (relevant when adding smoothers)
+#' @param legend Boolean switch to add a legend
 #' @param ... Additional parameters to be handed over to \code{ggplot2::geom_line()} 
 #' 
 #' @return A ggplot2 plot 
@@ -40,32 +42,67 @@
 podlove_baseplot <- function(df_tidy_data,
                              gvar = "Total",
                              cumulative = TRUE,
+                             limit = TRUE,
+                             legend = FALSE,
                              ...) {
   # switcher for cumulative data (use listeners or listeners-total)
-  
-  
   if (cumulative == TRUE) {
     
     g_dl_curves <- ggplot(df_tidy_data,
                           ggplot2::aes(x = time,
                                        y = listeners_total,
-                                       color = {{gvar}})) #+
-      
-     # ggplot2::coord_cartesian(ylim = c(0, max(df_tidy_data$listeners_total)))
+                                       color = {{gvar}}))
     
-  } else {
+    # set possible axis limit (not applied yet)
+    lim_terms_y <- c(0, max(df_tidy_data$listeners_total))
+    
+  } else {    # non cumulative
     
     g_dl_curves <- ggplot2::ggplot(df_tidy_data,
                                    ggplot2::aes(x = time,
                                                 y = listeners,
-                                                color = {{gvar}})) #+
-      
-     # ggplot2::coord_cartesian(ylim = c(0, max(df_tidy_data$listeners)))
+                                                color = {{gvar}}))
+    # set possible axis limit
+    lim_terms_y <- c(0, max(df_tidy_data$listeners))
   } 
   
+  # apply axis limitis, if necessary
+  if (limit) {
+    lim_terms_x <- c(min(df_tidy_data$time), max(df_tidy_data$time))
+    
+    g_dl_curves <- g_dl_curves + 
+      ggplot2::scale_y_continuous(limits = lim_terms_y)
+      
+      # class switcher for type of x axis (Date or Continuous)
+      if ("Date" %in% class(df_tidy_data$time)) {
+        
+        g_dl_curves <- g_dl_curves + 
+          ggplot2::scale_x_date(limits = lim_terms_x) 
+        
+      } else if ("POSIXct" %in% class(df_tidy_data$time)) {
+        
+        g_dl_curves <- g_dl_curves + 
+          ggplot2::scale_x_datetime(limits = lim_terms_x) 
+        
+        } else {
+        
+        g_dl_curves <- g_dl_curves + 
+          ggplot2::scale_x_continuous(limits = lim_terms_x) 
+      }
+        
+  }
+  
+  # turn off legend if not used
+  if (!legend) {
+    
+    g_dl_curves <- g_dl_curves + 
+      ggplot2::guides(color = FALSE) 
+  }
+  
+  # add dotdots
   g_dl_curves <-  g_dl_curves +
-    ggplot2::geom_line(...) +
-    ggplot2::guides(color = FALSE) 
+    ggplot2::geom_line(...)
+  
   
   g_dl_curves
   

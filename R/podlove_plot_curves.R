@@ -23,15 +23,17 @@
 #' @param labelmethod Defines where should the labels be attached 
 #'     (at the beinning of the curves: \code{"last.points"}, default, or at
 #'     the end of the curves \code{"first.points"}) 
-#' @param printout Switcher to automatically print out the plot (default TRUE)
-#' @param ... additional formating parameters for \code{ggplot2::geom_line()}
-#'     or \code{ggridges::geom_density_ridges}.
 #' @param last_n Number of most recent episodes to filter for. Defaults to 0 
 #'     (no filtering), use negative numbers to filter for first n episodes. 
 #' @param sum_fun Summary function used to draw a (smoothed) curve over all 
 #'     \code{gvar} curves, e.g. \code{mean} or \code{median}. The summary is
 #'     taken from all curves in the dataset, even if a \code{last_n} parameter 
 #'     is set. Do not quote. 
+#' @param printout Switcher to automatically print out the plot (default TRUE)
+#' @param limit Boolean switch to fix axis limtis (relevant when adding smoothers)
+#' @param printout Switcher to automatically print out the plot (default TRUE)
+#' @param ... additional formating parameters for \code{ggplot2::geom_line()}
+#'     or \code{ggridges::geom_density_ridges}.
 #' 
 #' @return A ggplot object
 #' 
@@ -49,7 +51,7 @@
 #' # the same as in the plot before.
 #' podlove_plot_curves(dls, gvar = title, relative = TRUE, cumulative = TRUE,
 #'                     sum_fun = mean, last_n = 4)
-#'                     sum_fun = mean, last_n = 4)
+#' 
 #' 
 #' # see podlove_graph_download_curves() for additional information.
 #' 
@@ -70,6 +72,8 @@ podlove_plot_curves <- function(dldata,
 																printout = TRUE,
 																last_n = 0,
 																sum_fun = NULL,
+																limit = TRUE,
+																legend = FALSE,
 																...) {
   
 	# prepare data
@@ -85,6 +89,8 @@ podlove_plot_curves <- function(dldata,
 																		 cumulative = cumulative,
 																		 plot_type = plot_type,
 																		 labelmethod = labelmethod,
+																		 limit = limit,
+																		 legend = legend,
 																		 printout = FALSE,
 																		 ...)
 	
