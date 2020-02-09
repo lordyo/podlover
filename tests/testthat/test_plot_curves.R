@@ -567,6 +567,52 @@ g64 <- podlove_plot_curves(dldata = t_exmpl,
 													 limit = FALSE, last_n = -4, 
 													 printout = FALSE)
 
+# labelsi
+
+g65 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = FALSE, 
+													 relative = TRUE, 
+													 cumulative = TRUE, 
+													 plot_type = "line",
+													 sum_fun = mean, 
+													 limit = TRUE, 
+													 labelmethod = "last.points",
+													 printout = FALSE)
+
+g66 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = FALSE, 
+													 relative = TRUE, 
+													 cumulative = TRUE, 
+													 plot_type = "line",
+													 sum_fun = mean, 
+													 limit = TRUE, 
+													 labelmethod = "first.points",
+													 printout = FALSE)
+
+g67 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = FALSE, 
+													 relative = TRUE, 
+													 cumulative = TRUE, 
+													 plot_type = "line",
+													 sum_fun = mean, 
+													 limit = TRUE, 
+													 labelmethod = "angled.boxes",
+													 printout = FALSE)
+
+g68 <- podlove_plot_curves(dldata = t_exmpl, 
+													 gvar = title, 
+													 hourly = FALSE, 
+													 relative = TRUE, 
+													 cumulative = TRUE, 
+													 plot_type = "line",
+													 sum_fun = mean, 
+													 limit = TRUE, 
+													 labelmethod = "",
+													 legend = TRUE,
+													 printout = FALSE)
 
 # tests
 test_that("plots are ggplot objects", {
@@ -634,6 +680,10 @@ test_that("plots are ggplot objects", {
 	expect_is(g62, "ggplot")
 	expect_is(g63, "ggplot")
 	expect_is(g64, "ggplot")
+	expect_is(g65, "ggplot")
+	expect_is(g66, "ggplot")
+	expect_is(g67, "ggplot")
+	expect_is(g68, "ggplot")
 })
 
 test_that("plots look as expected", {
@@ -714,6 +764,15 @@ test_that("plots look as expected", {
 	vdiffr::expect_doppelganger("Win Wrap title DL hou abs cum line sumfun nolim",  g63)
 	vdiffr::expect_doppelganger("Win Wrap title DL hou abs ncum line sumfun nolim", g64)
 	
+	vdiffr::expect_doppelganger("Win lastpoints nolegend",  g65)
+	vdiffr::expect_doppelganger("Win firstpoints nolegend", g66)
+	vdiffr::expect_doppelganger("Win angledboxes nolegend",  g67)
+	vdiffr::expect_doppelganger("Win nodirectlabels legend", g68)	
+	vdiffr::expect_doppelganger("Win lastpoints nolegend",  g65)
+	vdiffr::expect_doppelganger("Win firstpoints nolegend", g66)
+	vdiffr::expect_doppelganger("Win angledboxes nolegend",  g67)
+	vdiffr::expect_doppelganger("Win nodirectlabels legend", g68)
+	
 	} else if (os == "Linux") {
 		
 	vdiffr::expect_doppelganger("Linux Total DL day rel cum line",  g1)
@@ -787,6 +846,11 @@ test_that("plots look as expected", {
 	vdiffr::expect_doppelganger("Linux Wrap title DL hou rel ncum line sumfun nolim", g62)
 	vdiffr::expect_doppelganger("Linux Wrap title DL hou abs cum line sumfun nolim",  g63)
 	vdiffr::expect_doppelganger("Linux Wrap title DL hou abs ncum line sumfun nolim", g64)
+	
+	vdiffr::expect_doppelganger("Linux lastpoints nolegend",  g65)
+	vdiffr::expect_doppelganger("Linux firstpoints nolegend", g66)
+	vdiffr::expect_doppelganger("Linux angledboxes nolegend",  g67)
+	vdiffr::expect_doppelganger("Linux nodirectlabels legend", g68)
 		
 	}
 	
