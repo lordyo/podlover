@@ -92,8 +92,22 @@ podlove_graph_download_curves <- function(df_tidy_data,
       if (stringr::str_detect(labelmethod, "last")) exp_val <- c(0.05, 0.3)
       if (stringr::str_detect(labelmethod, "maxvar")) exp_val <- c(0.2, 0.2)
       
-      g_dl_curves <-  g_dl_curves +
-        ggplot2::scale_x_continuous(expand = ggplot2::expand_scale(exp_val))
+      # class switcher for type of x axis (Date or Continuous)
+      if ("Date" %in% class(df_tidy_data$time)) {
+        
+        g_dl_curves <-  g_dl_curves +
+          ggplot2::scale_x_date(expand = ggplot2::expand_scale(exp_val))
+        
+      } else if ("POSIXct" %in% class(df_tidy_data$time)) {
+        
+        g_dl_curves <-  g_dl_curves +
+          ggplot2::scale_x_datetime(expand = ggplot2::expand_scale(exp_val))
+        
+      } else {
+        
+        g_dl_curves <-  g_dl_curves +
+          ggplot2::scale_x_continuous(expand = ggplot2::expand_scale(exp_val))
+      }
       
     }
     

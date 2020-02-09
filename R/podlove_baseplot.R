@@ -71,9 +71,25 @@ podlove_baseplot <- function(df_tidy_data,
     lim_terms_x <- c(min(df_tidy_data$time), max(df_tidy_data$time))
     
     g_dl_curves <- g_dl_curves + 
-      ggplot2::scale_x_continuous(limits = lim_terms_x) +
       ggplot2::scale_y_continuous(limits = lim_terms_y)
       
+      # class switcher for type of x axis (Date or Continuous)
+      if ("Date" %in% class(df_tidy_data$time)) {
+        
+        g_dl_curves <- g_dl_curves + 
+          ggplot2::scale_x_date(limits = lim_terms_x) 
+        
+      } else if ("POSIXct" %in% class(df_tidy_data$time)) {
+        
+        g_dl_curves <- g_dl_curves + 
+          ggplot2::scale_x_datetime(limits = lim_terms_x) 
+        
+        } else {
+        
+        g_dl_curves <- g_dl_curves + 
+          ggplot2::scale_x_continuous(limits = lim_terms_x) 
+      }
+        
   }
   
   # turn off legend if not used
