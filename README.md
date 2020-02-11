@@ -124,8 +124,9 @@ correct access information. You will probably need to set allow an
 **access permission** to your database and user from the IP address R is
 running on (“whitelisting”). This is also done via your hoster’s admin
 panel. Check your hoster’s support sections for more info. (Note: Some
-hosters are stricter and don’t allow any access except via SSH tunnels.
-`podlover` doesn’t provide that option yet.)
+hosters are stricter and don’t allow any access except via SSH tunnels,
+which you will need ot establish first - how depends on your OS and
+hoster. Check your hoster’s support section on how to do this.)
 
 ### Prefix of the Table Names
 
@@ -415,6 +416,8 @@ dates).
                                     cumulative = TRUE, 
                                     plot_type = "line",
                                     printout = FALSE)
+    #> Scale for 'x' is already present. Adding another scale for 'x', which will
+    #> replace the existing scale.
 
     print(g_tdlacc)
 
@@ -429,6 +432,8 @@ episode launches:
                                   cumulative = FALSE, 
                                   plot_type = "line",
                                   printout = FALSE)
+    #> Scale for 'x' is already present. Adding another scale for 'x', which will
+    #> replace the existing scale.
 
     print(g_tdl)
 
@@ -451,6 +456,8 @@ labels at the beginning of the curves.
                                        plot_type = "line",
                                        labelmethod = "first.points",
                                        printout = FALSE)
+    #> Scale for 'x' is already present. Adding another scale for 'x', which will
+    #> replace the existing scale.
 
     print(g_ep_dlsacc)
 
@@ -471,6 +478,8 @@ better for this kind of curve.
                                        plot_type = "line",
                                        labelmethod = "last.points",
                                        printout = FALSE)
+    #> Scale for 'x' is already present. Adding another scale for 'x', which will
+    #> replace the existing scale.
 
     print(g_ep_dlsaccrel)
 
@@ -509,6 +518,8 @@ our listeners get their episodes. The labelmethod here is set to
                                     plot_type = "line", 
                                     labelmethod = "angled.boxes", #looks nice
                                     printout = FALSE)
+    #> Scale for 'x' is already present. Adding another scale for 'x', which will
+    #> replace the existing scale.
 
     print(g_source_acc)
 
@@ -547,6 +558,8 @@ episodes hadn’t.
 
     # plot the downloads with your new variable "guest"
     podlove_plot_curves(downloads_with_guests, gvar = guest, printout = FALSE)
+    #> Scale for 'x' is already present. Adding another scale for 'x', which will
+    #> replace the existing scale.
 
 ![](README_files/figure-markdown_strict/unnamed-chunk-15-1.png)
 
@@ -566,7 +579,8 @@ to read. To reduce the number of curves, you can use the parameter
                                        labelmethod = "first.points",
                                        printout = FALSE,
                                        last_n = 3)
-    #> Selecting by ep_rank
+    #> Selecting by ep_rankScale for 'x' is already present. Adding another scale for 'x', which will
+    #> replace the existing scale.
 
     print(g_ep_dlsacc_red)
 
@@ -668,47 +682,31 @@ If the number of downloads after a specified date after launch is rising
 over time, the podcast is gaining listeners. If it falls, it’s losing
 listeners. If it stays stable, it’s keeping listeners.
 
-To prepare the regression, you first need to use the function
-`podlove_downloads_until()` to create a dataset of downloads at a
-specific point. The longer the period between launch and measuring point
-is, the more valid the model will be - but you’ll also have less data
-points. For this example, we’ll pick a period of 30 days after launch:
+A regression analysis is usually shown as a regression model printout,
+but understanding those requires some statistical knowledge. An easier
+way is to plot your data and the corresponding regression line. The
+function `podlove_plot_regression()` allows you to do both.
 
-    du <- podlove_downloads_until(downloads, 30)
+The function creates a dataset of downloads at a specific point in time.
+The longer the period between launch and measuring point is, the more
+valid the model will be - but you’ll also have less data points. For
+this example, we’ll pick a period of 30 days after launch. You can also
+choose if you want to use the `post_datehour` parameter (better if your
+episodes don’t come out regularly), or `ep_rank`, which corresponds to
+the episode number (it has a different name because episode numbers are
+strings).
 
-    du
-    #> # A tibble: 10 x 12
-    #>    ep_number title ep_num_title duration                   post_date 
-    #>    <chr>     <chr> <chr>        <Duration>                 <date>    
-    #>  1 01        Port… 01: Portrai… 1641.22s (~27.35 minutes)  2019-01-01
-    #>  2 02        Cons… 02: Constru… 1179.396s (~19.66 minutes) 2019-02-22
-    #>  3 03        Duke… 03: Duke Un… 637.664s (~10.63 minutes)  2019-03-20
-    #>  4 04        Robe… 04: Robert … 3087.407s (~51.46 minutes) 2019-04-15
-    #>  5 05        Bruc… 05: Bruce C… 2247.582s (~37.46 minutes) 2019-05-11
-    #>  6 06        Jero… 06: Jerome,… 2622.9s (~43.72 minutes)   2019-07-02
-    #>  7 07        Cast… 07: Castle   1130.651s (~18.84 minutes) 2019-08-23
-    #>  8 08        Ceil… 08: Ceiling… 816.862s (~13.61 minutes)  2019-10-14
-    #>  9 09        Lima… 09: Limalok  2148.397s (~35.81 minutes) 2019-11-09
-    #> 10 10        Gian… 10: Giant o… 1363.267s (~22.72 minutes) 2019-12-05
-    #> # … with 7 more variables: post_datehour <dttm>, ep_age_hours <dbl>,
-    #> #   ep_age_days <dbl>, ep_rank <int>, measure_day <dbl>, measure_hour <dbl>,
-    #> #   downloads <int>
+With the option `print_model`, you can display the model results:
 
-This dataset we can feed into the regression function
-`podlove_episode_regression()`. You can choose if you want to use the
-`post_datehour` parameter (better if your episodes don’t come out
-regularly), or `ep_rank`, which corresponds to the episode number (it
-has a different name because episode numbers are strings):
-
-    reg <- podlove_episode_regression(df_regression_data = du, terms = "ep_rank")
-
-If you’re statistically inclined, you can check out the model directly
-and see if your model is significant:
-
-    summary(reg)
+    reg <- podlove_plot_regression(df_tidy_data = downloads, 
+                                   point_in_time = 30, 
+                                   predictor = ep_rank, 
+                                   print_model = TRUE,
+                                   print_plot = FALSE)
     #> 
     #> Call:
-    #> stats::lm(formula = formula_string, data = df_regression_data)
+    #> stats::lm(formula = stats::reformulate(terms, response = "downloads"), 
+    #>     data = df_regression_data)
     #> 
     #> Residuals:
     #>     Min      1Q  Median      3Q     Max 
@@ -725,15 +723,18 @@ and see if your model is significant:
     #> Multiple R-squared:  0.9868, Adjusted R-squared:  0.9851 
     #> F-statistic: 595.9 on 1 and 8 DF,  p-value: 8.468e-09
 
-Or you could just check out the regression plot with the function
-`podlove_graph_regression()` and see in which direction the line points:
+The option `print_plot` shows the plot (which is also saved in the
+object `reg`):
 
-    g_reg <- podlove_graph_regression(du, predictor = ep_rank)
+    reg <- podlove_plot_regression(df_tidy_data = downloads, 
+                                   point_in_time = 30, 
+                                   predictor = ep_rank, 
+                                   print_model = FALSE,
+                                   print_plot = TRUE)
 
-![](README_files/figure-markdown_strict/unnamed-chunk-23-1.png)
+![](README_files/figure-markdown_strict/unnamed-chunk-21-1.png)
 
-Oh noes! It seems like your podcast is steadily losing listeners at the
-rate of -138 listeners per episode!
+Oh noes! It seems like your podcast is steadily losing listeners!
 
 Finally
 -------
