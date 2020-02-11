@@ -99,7 +99,7 @@ Note that this file also includes a hostname, but this is the internal hostname 
 
 ### Access permissions
 
-MySQL databases are sensitive to hacking attacks, which is why they usually aren't accessible to just any visitor - even if she has the correct access information. You will probably need to set allow an **access permission** to your database and user from the IP address R is running on ("whitelisting"). This is also done via your hoster's admin panel. Check your hoster's support sections for more info. (Note: Some hosters are stricter and don't allow any access except via SSH tunnels. `podlover` doesn't provide that option yet.)
+MySQL databases are sensitive to hacking attacks, which is why they usually aren't accessible to just any visitor - even if she has the correct access information. You will probably need to set allow an **access permission** to your database and user from the IP address R is running on ("whitelisting"). This is also done via your hoster's admin panel. Check your hoster's support sections for more info. (Note: Some hosters are stricter and don't allow any access except via SSH tunnels, which you will need ot establish first - how depends on your OS and hoster. Check your hoster's support section on how to do this.)
 
 ### Prefix of the Table Names
 
