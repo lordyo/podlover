@@ -7,9 +7,10 @@
 podlove_prepare_stats_for_graph(
   df_stats,
   gvar,
-  hourly = FALSE,
+  time_unit = "days",
   relative = TRUE,
-  last_n = 0
+  last_n = 0,
+  ...
 )
 }
 \arguments{
@@ -18,9 +19,8 @@ podlove_prepare_stats_for_graph(
 
 \item{gvar}{Optional grouping variable(s), unquoted.}
 
-\item{hourly}{Boolean switching parameter for rendering of hourly vs.
-daily data. Defaults to \code{FALSE} (daily data), \code{TRUE} creates
-hourly data.}
+\item{time_unit}{quoted time unit to group by: "hours", "days", "weeks", 
+"months", "years"}
 
 \item{relative}{Boolean switching parameter to define if the data is 
 rendered relative to the respective episode release date (\code{TRUE}) or
@@ -28,6 +28,8 @@ in absolute dates (\code{TRUE}). Defaults to \code{TRUE}.}
 
 \item{last_n}{Number of most recent episodes to filter for. Defaults to 0 (no filtering),
 use negative numbers to filter for first n episodes.}
+
+\item{...}{Depreciated arguments}
 }
 \description{
 Takes clean Podlove data and prepares it to be rendered with \code{ggplot2}. 

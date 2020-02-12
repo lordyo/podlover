@@ -7,7 +7,7 @@
 podlove_plot_curves(
   dldata,
   gvar = "Total",
-  hourly = FALSE,
+  time_unit = "days",
   relative = TRUE,
   cumulative = TRUE,
   plot_type = "line",
@@ -26,10 +26,6 @@ by \code{podlove_prepare_stats_for_graph()}}
 
 \item{gvar}{Optional grouping parameter (e.g. episode title), handed over
 to \code{ggplot2::aes(color)}.}
-
-\item{hourly}{Boolean switching parameter for rendering of hourly vs.
-daily data. Defaults to \code{FALSE} (daily data), \code{TRUE} creates
-hourly data.}
 
 \item{relative}{Boolean switching parameter to define if the data is 
 rendered relative to the respective episode release date (\code{TRUE}) or
@@ -58,7 +54,11 @@ is set. Do not quote.}
 \item{limit}{Boolean switch to fix axis limtis (relevant when adding smoothers)}
 
 \item{...}{additional formating parameters for \code{ggplot2::geom_line()}
-or \code{ggridges::geom_density_ridges}.}
+or \code{ggridges::geom_density_ridges}. Also used for depreciated arguments.}
+
+\item{hourly}{Boolean switching parameter for rendering of hourly vs.
+daily data. Defaults to \code{FALSE} (daily data), \code{TRUE} creates
+hourly data.}
 }
 \value{
 A ggplot object

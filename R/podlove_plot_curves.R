@@ -33,7 +33,7 @@
 #' @param limit Boolean switch to fix axis limtis (relevant when adding smoothers)
 #' @param printout Switcher to automatically print out the plot (default TRUE)
 #' @param ... additional formating parameters for \code{ggplot2::geom_line()}
-#'     or \code{ggridges::geom_density_ridges}.
+#'     or \code{ggridges::geom_density_ridges}. Also used for depreciated arguments.
 #' 
 #' @return A ggplot object
 #' 
@@ -64,7 +64,7 @@
 
 podlove_plot_curves <- function(dldata, 
 																gvar = "Total", 
-																hourly = FALSE, 
+																time_unit = "days", 
 																relative = TRUE, 
 																cumulative = TRUE,
 																plot_type = "line", 
@@ -75,11 +75,18 @@ podlove_plot_curves <- function(dldata,
 																limit = TRUE,
 																legend = FALSE,
 																...) {
-  
+	
+	# check depreciated arguments
+	args <- list(...)
+	if ("hourly" %in% names(args)) {
+		if (args$hourly == TRUE) time_unit <- "hours" else time_unit <- "days"
+		warning("option 'hourly' is depreciated. Use option 'time_unit' instead.")
+	}
+	
 	# prepare data
 	g_data <- podlove_prepare_stats_for_graph(df_stats = dldata,
 																						gvar = {{gvar}},
-																						hourly = hourly,
+																						time_unit = time_unit,
 																						relative = relative, 
 																						last_n = last_n)
 	
@@ -106,7 +113,7 @@ podlove_plot_curves <- function(dldata,
 		
 		sumdata <- podlove_prepare_stats_for_graph(df_stats = dldata,
 																							 gvar = {{gvar}},
-																							 hourly = hourly,
+																							 time_unit = time_unit,
 																							 relative = relative)
 		
 		sumdata <- sumdata %>% 
