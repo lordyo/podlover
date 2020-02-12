@@ -14,6 +14,7 @@
 #'     in absolute dates (\code{TRUE}). Defaults to \code{TRUE}.
 #' @param last_n Number of most recent episodes to filter for. Defaults to 0 (no filtering),
 #'     use negative numbers to filter for first n episodes. 
+#' @param ... Depreciated arguments
 #'     
 #' @examples 
 #' \dontrun{
@@ -32,7 +33,7 @@
 #' 
 #' @importFrom magrittr %>% 
 #' @importFrom dplyr group_by summarize ungroup mutate n
-#' @importFrom lubridate hours days weeks months years
+#' @importFrom lubridate hours days weeks month years
 #' 
 #' @export 
 
@@ -41,10 +42,19 @@ podlove_prepare_stats_for_graph <- function(df_stats,
                                             gvar, 
                                             time_unit = "days", 
                                             relative = TRUE,
-                                            last_n = 0) {
+                                            last_n = 0,
+                                            ...) {
   
+  # check if time_unit can be used
   if (!(time_unit %in% c("hours", "days", "weeks", "months", "years"))) {
     stop("time_unit must be one of 'hours', 'days', 'weeks', 'months', 'years'.")
+  }
+  
+  # check depreciated arguments
+  args <- list(...)
+  if ("hourly" %in% names(args)) {
+   if (args$hourly == TRUE) time_unit <- "hours" else time_unit <- "days"
+    warning("option 'hourly' is depreciated. Use option 'time_unit' instead.")
   }
   
   # prepare for tidy evaluation
