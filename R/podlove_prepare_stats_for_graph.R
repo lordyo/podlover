@@ -7,9 +7,8 @@
 #' @param df_stats A data frame of clean Podlove data, as rendered by 
 #'     \code{podlove_get_and_clean()} or \code{podlove_clean_stats}.
 #' @param gvar Optional grouping variable(s), unquoted.
-#' @param hourly Boolean switching parameter for rendering of hourly vs.
-#'     daily data. Defaults to \code{FALSE} (daily data), \code{TRUE} creates
-#'     hourly data.  
+#' @param time_unit quoted time unit to group by: "hours", "days", "weeks", 
+#'                  "months", "years" 
 #' @param relative Boolean switching parameter to define if the data is 
 #'     rendered relative to the respective episode release date (\code{TRUE}) or
 #'     in absolute dates (\code{TRUE}). Defaults to \code{TRUE}.
@@ -33,15 +32,20 @@
 #' 
 #' @importFrom magrittr %>% 
 #' @importFrom dplyr group_by summarize ungroup mutate n
+#' @importFrom lubridate hours days weeks months years
 #' 
 #' @export 
 
 
 podlove_prepare_stats_for_graph <- function(df_stats, 
                                             gvar, 
-                                            hourly = FALSE, 
+                                            time_unit = "days", 
                                             relative = TRUE,
                                             last_n = 0) {
+  
+  if (!(time_unit %in% c("hours", "days", "weeks", "months", "years"))) {
+    stop("time_unit must be one of 'hours', 'days', 'weeks', 'months', 'years'.")
+  }
   
   # prepare for tidy evaluation
   gvar <- dplyr::enquo(gvar)
@@ -66,40 +70,44 @@ podlove_prepare_stats_for_graph <- function(df_stats,
       select(-ep_rank)
   }
 
-  # switcher for hourly/realative combinations
-  
-  if (hourly == TRUE & relative == TRUE) {
-    prep_stats <- group_by(prep_stats, hours_since_release)
-  } else if (hourly == FALSE & relative == TRUE) {
-    prep_stats <- group_by(prep_stats, days_since_release)
-  } else if (hourly == TRUE & relative == FALSE) {
-    prep_stats <- group_by(prep_stats, dldatehour)
-  } else if (hourly == FALSE & relative == FALSE) {
-    prep_stats <- group_by(prep_stats, dldate)
+  # switcher to calculate time units to group by (relative or absolute)
+  if (relative) {
+    suppressMessages(  # calculation throws irrelevant rounding info
+      # the do.call() uses the time_unit as a function,
+      # e.g. floor(hours_since_release / (weeks(1) / hours(1) ) )
+      prep_stats <- mutate(prep_stats,
+                         time = floor(
+                           hours_since_release / (do.call(time_unit, list(1)) / hours(1)))))
+  } else {
+    # the absolute version rounds down to the neares time unit
+    prep_stats <- mutate(prep_stats,
+                           time = lubridate::round_date(dldatehour, time_unit))
   }
   
-  # check if gvar is empty
+  prep_stats <- group_by(prep_stats, time)
   
+  # check if gvar is empty
+
   if (!is.null(gvar)) {
     prep_stats <- prep_stats %>% group_by(!! gvar, add = TRUE)
   }
-  
+
   # summarize
 
   prep_stats <- prep_stats %>%
     summarize(listeners = n()) %>%
-    ungroup() %>% 
+    ungroup() %>%
     dplyr::rename(time = 1) # call first column "time"
-  
+
   # check again if gvar is empty
-  
+
   if (!is.null(gvar)) {
     prep_stats <- prep_stats %>% group_by(!! gvar)
   }
-  
+
   # add additional cumulative listeners column
 
-  prep_stats <- prep_stats %>% 
+  prep_stats <- prep_stats %>%
     mutate(listeners_total = cumsum(listeners)) %>%
     ungroup()
   
