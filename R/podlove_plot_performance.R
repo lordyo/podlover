@@ -14,7 +14,13 @@
 #' @param post_launch definition of begin of long-term performance in days after launch
 #' @param limit_unit time unit for limits. Can be "days" (default) or "hours".
 #'     Used to fine-tune launch performance cutoffs.  
-#' @param label Switcher to attach labels to points (defaults to TRUE)
+#' @param label Unquoted, episode-related variable to use for labelling. By default,
+#'     \code{podlove_performance_stats} creates the options \code{title}, 
+#'     \code{ep_number} and \code{ep_num_title}. Leave the argument away to
+#'     display no label 
+#' @param legend Unquoted, episode-related variable to use in a explanatory legend 
+#'     next to the performance graph. Leave the option away to display no legend.
+#'     \code{label} argument must be defined to show the legend.
 #' @param printout Switcher to automatically print out the plot (default TRUE)
 #' 
 #' @return A ggplot object
@@ -35,7 +41,8 @@ podlove_plot_performance <- function(dldata,
 																		 launch = 3, 
 																		 post_launch = 7, 
 																		 limit_unit = "days", 
-																		 label = TRUE,
+																		 label,
+																		 legend,
 																		 printout = TRUE) {
 	
 	g_data <- podlove_performance_stats(df_tidy_data = dldata, 
@@ -43,9 +50,23 @@ podlove_plot_performance <- function(dldata,
 																			post_launch = post_launch, 
 																			limit_unit = limit_unit)
 	
-	g <- podlove_graph_performance(df_perfstats = g_data, 
-																 label = label, 
-																 printout = printout)
-	
+	if (missing(label)) {
+		
+		g <- podlove_graph_performance(df_perfstats = g_data, 
+																	 printout = printout)
+		
+	} else if (missing(legend)) {
+		
+		g <- podlove_graph_performance(df_perfstats = g_data, 
+																	 label = {{label}}, 
+																	 printout = printout)
+	} else {
+		
+		g <- podlove_graph_performance(df_perfstats = g_data, 
+																	 label = {{label}}, 
+																	 legend = {{legend}},
+																	 printout = printout)
+	}
+		
 	g
 }

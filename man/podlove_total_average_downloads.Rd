@@ -6,19 +6,15 @@
 \usage{
 podlove_total_average_downloads(
   df_tidy_data,
-  gvar = "title",
   lower_limit = 0,
   upper_limit = Inf,
-  limit_unit = "days"
+  limit_unit = "days",
+  ...
 )
 }
 \arguments{
 \item{df_tidy_data}{A tidy data frame with download data, as constructed
 by \code{podlove_clean_stats()} or \code{podlove_get_and_clean}.}
-
-\item{gvar}{an optional grouping variable, which should be reflect the episode
-structure (e.g. ep_number, title). Other variables will lead to nonsensical
-results, because the calculation is based on time unit since episode release.}
 
 \item{lower_limit}{lower cutoff for time since episode launch (used to eliminate
 launch peaks). Defaults to 0, i.e. no filtering.}
@@ -28,6 +24,8 @@ long term download data and just focus on launch performance)}
 
 \item{limit_unit}{time unit for limits. Can be "days" (default) or "hours".
 Used to fine-tune launch performance cutoffs.}
+
+\item{...}{used for depreciated arguments}
 }
 \value{
 a dataframe containing performance data per episode (total downloads,
