@@ -7,8 +7,13 @@
 #'     Note that you won't see episodes which are younger than your \code{post_launch}
 #'     limit. 
 #'
-#' @param  df_perfstats a tidy data frame created by \code{performance_stats()}
-#' @param label Switcher to attach labels to points (defaults to TRUE)
+#' @param df_perfstats a tidy data frame created by \code{performance_stats()}
+#' @param label Unquoted, episode-related variable to use for labelling. By default,
+#'     \code{podlove_performance_stats} creates the options \code{title}, 
+#'     \code{ep_number} (default) and \code{ep_num_title}. Use \code{label = ""} or
+#'     leave argument away to display no label 
+#' @param legend Unquoted, episode-related variable to use in a explanatory legend 
+#'     next to the performance graph. 
 #' @param printout Switcher to automatically print out the plot (default TRUE)
 #'     
 #' @return A ggplot object
@@ -20,6 +25,11 @@
 #' 
 #' perf <- podlove_performance_stats(podcast_example_data, launch = 2, post_launch = 5)
 #' podlove_graph_performance(perf)
+#' 
+#' # add a label
+#' perf <- podlove_performance_stats(podcast_example_data, launch = 2, post_launch = 5,
+#'                                   label = ep_number, legend = title)
+#' podlove_graph_performance(perf)
 #' }
 #' 
 #' @importFrom ggplot2 ggplot aes
@@ -29,7 +39,8 @@
 
 
 podlove_graph_performance <- function(df_perfstats, 
-                                      label = TRUE,
+                                      label,
+                                      legend,
                                       printout = TRUE) {
   
   df_perfstats <- dplyr::filter(df_perfstats, !is.na(dls_per_day_after_launch),
@@ -40,7 +51,7 @@ podlove_graph_performance <- function(df_perfstats,
   
   g <- ggplot(df_perfstats,
               aes(x = dls_per_day_after_launch,
-                  y = dls_per_day_at_launch ,label = title)) +
+                  y = dls_per_day_at_launch, label = {{label}})) +
     ggplot2::geom_point() +
     ggplot2::scale_x_continuous(name = "dls per Day after Launch",
                        limits = c(0,max(df_perfstats$dls_per_day_after_launch))) +
@@ -49,13 +60,15 @@ podlove_graph_performance <- function(df_perfstats,
     ggplot2::geom_hline(yintercept = median_y, alpha = 0.3) +
     ggplot2::geom_vline(xintercept = median_x, alpha = 0.3)
   
-  if (label) {
-    
-    g <- g + ggrepel::geom_label_repel()
-    
-  }
+  if (!missing(label)) g <- g + ggrepel::geom_text_repel()
   
-  if (printout) print(g)
+  if (!missing(label) && !missing(legend)) {
+    
+      leg_table <- gridExtra::tableGrob(
+        select(df_perfstats, {{label}}, {{legend}}), theme = ttheme_minimal())
+      
+      g <- grid.arrange(g, leg_table, nrow = 1)
+  }
   
   g
   

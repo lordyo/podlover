@@ -54,21 +54,25 @@ podlove_performance_stats <- function(df_tidy_data,
                                             upper_limit = Inf, 
                                             lower_limit = 0,
                                             limit_unit = limit_unit)
+  
   launches <- podlove_total_average_downloads(df_tidy_data, 
                                               upper_limit = {{launch}},
-                                              limit_unit = limit_unit)
+                                              limit_unit = limit_unit) %>% 
+    select(-title, -ep_number)
+  
   evergreens <- podlove_total_average_downloads(df_tidy_data, 
                                                 lower_limit = {{post_launch}},
-                                                limit_unit = limit_unit)
+                                                limit_unit = limit_unit) %>% 
+    select(-title, -ep_number)
   
   pl_stats <- totals %>%
-    dplyr::left_join(launches, by = "title") %>%
-    dplyr::left_join(evergreens, by = "title")
+    dplyr::left_join(launches, by = "ep_num_title") %>%
+    dplyr::left_join(evergreens, by = "ep_num_title")
   
   if (limit_unit == "days") {
 
     pl_stats <- pl_stats %>%
-      dplyr::select(title,
+      dplyr::select(ep_number, title, ep_num_title,
                     dls = dls_total.x,
                     dls_per_day = dls_per_day.x,
                     dls_per_day_at_launch = dls_per_day.y,
@@ -77,7 +81,7 @@ podlove_performance_stats <- function(df_tidy_data,
   } else if (limit_unit == "hours") {
 
     pl_stats <- pl_stats %>%
-      dplyr::select(title,
+      dplyr::select(ep_number, title, ep_num_title,
                     dls = dls_total.x,
                     dls_per_hour = dls_per_hour.x,
                     dls_per_hour_at_launch = dls_per_hour.y,

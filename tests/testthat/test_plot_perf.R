@@ -13,11 +13,11 @@ data1 <- podlove_performance_stats(df_tidy_data = t_exmpl,
 																	 post_launch = 7, 
 																	 limit_unit = "days")
 
-g1 <- podlove_graph_performance(data1, label = FALSE, printout = FALSE)
+g1 <- podlove_graph_performance(data1, printout = FALSE)
 
-g2 <- podlove_plot_performance(t_exmpl, label = FALSE, printout = FALSE)
+g2 <- podlove_plot_performance(t_exmpl, printout = FALSE)
 																		
-# tests
+#																		 label = TRUEi tests
 test_that("plots are ggplot objects", {
 	
 	expect_is(g1, "ggplot")
