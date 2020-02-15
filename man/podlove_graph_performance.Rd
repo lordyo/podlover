@@ -4,20 +4,15 @@
 \alias{podlove_graph_performance}
 \title{Create performance grid for podcast episodes}
 \usage{
-podlove_graph_performance(
-  df_perfstats,
-  label = ep_number,
-  legend = "",
-  printout = TRUE
-)
+podlove_graph_performance(df_perfstats, label, legend, printout = TRUE)
 }
 \arguments{
 \item{df_perfstats}{a tidy data frame created by \code{performance_stats()}}
 
 \item{label}{Unquoted, episode-related variable to use for labelling. By default,
 \code{podlove_performance_stats} creates the options \code{title}, 
-\code{ep_number} (default) and \code{ep_num_title}. Use \code{label = ""} to
-display no label}
+\code{ep_number} (default) and \code{ep_num_title}. Use \code{label = ""} or
+leave argument away to display no label}
 
 \item{legend}{Unquoted, episode-related variable to use in a explanatory legend 
 next to the performance graph.}
