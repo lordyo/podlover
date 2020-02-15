@@ -10,8 +10,8 @@
 #' @param df_perfstats a tidy data frame created by \code{performance_stats()}
 #' @param label Unquoted, episode-related variable to use for labelling. By default,
 #'     \code{podlove_performance_stats} creates the options \code{title}, 
-#'     \code{ep_number} (default) and \code{ep_num_title}. Use \code{label = ""} to
-#'     display no label 
+#'     \code{ep_number} (default) and \code{ep_num_title}. Use \code{label = ""} or
+#'     leave argument away to display no label 
 #' @param legend Unquoted, episode-related variable to use in a explanatory legend 
 #'     next to the performance graph. 
 #' @param printout Switcher to automatically print out the plot (default TRUE)
@@ -39,8 +39,8 @@
 
 
 podlove_graph_performance <- function(df_perfstats, 
-                                      label = ep_number,
-                                      legend = "",
+                                      label,
+                                      legend,
                                       printout = TRUE) {
   
   df_perfstats <- dplyr::filter(df_perfstats, !is.na(dls_per_day_after_launch),
@@ -60,10 +60,9 @@ podlove_graph_performance <- function(df_perfstats,
     ggplot2::geom_hline(yintercept = median_y, alpha = 0.3) +
     ggplot2::geom_vline(xintercept = median_x, alpha = 0.3)
   
-  g <- g + ggrepel::geom_text_repel()
+  if (!missing(label)) g <- g + ggrepel::geom_text_repel()
   
-  if (!missing(legend)) {
-    
+  if (!missing(label) && !missing(legend)) {
     
       leg_table <- gridExtra::tableGrob(
         select(df_perfstats, {{label}}, {{legend}}), theme = ttheme_minimal())
