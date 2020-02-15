@@ -53,10 +53,8 @@ podlove_graph_performance <- function(df_perfstats,
               aes(x = dls_per_day_after_launch,
                   y = dls_per_day_at_launch, label = {{label}})) +
     ggplot2::geom_point() +
-    ggplot2::scale_x_continuous(name = "dls per Day after Launch",
-                       limits = c(0,max(df_perfstats$dls_per_day_after_launch))) +
-    ggplot2::scale_y_continuous(name = "dls per Day during Launch",
-                       limits = c(0,max(df_perfstats$dls_per_day_at_launch))) +
+    ggplot2::scale_x_continuous(name = "dls per Day after Launch") +
+    ggplot2::scale_y_continuous(name = "dls per Day during Launch") +
     ggplot2::geom_hline(yintercept = median_y, alpha = 0.3) +
     ggplot2::geom_vline(xintercept = median_x, alpha = 0.3)
   
@@ -65,9 +63,9 @@ podlove_graph_performance <- function(df_perfstats,
   if (!missing(label) && !missing(legend)) {
     
       leg_table <- gridExtra::tableGrob(
-        select(df_perfstats, {{label}}, {{legend}}), theme = ttheme_minimal())
+        select(df_perfstats, {{label}}, {{legend}}), theme = gridExtra::ttheme_minimal())
       
-      g <- grid.arrange(g, leg_table, nrow = 1)
+      g <- gridExtra::grid.arrange(g, leg_table, nrow = 1)
   }
   
   g
