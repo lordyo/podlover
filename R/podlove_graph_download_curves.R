@@ -18,6 +18,8 @@
 #'     (at the beinning of the curves: \code{"last.points"}, default, or at
 #'     the end of the curves \code{"first.points"}) 
 #' @param printout Switcher to automatically print out the plot (default TRUE)
+#' @param limit Boolean switch to fix axis limtis (relevant when adding smoothers)
+#' @param legend Boolean switch to add a legend' 
 #' @param ... additional formating parameters for \code{ggplot2::geom_line()}
 #'     or \code{ggridges::geom_density_ridges}.
 #' 
@@ -59,6 +61,8 @@ podlove_graph_download_curves <- function(df_tidy_data,
                                           cumulative = TRUE,
                                           plot_type = "line", 
                                           labelmethod = "last.points",
+                                          limit = TRUE,
+                                          legend = FALSE,
                                           printout = TRUE,
                                           ...) {
   
@@ -68,9 +72,47 @@ podlove_graph_download_curves <- function(df_tidy_data,
     g_dl_curves <- podlove_baseplot(df_tidy_data, 
                                     gvar = {{gvar}}, 
                                     cumulative = cumulative,
+                                    limit = limit,
+                                    legend = legend,
                                     ...)
-    g_dl_curves <-  g_dl_curves +
-      directlabels::geom_dl(aes(label = {{gvar}}), method = list(labelmethod, cex = 0.8))
+    
+    # check if labelmethod exists, add it and expand the x axis
+    labelmethods <- c("angled.boxes","first.bumpup","first.points","first.polygons","first.qp",
+                      "lasso.labels","last.bumpup","last.points","last.polygons","last.qp",
+                      "lines2","maxvar.points","maxvar.qp")
+    
+    if (labelmethod %in% labelmethods) {
+      
+      g_dl_curves <-  g_dl_curves +
+        directlabels::geom_dl(aes(label = {{gvar}}), method = list(labelmethod, cex = 0.8))
+      
+      # select amount to expand x axis depending on direct label method
+      exp_val = c(0,0)
+      if (stringr::str_detect(labelmethod, "first")) exp_val <- c(0.3, 0.05)
+      if (stringr::str_detect(labelmethod, "last")) exp_val <- c(0.05, 0.3)
+      if (stringr::str_detect(labelmethod, "maxvar")) exp_val <- c(0.2, 0.2)
+      
+      # class switcher for type of x axis (Date or Continuous)
+      # messages suppressed due to double scaling
+      suppressMessages(
+        if ("Date" %in% class(df_tidy_data$time)) {
+          
+          g_dl_curves <-  g_dl_curves +
+            ggplot2::scale_x_date(expand = ggplot2::expand_scale(exp_val))
+          
+        } else if ("POSIXct" %in% class(df_tidy_data$time)) {
+          
+          g_dl_curves <-  g_dl_curves +
+            ggplot2::scale_x_datetime(expand = ggplot2::expand_scale(exp_val))
+          
+        } else {
+          
+          g_dl_curves <-  g_dl_curves +
+            ggplot2::scale_x_continuous(expand = ggplot2::expand_scale(exp_val))
+        }
+      )
+      
+    }
     
   } else if (plot_type == "ridge") {
     g_dl_curves <- podlove_baseplot_multi(df_tidy_data,

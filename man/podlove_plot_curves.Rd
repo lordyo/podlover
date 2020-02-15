@@ -7,13 +7,16 @@
 podlove_plot_curves(
   dldata,
   gvar = "Total",
-  hourly = FALSE,
+  time_unit = "days",
   relative = TRUE,
   cumulative = TRUE,
   plot_type = "line",
   labelmethod = "last.points",
   printout = TRUE,
   last_n = 0,
+  sum_fun = NULL,
+  limit = TRUE,
+  legend = FALSE,
   ...
 )
 }
@@ -23,10 +26,6 @@ by \code{podlove_prepare_stats_for_graph()}}
 
 \item{gvar}{Optional grouping parameter (e.g. episode title), handed over
 to \code{ggplot2::aes(color)}.}
-
-\item{hourly}{Boolean switching parameter for rendering of hourly vs.
-daily data. Defaults to \code{FALSE} (daily data), \code{TRUE} creates
-hourly data.}
 
 \item{relative}{Boolean switching parameter to define if the data is 
 rendered relative to the respective episode release date (\code{TRUE}) or
@@ -47,8 +46,19 @@ the end of the curves \code{"first.points"})}
 \item{last_n}{Number of most recent episodes to filter for. Defaults to 0 
 (no filtering), use negative numbers to filter for first n episodes.}
 
+\item{sum_fun}{Summary function used to draw a (smoothed) curve over all 
+\code{gvar} curves, e.g. \code{mean} or \code{median}. The summary is
+taken from all curves in the dataset, even if a \code{last_n} parameter 
+is set. Do not quote.}
+
+\item{limit}{Boolean switch to fix axis limtis (relevant when adding smoothers)}
+
 \item{...}{additional formating parameters for \code{ggplot2::geom_line()}
-or \code{ggridges::geom_density_ridges}.}
+or \code{ggridges::geom_density_ridges}. Also used for depreciated arguments.}
+
+\item{hourly}{Boolean switching parameter for rendering of hourly vs.
+daily data. Defaults to \code{FALSE} (daily data), \code{TRUE} creates
+hourly data.}
 }
 \value{
 A ggplot object
@@ -66,7 +76,17 @@ dls <- podlove_create_example(clean = TRUE)
 
 podlove_plot_curves(dls, gvar = title, relative = TRUE, cumulative = TRUE)
 
-# see podlove_graph_download_curves() for more information.
+# add a mean curve
+podlove_plot_curves(dls, gvar = title, relative = TRUE, cumulative = TRUE,
+                    sum_fun = mean)
+     
+# show only the last 4 episodes' curves. Note how the summary curve remains 
+# the same as in the plot before.
+podlove_plot_curves(dls, gvar = title, relative = TRUE, cumulative = TRUE,
+                    sum_fun = mean, last_n = 4)
+
+
+# see podlove_graph_download_curves() for additional information.
 
 }
 \seealso{

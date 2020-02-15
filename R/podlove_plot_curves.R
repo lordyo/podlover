@@ -23,11 +23,17 @@
 #' @param labelmethod Defines where should the labels be attached 
 #'     (at the beinning of the curves: \code{"last.points"}, default, or at
 #'     the end of the curves \code{"first.points"}) 
-#' @param printout Switcher to automatically print out the plot (default TRUE)
-#' @param ... additional formating parameters for \code{ggplot2::geom_line()}
-#'     or \code{ggridges::geom_density_ridges}.
 #' @param last_n Number of most recent episodes to filter for. Defaults to 0 
 #'     (no filtering), use negative numbers to filter for first n episodes. 
+#' @param sum_fun Summary function used to draw a (smoothed) curve over all 
+#'     \code{gvar} curves, e.g. \code{mean} or \code{median}. The summary is
+#'     taken from all curves in the dataset, even if a \code{last_n} parameter 
+#'     is set. Do not quote. 
+#' @param printout Switcher to automatically print out the plot (default TRUE)
+#' @param limit Boolean switch to fix axis limtis (relevant when adding smoothers)
+#' @param printout Switcher to automatically print out the plot (default TRUE)
+#' @param ... additional formating parameters for \code{ggplot2::geom_line()}
+#'     or \code{ggridges::geom_density_ridges}. Also used for depreciated arguments.
 #' 
 #' @return A ggplot object
 #' 
@@ -37,7 +43,17 @@
 #' 
 #' podlove_plot_curves(dls, gvar = title, relative = TRUE, cumulative = TRUE)
 #' 
-#' # see podlove_graph_download_curves() for more information.
+#' # add a mean curve
+#' podlove_plot_curves(dls, gvar = title, relative = TRUE, cumulative = TRUE,
+#'                     sum_fun = mean)
+#'      
+#' # show only the last 4 episodes' curves. Note how the summary curve remains 
+#' # the same as in the plot before.
+#' podlove_plot_curves(dls, gvar = title, relative = TRUE, cumulative = TRUE,
+#'                     sum_fun = mean, last_n = 4)
+#' 
+#' 
+#' # see podlove_graph_download_curves() for additional information.
 #' 
 #' @importFrom magrittr %>% 
 #' 
@@ -48,28 +64,70 @@
 
 podlove_plot_curves <- function(dldata, 
 																gvar = "Total", 
-																hourly = FALSE, 
+																time_unit = "days", 
 																relative = TRUE, 
 																cumulative = TRUE,
 																plot_type = "line", 
 																labelmethod = "last.points",
 																printout = TRUE,
 																last_n = 0,
+																sum_fun = NULL,
+																limit = TRUE,
+																legend = FALSE,
 																...) {
-  
+	
+	# check depreciated arguments
+	args <- list(...)
+	if ("hourly" %in% names(args)) {
+		if (args$hourly == TRUE) time_unit <- "hours" else time_unit <- "days"
+		warning("option 'hourly' is depreciated. Use option 'time_unit' instead.")
+	}
+	
+	# prepare data
 	g_data <- podlove_prepare_stats_for_graph(df_stats = dldata,
 																						gvar = {{gvar}},
-																						hourly = hourly,
+																						time_unit = time_unit,
 																						relative = relative, 
 																						last_n = last_n)
 	
+	# plot curves
 	g <- podlove_graph_download_curves(df_tidy_data = g_data,
 																		 gvar = {{gvar}},
 																		 cumulative = cumulative,
 																		 plot_type = plot_type,
 																		 labelmethod = labelmethod,
-																		 printout = printout,
+																		 limit = limit,
+																		 legend = legend,
+																		 printout = FALSE,
 																		 ...)
+	
+	# add summary function to plot
+	
+	if (!is.null(sum_fun) && plot_type == "ridge") {
+		warning("Option sum_fun ignored, as it can't be used with ridge plots.")
+		
+	} else if (!is.null(sum_fun) && !is.function(sum_fun)) {
+		warning(paste0("Option sum_fun =  '", sum_fun, "' ignored: Not a function."))
+		
+	} else if (is.function(sum_fun)) {
+		
+		sumdata <- podlove_prepare_stats_for_graph(df_stats = dldata,
+																							 gvar = {{gvar}},
+																							 time_unit = time_unit,
+																							 relative = relative)
+		
+		sumdata <- sumdata %>% 
+			group_by(time) %>% 
+			dplyr::summarise_at(c("listeners", "listeners_total"), sum_fun)
+		
+		g <- g + ggplot2::geom_smooth(data = sumdata, 
+																	ggplot2::aes(color = NULL), 
+																	color = "#333333", size = 0.5,
+																	method = "loess")
+		
+	}
+	
+	if (printout) print(g)
 	
 	g
 }

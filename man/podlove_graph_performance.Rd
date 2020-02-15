@@ -4,12 +4,18 @@
 \alias{podlove_graph_performance}
 \title{Create performance grid for podcast episodes}
 \usage{
-podlove_graph_performance(df_perfstats, label = TRUE, printout = TRUE)
+podlove_graph_performance(df_perfstats, label, legend, printout = TRUE)
 }
 \arguments{
 \item{df_perfstats}{a tidy data frame created by \code{performance_stats()}}
 
-\item{label}{Switcher to attach labels to points (defaults to TRUE)}
+\item{label}{Unquoted, episode-related variable to use for labelling. By default,
+\code{podlove_performance_stats} creates the options \code{title}, 
+\code{ep_number} (default) and \code{ep_num_title}. Use \code{label = ""} or
+leave argument away to display no label}
+
+\item{legend}{Unquoted, episode-related variable to use in a explanatory legend 
+next to the performance graph.}
 
 \item{printout}{Switcher to automatically print out the plot (default TRUE)}
 }
@@ -30,6 +36,11 @@ Based on data created by \code{podlove_performance_stats}, plot all episodes
 # post-launch period of 5 days
 
 perf <- podlove_performance_stats(podcast_example_data, launch = 2, post_launch = 5)
+podlove_graph_performance(perf)
+
+# add a label
+perf <- podlove_performance_stats(podcast_example_data, launch = 2, post_launch = 5,
+                                  label = ep_number, legend = title)
 podlove_graph_performance(perf)
 }
 

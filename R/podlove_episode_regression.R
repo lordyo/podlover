@@ -32,10 +32,8 @@ podlove_episode_regression <- function(df_regression_data,
                                        terms = "post_datehour",
                                        printout = TRUE) {
   
-  formula_string <- paste0("downloads ~ ", terms)
-  
-  episode_model <- stats::lm(formula = formula_string,
-                      data = df_regression_data)
+  episode_model <- stats::lm(stats::reformulate(terms, response = "downloads"), 
+                            data = df_regression_data)
   
   if (printout) summary(episode_model)
   

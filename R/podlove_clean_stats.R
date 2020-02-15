@@ -77,9 +77,9 @@ podlove_clean_stats <- function(df_stats,
       hour = lubridate::hour(dldatetime),
       dldatehour = lubridate::ymd_hms(
         paste0(year(dldatetime), "-",
-              month(dldatetime), "-",
-              day(dldatetime), " ", 
-              lubridate::hour(dldatetime), ":00:00")))
+               month(dldatetime), "-",
+               day(dldatetime), " ", 
+               lubridate::hour(dldatetime), ":00:00")))
   
   # filter for launchdate if parameter is not empty
   if (!is.null(launch_date)) df_clean <- filter(df_clean, dldate >= lubridate::ymd(launch_date))
@@ -92,7 +92,7 @@ podlove_clean_stats <- function(df_stats,
       hours_since_release = floor(interval(post_datetime, dldatetime) / lubridate::hours(1)),
       days_since_release = floor(hours_since_release / 24),
       # ep_number = as.character(ep_number),
-       
+      
       # add leading zeroes to episode numbers
       ep_number = formatC(ep_number,
                           width = max(floor(log10(as.numeric(ep_number))) + 1),
@@ -138,7 +138,7 @@ podlove_clean_stats <- function(df_stats,
       dplyr::mutate(dl_attempts = 1,
                     dl_attempts = as.integer(dl_attempts))
   }
-
-    df_clean
-    
-  }
+  
+  df_clean
+  
+}

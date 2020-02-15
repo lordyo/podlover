@@ -4,7 +4,6 @@ output: rmarkdown::md_document
 
 ---
 
-
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -97,7 +96,7 @@ Note that this file also includes a hostname, but this is the internal hostname 
 
 ### Access permissions
 
-MySQL databases are sensitive to hacking attacks, which is why they usually aren't accessible to just any visitor - even if she has the correct access information. You will probably need to set allow an **access permission** to your database and user from the IP address R is running on ("whitelisting"). This is also done via your hoster's admin panel. Check your hoster's support sections for more info. (Note: Some hosters are stricter and don't allow any access except via SSH tunnels. `podlover` doesn't provide that option yet.)
+MySQL databases are sensitive to hacking attacks, which is why they usually aren't accessible to just any visitor - even if she has the correct access information. You will probably need to set allow an **access permission** to your database and user from the IP address R is running on ("whitelisting"). This is also done via your hoster's admin panel. Check your hoster's support sections for more info. (Note: Some hosters are stricter and don't allow any access except via SSH tunnels, which you will need ot establish first - how depends on your OS and hoster. Check your hoster's support section on how to do this.)
 
 ### Prefix of the Table Names
 
@@ -433,7 +432,7 @@ perf %>%
 So there are episodes with different launches strengths long-term performance. Can you plot them against each other? Yes, you can! The function `podlove_graph_performance()` gives you a nice four-box grid. The top right corner is showing "evergreen" episodes with strong launches and long-term performance, the top left the "shooting stars" with strong launches and loss of interest over time, the bottom right shows "slow burners" which took a while to get an audience, and the bottom left is showing... well, the rest.
 
 ```{r echo=TRUE, fig.height=7, fig.width=7}
-g_perf <- podlove_graph_performance(perf, printout = FALSE)
+g_perf <- podlove_graph_performance(perf, label = title, printout = FALSE)
 
 print(g_perf)
 ```
@@ -441,7 +440,7 @@ print(g_perf)
 Or, if you want to skip the step of generating data and just get the plot, use the wrapper function `podlove_plot_performance()`:
 
 ```
-podlove_plot_performance(dldata = downloads, launch = 3, post_launch = 30)
+podlove_plot_performance(dldata = downloads, launch = 3, label = title, post_launch = 30)
 
 ```
 
@@ -450,36 +449,33 @@ podlove_plot_performance(dldata = downloads, launch = 3, post_launch = 30)
 
 The one question every podcast producer is asking themselves is: "Is my podcast's audience growing?". This is not an easy question to answer, because you're dealing with lagging time series data. One approach to deal answer the question is to calculate a regression model of downloads against time or episode number (tip of the hat to [Bernhard Fischer, who prototyped this idea](https://community.podlove.org/t/implementation-of-regression-prototype/1994)). If the number of downloads after a specified date after launch is rising over time, the podcast is gaining listeners. If it falls, it's losing listeners. If it stays stable, it's keeping listeners.
 
-To prepare the regression, you first need to use the function `podlove_downloads_until()` to create a dataset of downloads at a specific point. The longer the period between launch and measuring point is, the more valid the model will be - but you'll also have less data points. For this example, we'll pick a period of 30 days after launch:
+A regression analysis is usually shown as a regression model printout, but understanding those requires some statistical knowledge. An easier way is to plot your data and the corresponding regression line. The function `podlove_plot_regression()` allows you to do both.
+
+The function creates a dataset of downloads at a specific point in time. The longer the period between launch and measuring point is, the more valid the model will be - but you'll also have less data points. For this example, we'll pick a period of 30 days after launch. You can also choose if you want to use the `post_datehour` parameter (better if your episodes don't come out regularly), or `ep_rank`, which corresponds to the episode number (it has a different name because episode numbers are strings).
+
+With the option `print_model`, you can display the model results:
 
 ```{r}
-du <- podlove_downloads_until(downloads, 30)
-
-du
+reg <- podlove_plot_regression(df_tidy_data = downloads, 
+                               point_in_time = 30, 
+                               predictor = ep_rank, 
+                               print_model = TRUE,
+                               print_plot = FALSE)
 
 ```
 
-This dataset we can feed into the regression function `podlove_episode_regression()`. You can choose if you want to use the `post_datehour` parameter (better if your episodes don't come out regularly), or `ep_rank`, which corresponds to the episode number (it has a different name because episode numbers are strings):
-
-```{r}
-reg <- podlove_episode_regression(df_regression_data = du, terms = "ep_rank")
-
-```
-
-If you're statistically inclined, you can check out the model directly and see if your model is significant:
-
-```{r}
-summary(reg)
-```
-
-Or you could just check out the regression plot with the function `podlove_graph_regression()` and see in which direction the line points:
+The option `print_plot` shows the plot (which is also saved in the object `reg`): 
 
 ```{r fig.height=5, fig.width=7}
-g_reg <- podlove_graph_regression(du, predictor = ep_rank)
+reg <- podlove_plot_regression(df_tidy_data = downloads, 
+                               point_in_time = 30, 
+                               predictor = ep_rank, 
+                               print_model = FALSE,
+                               print_plot = TRUE)
 
 ```
 
-Oh noes! It seems like your podcast is steadily losing listeners at the rate of `r round(reg$coefficients[2],0)` listeners per episode!
+Oh noes! It seems like your podcast is steadily losing listeners!
 
 ## Finally
 

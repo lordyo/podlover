@@ -10,6 +10,8 @@ podlove_graph_download_curves(
   cumulative = TRUE,
   plot_type = "line",
   labelmethod = "last.points",
+  limit = TRUE,
+  legend = FALSE,
   printout = TRUE,
   ...
 )
@@ -30,6 +32,10 @@ ridgeline plot (\code{"ridge"}).}
 \item{labelmethod}{Defines where should the labels be attached 
 (at the beinning of the curves: \code{"last.points"}, default, or at
 the end of the curves \code{"first.points"})}
+
+\item{limit}{Boolean switch to fix axis limtis (relevant when adding smoothers)}
+
+\item{legend}{Boolean switch to add a legend'}
 
 \item{printout}{Switcher to automatically print out the plot (default TRUE)}
 

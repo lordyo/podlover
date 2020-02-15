@@ -9,7 +9,8 @@ podlove_plot_performance(
   launch = 3,
   post_launch = 7,
   limit_unit = "days",
-  label = TRUE,
+  label,
+  legend,
   printout = TRUE
 )
 }
@@ -24,7 +25,14 @@ by \code{podlove_clean_stats()} or \code{podlove_get_and_clean}.}
 \item{limit_unit}{time unit for limits. Can be "days" (default) or "hours".
 Used to fine-tune launch performance cutoffs.}
 
-\item{label}{Switcher to attach labels to points (defaults to TRUE)}
+\item{label}{Unquoted, episode-related variable to use for labelling. By default,
+\code{podlove_performance_stats} creates the options \code{title}, 
+\code{ep_number} and \code{ep_num_title}. Leave the argument away to
+display no label}
+
+\item{legend}{Unquoted, episode-related variable to use in a explanatory legend 
+next to the performance graph. Leave the option away to display no legend.
+\code{label} argument must be defined to show the legend.}
 
 \item{printout}{Switcher to automatically print out the plot (default TRUE)}
 }
