@@ -435,7 +435,7 @@ perf %>%
 So there are episodes with different launches strengths long-term performance. Can you plot them against each other? Yes, you can! The function `podlove_graph_performance()` gives you a nice four-box grid. The top right corner is showing "evergreen" episodes with strong launches and long-term performance, the top left the "shooting stars" with strong launches and loss of interest over time, the bottom right shows "slow burners" which took a while to get an audience, and the bottom left is showing... well, the rest.
 
 ```{r echo=TRUE, fig.height=7, fig.width=7}
-g_perf <- podlove_graph_performance(perf, printout = FALSE)
+g_perf <- podlove_graph_performance(perf, label = title, printout = FALSE)
 
 print(g_perf)
 ```
@@ -443,7 +443,7 @@ print(g_perf)
 Or, if you want to skip the step of generating data and just get the plot, use the wrapper function `podlove_plot_performance()`:
 
 ```
-podlove_plot_performance(dldata = downloads, launch = 3, post_launch = 30)
+podlove_plot_performance(dldata = downloads, launch = 3, label = title, post_launch = 30)
 
 ```
 
