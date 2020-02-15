@@ -5,7 +5,6 @@ library(podlover)
 # prepare for tests
 t_exmpl <- t_exmpl
 
-
 ### no gvar ###
 
 data1 <- podlove_performance_stats(df_tidy_data = t_exmpl, 
@@ -16,12 +15,27 @@ data1 <- podlove_performance_stats(df_tidy_data = t_exmpl,
 g1 <- podlove_graph_performance(data1, printout = FALSE)
 
 g2 <- podlove_plot_performance(t_exmpl, printout = FALSE)
+
+# test labels and legends
+g3 <- podlove_graph_performance(data1, label = title, printout = FALSE)
+
+g4 <- podlove_graph_performance(data1, 
+																label = ep_number, legend = title,
+																printout = FALSE)
+
+g5 <- podlove_plot_performance(t_exmpl, label = title, printout = FALSE)
+
+g6 <- podlove_plot_performance(t_exmpl, label = ep_number, legend = title,
+															 printout = FALSE)
 																		
-#																		 label = TRUEi tests
 test_that("plots are ggplot objects", {
 	
 	expect_is(g1, "ggplot")
 	expect_is(g2, "ggplot")
+	expect_is(g3, "ggplot")
+	expect_is(g4, "gtable")
+	expect_is(g5, "ggplot")
+	expect_is(g6, "gtable")
 	
 })
 
